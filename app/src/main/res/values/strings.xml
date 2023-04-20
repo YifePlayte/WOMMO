@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name" translatable="false">WOMMO</string>
+    <string name="xposed_desc" translatable="false">Works on my machine ONLY</string>
+    <string name="warning">Warning</string>
+    <string name="not_support">You seem to be using an outdated version of LSPosed or LSPosed is not active, please update LSPosed or activate it and try again.</string>
+    <string name="done">OK</string>
+    <string name="screen_recorder">Screen Recorder</string>
+    <string name="force_enable_native_playback_capture">Force enable native playback capture</string>
+    <string name="change_bitrate_and_frame_rate_range">Change bitrate and frame rate range</string>
+    <string name="reboot">Reboot</string>
+    <string name="reboot_tips">Are you sure to reboot?</string>
+    <string name="cancel">Cancel</string>
+    <string name="reboot_system">Reboot system</string>
+    <string name="restart_all_scope">Restart all scope</string>
+    <string name="restart_all_scope_tips">Are you sure to restart all scope?</string>
+    <string name="finished">Finished</string>
+</resources>

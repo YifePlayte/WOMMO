@@ -1,0 +1,1 @@
+-keep class com.yifeplayte.wommo.hook.MainHook-keep class com.yifeplayte.wommo.hook.hooks.**.**-keepattributes RuntimeVisibleAnnotations

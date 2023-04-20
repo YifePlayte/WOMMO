@@ -1,0 +1,15 @@
+<resources>
+    <string name="warning">警告</string>
+    <string name="not_support">您似乎正在使用过时的 LSPosed 版本或 LSPosed 未激活，请更新 LSPosed 或者激活后再试。</string>
+    <string name="done">确定</string>
+    <string name="screen_recorder">屏幕录制</string>
+    <string name="force_enable_native_playback_capture">强制启用原生录音支持</string>
+    <string name="change_bitrate_and_frame_rate_range">修改码率与帧率范围</string>
+    <string name="reboot">重启</string>
+    <string name="reboot_system">重启系统</string>
+    <string name="reboot_tips">确定重启系统？</string>
+    <string name="restart_all_scope">重启全部作用域</string>
+    <string name="restart_all_scope_tips">确定重启全部作用域？</string>
+    <string name="finished">运行完成</string>
+    <string name="cancel">取消</string>
+</resources>
