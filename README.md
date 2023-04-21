@@ -1,12 +1,16 @@
 # WOMMO - <img alt="Works On My Machine Only" src="https://img.shields.io/badge/Works%20On-My%20Machine%20Only-brightgreen">
 
-这是一个自用的大杂烩模块。
+这是一个自用的小米大杂烩模块。
 
 ---
 
 ### 现有功能
 
-#### 小米屏幕录制
+#### 系统界面
+
+- 恢复附近分享磁贴
+
+#### 屏幕录制
 
 - 强制启用原生录音支持
 - 修改码率与帧数范围
@@ -31,6 +35,9 @@
 
 [Simplicity-Team/WooBoxForMIUI](https://github.com/Simplicity-Team/WooBoxForMIUI)
 
+##### 啥也不知道，咱也不敢问（
+
+[chsbuffer/MIUIQOL](https://github.com/chsbuffer/MIUIQOL)
 
 ---
 
