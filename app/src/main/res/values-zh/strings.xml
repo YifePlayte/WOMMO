@@ -12,4 +12,6 @@
     <string name="restart_all_scope_tips">确定重启全部作用域？</string>
     <string name="finished">运行完成</string>
     <string name="cancel">取消</string>
+    <string name="system_ui">系统界面</string>
+    <string name="restore_near_by_tile">恢复附近分享磁贴</string>
 </resources>

@@ -15,6 +15,14 @@ import com.yifeplayte.wommo.hook.PACKAGE_NAME_HOOKED
 @BMMainPage(titleId = R.string.app_name)
 class MainPage : BasePage() {
     override fun onCreate() {
+        TitleText(textId = R.string.system_ui)
+        TextSummaryWithSwitch(
+            TextSummaryV(
+                textId = R.string.restore_near_by_tile
+            ),
+            SwitchV("restore_near_by_tile", false)
+        )
+
         TitleText(textId = R.string.screen_recorder)
         TextSummaryWithSwitch(
             TextSummaryV(
@@ -48,6 +56,7 @@ class MainPage : BasePage() {
                             getString(R.string.finished),
                             Toast.LENGTH_SHORT
                         ).show()
+                        dismiss()
                     }
                 }.show()
             }
