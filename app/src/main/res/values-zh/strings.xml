@@ -16,4 +16,6 @@
     <string name="restore_near_by_tile">恢复附近分享磁贴</string>
     <string name="miui_home">系统桌面</string>
     <string name="restore_google_app_icon">恢复Google图标</string>
+    <string name="freeform">小窗</string>
+    <string name="add_freeform_shortcut">快捷菜单添加小窗</string>
 </resources>

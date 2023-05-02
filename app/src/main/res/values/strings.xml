@@ -18,4 +18,6 @@
     <string name="restore_near_by_tile">Restore NearBy Share tile</string>
     <string name="miui_home">Launcher</string>
     <string name="restore_google_app_icon">Restore google app icon</string>
+    <string name="freeform">Freeform</string>
+    <string name="add_freeform_shortcut">Add freeform shortcut</string>
 </resources>

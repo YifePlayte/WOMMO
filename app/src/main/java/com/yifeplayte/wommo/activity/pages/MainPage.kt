@@ -22,6 +22,12 @@ class MainPage : BasePage() {
             ),
             SwitchV("restore_google_app_icon", false)
         )
+        TextSummaryWithSwitch(
+            TextSummaryV(
+                textId = R.string.add_freeform_shortcut
+            ),
+            SwitchV("add_freeform_shortcut", false)
+        )
 
         TitleText(textId = R.string.system_ui)
         TextSummaryWithSwitch(

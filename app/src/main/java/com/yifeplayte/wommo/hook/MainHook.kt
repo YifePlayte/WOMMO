@@ -4,6 +4,7 @@ import com.github.kyuubiran.ezxhelper.EzXHelper
 import com.github.kyuubiran.ezxhelper.Log
 import com.github.kyuubiran.ezxhelper.LogExtensions.logexIfThrow
 import com.yifeplayte.wommo.hook.hooks.BaseHook
+import com.yifeplayte.wommo.hook.hooks.home.AddFreeformShortcut
 import com.yifeplayte.wommo.hook.hooks.home.RestoreGoogleAppIcon
 import com.yifeplayte.wommo.hook.hooks.screenrecorder.EnablePlaybackCapture
 import com.yifeplayte.wommo.hook.hooks.screenrecorder.ModifyScreenRecorderConfig
@@ -41,6 +42,7 @@ class MainHook : IXposedHookLoadPackage, IXposedHookZygoteInit {
 
                 "com.miui.home" -> {
                     initHook(RestoreGoogleAppIcon, "restore_google_app_icon")
+                    initHook(AddFreeformShortcut, "add_freeform_shortcut")
                 }
             }
             DexKit.closeDexKit()
