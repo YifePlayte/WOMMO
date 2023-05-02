@@ -16,4 +16,6 @@
     <string name="finished">Finished</string>
     <string name="system_ui">System UI</string>
     <string name="restore_near_by_tile">Restore NearBy Share tile</string>
+    <string name="miui_home">Launcher</string>
+    <string name="restore_google_app_icon">Restore google app icon</string>
 </resources>

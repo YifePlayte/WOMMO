@@ -4,6 +4,7 @@ import com.github.kyuubiran.ezxhelper.EzXHelper
 import com.github.kyuubiran.ezxhelper.Log
 import com.github.kyuubiran.ezxhelper.LogExtensions.logexIfThrow
 import com.yifeplayte.wommo.hook.hooks.BaseHook
+import com.yifeplayte.wommo.hook.hooks.home.RestoreGoogleAppIcon
 import com.yifeplayte.wommo.hook.hooks.screenrecorder.EnablePlaybackCapture
 import com.yifeplayte.wommo.hook.hooks.screenrecorder.ModifyScreenRecorderConfig
 import com.yifeplayte.wommo.hook.hooks.systemui.RestoreNearbyTile
@@ -15,7 +16,9 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage
 
 private const val TAG = "WOMMO"
 val PACKAGE_NAME_HOOKED = listOf(
-    "com.miui.screenrecorder", "com.android.systemui"
+    "com.miui.screenrecorder",
+    "com.android.systemui",
+    "com.miui.home"
 )
 
 @Suppress("unused")
@@ -34,6 +37,10 @@ class MainHook : IXposedHookLoadPackage, IXposedHookZygoteInit {
 
                 "com.android.systemui" -> {
                     initHook(RestoreNearbyTile, "restore_near_by_tile")
+                }
+
+                "com.miui.home" -> {
+                    initHook(RestoreGoogleAppIcon, "restore_google_app_icon")
                 }
             }
             DexKit.closeDexKit()

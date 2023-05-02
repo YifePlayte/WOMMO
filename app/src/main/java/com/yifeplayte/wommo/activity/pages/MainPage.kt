@@ -15,6 +15,14 @@ import com.yifeplayte.wommo.hook.PACKAGE_NAME_HOOKED
 @BMMainPage(titleId = R.string.app_name)
 class MainPage : BasePage() {
     override fun onCreate() {
+        TitleText(textId = R.string.miui_home)
+        TextSummaryWithSwitch(
+            TextSummaryV(
+                textId = R.string.restore_google_app_icon
+            ),
+            SwitchV("restore_google_app_icon", false)
+        )
+
         TitleText(textId = R.string.system_ui)
         TextSummaryWithSwitch(
             TextSummaryV(
@@ -36,6 +44,7 @@ class MainPage : BasePage() {
             ),
             SwitchV("modify_screen_recorder_config", false)
         )
+
         TitleText(textId = R.string.reboot)
         TextSummaryWithArrow(
             TextSummaryV(

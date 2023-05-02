@@ -3,5 +3,6 @@
     <string-array name="xposedscope">
         <item>com.miui.screenrecorder</item>
         <item>com.android.systemui</item>
+        <item>com.miui.home</item>
     </string-array>
 </resources>
