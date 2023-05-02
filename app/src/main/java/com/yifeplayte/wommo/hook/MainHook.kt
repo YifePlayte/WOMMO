@@ -22,7 +22,7 @@ val PACKAGE_NAME_HOOKED = listOf(
 class MainHook : IXposedHookLoadPackage, IXposedHookZygoteInit {
     override fun handleLoadPackage(lpparam: XC_LoadPackage.LoadPackageParam) {
         if (lpparam.packageName in PACKAGE_NAME_HOOKED) {
-            DexKit.initDexKit(lpparam)
+            if (lpparam.packageName != "android") DexKit.initDexKit(lpparam)
             EzXHelper.initHandleLoadPackage(lpparam)
             EzXHelper.setLogTag(TAG)
             EzXHelper.setToastTag(TAG)
