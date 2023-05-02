@@ -4,8 +4,8 @@ import com.github.kyuubiran.ezxhelper.EzXHelper
 import com.github.kyuubiran.ezxhelper.Log
 import com.github.kyuubiran.ezxhelper.LogExtensions.logexIfThrow
 import com.yifeplayte.wommo.hook.hooks.BaseHook
-import com.yifeplayte.wommo.hook.hooks.screenrecorder.PlaybackCapture
-import com.yifeplayte.wommo.hook.hooks.screenrecorder.ScreenRecorderConfig
+import com.yifeplayte.wommo.hook.hooks.screenrecorder.EnablePlaybackCapture
+import com.yifeplayte.wommo.hook.hooks.screenrecorder.ModifyScreenRecorderConfig
 import com.yifeplayte.wommo.hook.hooks.systemui.RestoreNearbyTile
 import com.yifeplayte.wommo.hook.utils.DexKit
 import com.yifeplayte.wommo.hook.utils.XSharedPreferences.getBoolean
@@ -28,8 +28,8 @@ class MainHook : IXposedHookLoadPackage, IXposedHookZygoteInit {
             EzXHelper.setToastTag(TAG)
             when (EzXHelper.hostPackageName) {
                 "com.miui.screenrecorder" -> {
-                    initHook(PlaybackCapture, "force_enable_native_playback_capture")
-                    initHook(ScreenRecorderConfig, "modify_screen_recorder_config")
+                    initHook(EnablePlaybackCapture, "force_enable_native_playback_capture")
+                    initHook(ModifyScreenRecorderConfig, "modify_screen_recorder_config")
                 }
 
                 "com.android.systemui" -> {

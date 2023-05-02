@@ -7,7 +7,7 @@ import com.yifeplayte.wommo.hook.hooks.BaseHook
 import com.yifeplayte.wommo.hook.utils.DexKit.dexKitBridge
 import com.yifeplayte.wommo.hook.utils.DexKit.loadDexKit
 
-object ScreenRecorderConfig : BaseHook() {
+object ModifyScreenRecorderConfig : BaseHook() {
     override fun init() {
         loadDexKit()
         dexKitBridge.findMethodUsingString {

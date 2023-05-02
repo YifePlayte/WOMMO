@@ -6,7 +6,7 @@ import com.github.kyuubiran.ezxhelper.MemberExtensions.paramCount
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder.`-Static`.methodFinder
 import com.yifeplayte.wommo.hook.hooks.BaseHook
 
-object PlaybackCapture : BaseHook() {
+object EnablePlaybackCapture : BaseHook() {
     override fun init() {
         loadClass("android.os.SystemProperties").methodFinder().first {
             name == "getBoolean"
