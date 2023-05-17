@@ -6,6 +6,11 @@
 
 ### 现有功能
 
+#### 系统桌面
+
+- 恢复Google图标
+- 快捷菜单添加小窗
+
 #### 系统界面
 
 - 恢复附近分享磁贴
@@ -34,6 +39,8 @@
 ##### GNU General Public License v3.0
 
 [Simplicity-Team/WooBoxForMIUI](https://github.com/Simplicity-Team/WooBoxForMIUI)
+
+[qqlittleice/MiuiHome_R](https://github.com/qqlittleice/MiuiHome_R)
 
 ##### 啥也不知道，咱也不敢问（
 
