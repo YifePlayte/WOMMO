@@ -8,6 +8,7 @@ import com.yifeplayte.wommo.hook.hooks.home.AddFreeformShortcut
 import com.yifeplayte.wommo.hook.hooks.home.RestoreGoogleAppIcon
 import com.yifeplayte.wommo.hook.hooks.screenrecorder.EnablePlaybackCapture
 import com.yifeplayte.wommo.hook.hooks.screenrecorder.ModifyScreenRecorderConfig
+import com.yifeplayte.wommo.hook.hooks.systemui.NotificationSettingsNoWhiteList
 import com.yifeplayte.wommo.hook.hooks.systemui.RestoreNearbyTile
 import com.yifeplayte.wommo.hook.utils.DexKit
 import com.yifeplayte.wommo.hook.utils.XSharedPreferences.getBoolean
@@ -38,6 +39,7 @@ class MainHook : IXposedHookLoadPackage, IXposedHookZygoteInit {
 
                 "com.android.systemui" -> {
                     initHook(RestoreNearbyTile, "restore_near_by_tile")
+                    initHook(NotificationSettingsNoWhiteList, "notification_settings_no_white_list")
                 }
 
                 "com.miui.home" -> {

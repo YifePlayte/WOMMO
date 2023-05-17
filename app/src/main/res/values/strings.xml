@@ -20,4 +20,5 @@
     <string name="restore_google_app_icon">Restore google app icon</string>
     <string name="freeform">Freeform</string>
     <string name="add_freeform_shortcut">Add freeform shortcut</string>
+    <string name="notification_settings_no_white_list">Remove white list for notification settings</string>
 </resources>

@@ -36,6 +36,12 @@ class MainPage : BasePage() {
             ),
             SwitchV("restore_near_by_tile", false)
         )
+        TextSummaryWithSwitch(
+            TextSummaryV(
+                textId = R.string.notification_settings_no_white_list
+            ),
+            SwitchV("notification_settings_no_white_list", false)
+        )
 
         TitleText(textId = R.string.screen_recorder)
         TextSummaryWithSwitch(
