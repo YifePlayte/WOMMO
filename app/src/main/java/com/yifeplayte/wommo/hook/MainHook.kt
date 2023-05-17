@@ -8,6 +8,7 @@ import com.yifeplayte.wommo.hook.hooks.home.AddFreeformShortcut
 import com.yifeplayte.wommo.hook.hooks.home.RestoreGoogleAppIcon
 import com.yifeplayte.wommo.hook.hooks.screenrecorder.EnablePlaybackCapture
 import com.yifeplayte.wommo.hook.hooks.screenrecorder.ModifyScreenRecorderConfig
+import com.yifeplayte.wommo.hook.hooks.securitycenter.OpenByDefaultSetting
 import com.yifeplayte.wommo.hook.hooks.systemui.NotificationSettingsNoWhiteList
 import com.yifeplayte.wommo.hook.hooks.systemui.RestoreNearbyTile
 import com.yifeplayte.wommo.hook.utils.DexKit
@@ -20,7 +21,8 @@ private const val TAG = "WOMMO"
 val PACKAGE_NAME_HOOKED = listOf(
     "com.miui.screenrecorder",
     "com.android.systemui",
-    "com.miui.home"
+    "com.miui.home",
+    "com.miui.securitycenter",
 )
 
 @Suppress("unused")
@@ -45,6 +47,10 @@ class MainHook : IXposedHookLoadPackage, IXposedHookZygoteInit {
                 "com.miui.home" -> {
                     initHook(RestoreGoogleAppIcon, "restore_google_app_icon")
                     initHook(AddFreeformShortcut, "add_freeform_shortcut")
+                }
+
+                "com.miui.securitycenter" -> {
+                    initHook(OpenByDefaultSetting, "open_by_default_setting")
                 }
             }
             DexKit.closeDexKit()

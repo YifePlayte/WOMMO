@@ -43,6 +43,14 @@ class MainPage : BasePage() {
             SwitchV("notification_settings_no_white_list", false)
         )
 
+        TitleText(textId = R.string.security_center)
+        TextSummaryWithSwitch(
+            TextSummaryV(
+                textId = R.string.open_by_default_setting
+            ),
+            SwitchV("open_by_default_setting", false)
+        )
+
         TitleText(textId = R.string.screen_recorder)
         TextSummaryWithSwitch(
             TextSummaryV(

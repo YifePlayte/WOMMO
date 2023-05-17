@@ -19,4 +19,9 @@
     <string name="freeform">小窗</string>
     <string name="add_freeform_shortcut">快捷菜单添加小窗</string>
     <string name="notification_settings_no_white_list">移除通知设置白名单</string>
+    <string name="app_link_open_always">允许应用打开支持的链接</string>
+    <string name="app_link_open_never">不允许应用打开链接</string>
+    <string name="open_by_default">默认打开</string>
+    <string name="security_center">手机管家/平板管家</string>
+    <string name="open_by_default_setting">将应用详情中“消除默认操作”改为“默认打开”设置</string>
 </resources>
