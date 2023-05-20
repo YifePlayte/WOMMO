@@ -26,4 +26,6 @@
     <string name="open_by_default" >Open by default</string>
     <string name="security_center">Security center</string>
     <string name="open_by_default_setting">Change App Info \"Clear defaults\" to \"Open by default\"</string>
+    <string name="package_installer">Package installer</string>
+    <string name="allow_unofficial_system_applications_installation">Allow the installation of system applications from unofficial channels</string>
 </resources>

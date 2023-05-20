@@ -65,6 +65,14 @@ class MainPage : BasePage() {
             SwitchV("modify_screen_recorder_config", false)
         )
 
+        TitleText(textId = R.string.package_installer)
+        TextSummaryWithSwitch(
+            TextSummaryV(
+                textId = R.string.allow_unofficial_system_applications_installation
+            ),
+            SwitchV("allow_unofficial_system_applications_installation", false)
+        )
+
         TitleText(textId = R.string.reboot)
         TextSummaryWithArrow(
             TextSummaryV(

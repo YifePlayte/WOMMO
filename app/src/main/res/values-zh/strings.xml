@@ -24,4 +24,6 @@
     <string name="open_by_default">默认打开</string>
     <string name="security_center">手机管家/平板管家</string>
     <string name="open_by_default_setting">将应用详情中“消除默认操作”改为“默认打开”设置</string>
+    <string name="package_installer">应用包管理组件</string>
+    <string name="allow_unofficial_system_applications_installation">允许从非官方渠道安装系统应用</string>
 </resources>

@@ -6,6 +6,7 @@ import com.github.kyuubiran.ezxhelper.LogExtensions.logexIfThrow
 import com.yifeplayte.wommo.hook.hooks.BaseHook
 import com.yifeplayte.wommo.hook.hooks.home.AddFreeformShortcut
 import com.yifeplayte.wommo.hook.hooks.home.RestoreGoogleAppIcon
+import com.yifeplayte.wommo.hook.hooks.packageinstaller.AllowUnofficialSystemApplicationsInstallation
 import com.yifeplayte.wommo.hook.hooks.screenrecorder.EnablePlaybackCapture
 import com.yifeplayte.wommo.hook.hooks.screenrecorder.ModifyScreenRecorderConfig
 import com.yifeplayte.wommo.hook.hooks.securitycenter.OpenByDefaultSetting
@@ -23,6 +24,7 @@ val PACKAGE_NAME_HOOKED = listOf(
     "com.android.systemui",
     "com.miui.home",
     "com.miui.securitycenter",
+    "com.miui.packageinstaller",
 )
 
 @Suppress("unused")
@@ -51,6 +53,10 @@ class MainHook : IXposedHookLoadPackage, IXposedHookZygoteInit {
 
                 "com.miui.securitycenter" -> {
                     initHook(OpenByDefaultSetting, "open_by_default_setting")
+                }
+
+                "com.miui.packageinstaller" -> {
+                    initHook(AllowUnofficialSystemApplicationsInstallation, "allow_unofficial_system_applications_installation")
                 }
             }
             DexKit.closeDexKit()
