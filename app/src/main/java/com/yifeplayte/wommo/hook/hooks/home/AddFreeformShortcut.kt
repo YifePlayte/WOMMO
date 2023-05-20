@@ -31,10 +31,7 @@ object AddFreeformShortcut : BaseHook() {
         loadClass("com.miui.home.launcher.util.ViewDarkModeHelper").methodFinder()
             .filterByName("onConfigurationChanged").toList().createHooks {
                 after {
-                    invokeStaticMethodBestMatch(
-                        clazzSystemShortcutMenuItem,
-                        "createAllSystemShortcutMenuItems"
-                    )
+                    invokeStaticMethodBestMatch(clazzSystemShortcutMenuItem, "createAllSystemShortcutMenuItems")
                 }
             }
         loadClass("com.miui.home.launcher.shortcuts.ShortcutMenuItem").methodFinder().filterByName("getShortTitle")
@@ -84,26 +81,23 @@ object AddFreeformShortcut : BaseHook() {
                     param.result = 5
                 }
             }
-        clazzSystemShortcutMenuItem.methodFinder()
-            .filterByName("createAllSystemShortcutMenuItems").toList().createHooks {
+        clazzSystemShortcutMenuItem.methodFinder().filterByName("createAllSystemShortcutMenuItems").toList()
+            .createHooks {
                 after {
-                    @Suppress("UNCHECKED_CAST")
-                    val mAllSystemShortcutMenuItems =
+                    @Suppress("UNCHECKED_CAST") val mAllSystemShortcutMenuItems =
                         getStaticObjectField(clazzSystemShortcutMenuItem, "sAllSystemShortcutMenuItems") as List<Any>
                     val mSmallWindowInstance =
                         loadClass("com.miui.home.launcher.shortcuts.SystemShortcutMenuItem\$AppDetailsShortcutMenuItem").newInstance()
                             .apply {
                                 callMethod(this, "setShortTitle", EzXHelper.moduleRes.getString(R.string.freeform))
-                                callMethod(
-                                    this, "setIconDrawable", EzXHelper.appContext.let {
-                                        it.getDrawable(
-                                            it.resources.getIdentifier(
-                                                "ic_task_small_window", "drawable", EzXHelper.hostPackageName
+                                callMethod(this, "setIconDrawable", EzXHelper.appContext.let {
+                                    it.getDrawable(
+                                        it.resources.getIdentifier(
+                                            "ic_task_small_window", "drawable", EzXHelper.hostPackageName
 
-                                            )
                                         )
-                                    }
-                                )
+                                    )
+                                })
                             }
 
                     val sAllSystemShortcutMenuItems = ArrayList<Any>().apply {
@@ -111,9 +105,7 @@ object AddFreeformShortcut : BaseHook() {
                         addAll(mAllSystemShortcutMenuItems)
                     }
                     setStaticObjectField(
-                        clazzSystemShortcutMenuItem,
-                        "sAllSystemShortcutMenuItems",
-                        sAllSystemShortcutMenuItems
+                        clazzSystemShortcutMenuItem, "sAllSystemShortcutMenuItems", sAllSystemShortcutMenuItems
                     )
                 }
             }
