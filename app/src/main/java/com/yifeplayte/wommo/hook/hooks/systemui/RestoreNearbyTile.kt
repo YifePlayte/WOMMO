@@ -2,6 +2,7 @@ package com.yifeplayte.wommo.hook.hooks.systemui
 
 import android.content.pm.ApplicationInfo
 import com.github.kyuubiran.ezxhelper.ClassUtils.loadClass
+import com.github.kyuubiran.ezxhelper.ClassUtils.setStaticObject
 import com.github.kyuubiran.ezxhelper.HookFactory
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
 import com.github.kyuubiran.ezxhelper.Log
@@ -9,7 +10,6 @@ import com.github.kyuubiran.ezxhelper.LogExtensions.logexIfThrow
 import com.github.kyuubiran.ezxhelper.MemberExtensions.paramCount
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder.`-Static`.methodFinder
 import com.yifeplayte.wommo.hook.hooks.BaseHook
-import de.robv.android.xposed.XposedHelpers.setStaticBooleanField
 
 object RestoreNearbyTile : BaseHook() {
     var isTrulyInit: Boolean = false
@@ -36,10 +36,10 @@ object RestoreNearbyTile : BaseHook() {
             val isInternationalHook: HookFactory.() -> Unit = {
                 val constantsClazz = loadClass("com.android.systemui.controlcenter.utils.Constants")
                 before {
-                    setStaticBooleanField(constantsClazz, "IS_INTERNATIONAL", true)
+                    setStaticObject(constantsClazz, "IS_INTERNATIONAL", true)
                 }
                 after {
-                    setStaticBooleanField(constantsClazz, "IS_INTERNATIONAL", false)
+                    setStaticObject(constantsClazz, "IS_INTERNATIONAL", false)
                 }
             }
 

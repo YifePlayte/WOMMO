@@ -44,7 +44,7 @@ android {
 
 dependencies {
     implementation(project(":blockmiui"))
-    implementation("com.github.kyuubiran:EzXHelper:2.0.1")
+    implementation("com.github.kyuubiran:EzXHelper:2.0.4")
     implementation("androidx.core:core-ktx:1.10.1")
     implementation("org.luckypray:DexKit:1.1.7")
     compileOnly("de.robv.android.xposed:api:82")

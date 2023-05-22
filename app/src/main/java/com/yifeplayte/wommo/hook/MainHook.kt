@@ -56,7 +56,10 @@ class MainHook : IXposedHookLoadPackage, IXposedHookZygoteInit {
                 }
 
                 "com.miui.packageinstaller" -> {
-                    initHook(AllowUnofficialSystemApplicationsInstallation, "allow_unofficial_system_applications_installation")
+                    initHook(
+                        AllowUnofficialSystemApplicationsInstallation,
+                        "allow_unofficial_system_applications_installation"
+                    )
                 }
             }
             DexKit.closeDexKit()

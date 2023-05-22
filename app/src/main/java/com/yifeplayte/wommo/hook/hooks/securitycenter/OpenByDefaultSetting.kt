@@ -12,12 +12,13 @@ import com.github.kyuubiran.ezxhelper.EzXHelper.appContext
 import com.github.kyuubiran.ezxhelper.EzXHelper.hostPackageName
 import com.github.kyuubiran.ezxhelper.EzXHelper.moduleRes
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
+import com.github.kyuubiran.ezxhelper.ObjectUtils.getObjectOrNull
+import com.github.kyuubiran.ezxhelper.ObjectUtils.invokeMethodBestMatch
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder.`-Static`.methodFinder
 import com.yifeplayte.wommo.R
 import com.yifeplayte.wommo.hook.hooks.BaseHook
 import com.yifeplayte.wommo.hook.utils.DexKit.dexKitBridge
 import com.yifeplayte.wommo.hook.utils.DexKit.loadDexKit
-import de.robv.android.xposed.XposedHelpers
 import io.luckypray.dexkit.enums.MatchType
 
 object OpenByDefaultSetting : BaseHook() {
@@ -48,7 +49,7 @@ object OpenByDefaultSetting : BaseHook() {
                         addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
                         addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
                     }
-                    XposedHelpers.callMethod(param.thisObject, "startActivity", intent)
+                    invokeMethodBestMatch(param.thisObject, "startActivity", null, intent)
                     param.result = null
                 }
             }
@@ -76,11 +77,21 @@ object OpenByDefaultSetting : BaseHook() {
                 val subTextId =
                     if (isLinkHandlingAllowed) R.string.app_link_open_always else R.string.app_link_open_never
                 cleanOpenByDefaultView::class.java.declaredFields.forEach {
-                    val view = XposedHelpers.getObjectField(cleanOpenByDefaultView, it.name)
+                    val view = getObjectOrNull(cleanOpenByDefaultView, it.name)
                     if (view !is TextView) return@forEach
-                    XposedHelpers.callMethod(view, "setText", moduleRes.getString(R.string.open_by_default))
+                    invokeMethodBestMatch(
+                        view,
+                        "setText",
+                        null,
+                        moduleRes.getString(R.string.open_by_default)
+                    )
                 }
-                XposedHelpers.callMethod(cleanOpenByDefaultView, "setSummary", moduleRes.getString(subTextId))
+                invokeMethodBestMatch(
+                    cleanOpenByDefaultView,
+                    "setSummary",
+                    null,
+                    moduleRes.getString(subTextId)
+                )
             }
         }
     }
