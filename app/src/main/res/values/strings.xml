@@ -28,4 +28,6 @@
     <string name="open_by_default_setting">Change App Info \"Clear defaults\" to \"Open by default\"</string>
     <string name="package_installer">Package installer</string>
     <string name="allow_unofficial_system_applications_installation">Allow the installation of system applications from unofficial channels</string>
+    <string name="lockscreen_charging_info">Display charging power on lock screen</string>
+    <string name="lockscreen_charging_info_not_supported">Device currently unsupported</string>
 </resources>

@@ -10,6 +10,7 @@ import com.yifeplayte.wommo.hook.hooks.packageinstaller.AllowUnofficialSystemApp
 import com.yifeplayte.wommo.hook.hooks.screenrecorder.EnablePlaybackCapture
 import com.yifeplayte.wommo.hook.hooks.screenrecorder.ModifyScreenRecorderConfig
 import com.yifeplayte.wommo.hook.hooks.securitycenter.OpenByDefaultSetting
+import com.yifeplayte.wommo.hook.hooks.systemui.LockscreenChargingInfo
 import com.yifeplayte.wommo.hook.hooks.systemui.NotificationSettingsNoWhiteList
 import com.yifeplayte.wommo.hook.hooks.systemui.RestoreNearbyTile
 import com.yifeplayte.wommo.hook.utils.DexKit
@@ -44,6 +45,7 @@ class MainHook : IXposedHookLoadPackage, IXposedHookZygoteInit {
                 "com.android.systemui" -> {
                     initHook(RestoreNearbyTile, "restore_near_by_tile")
                     initHook(NotificationSettingsNoWhiteList, "notification_settings_no_white_list")
+                    initHook(LockscreenChargingInfo, "lockscreen_charging_info")
                 }
 
                 "com.miui.home" -> {

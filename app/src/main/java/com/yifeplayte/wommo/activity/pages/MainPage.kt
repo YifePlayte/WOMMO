@@ -42,6 +42,12 @@ class MainPage : BasePage() {
             ),
             SwitchV("notification_settings_no_white_list", false)
         )
+        TextSummaryWithSwitch(
+            TextSummaryV(
+                textId = R.string.lockscreen_charging_info
+            ),
+            SwitchV("lockscreen_charging_info", false)
+        )
 
         TitleText(textId = R.string.security_center)
         TextSummaryWithSwitch(
