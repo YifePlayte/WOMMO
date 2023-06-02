@@ -8,13 +8,15 @@
 
 #### 系统桌面
 
-- 恢复Google图标
+- 恢复 Google 图标
 - 快捷菜单添加小窗
 
 #### 系统界面
 
 - 恢复附近分享磁贴
 - 移除通知设置白名单
+- 锁屏显示充电功率
+- 启用 Alpha 充电动画
 
 #### 手机管家/平板管家
 
@@ -50,6 +52,8 @@
 [Simplicity-Team/WooBoxForMIUI](https://github.com/Simplicity-Team/WooBoxForMIUI)
 
 [qqlittleice/MiuiHome_R](https://github.com/qqlittleice/MiuiHome_R)
+
+[YifePlayte/WaveCharge](https://github.com/YifePlayte/WaveCharge)
 
 ##### 啥也不知道，咱也不敢问（
 

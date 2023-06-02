@@ -47,7 +47,7 @@ class MainHook : IXposedHookLoadPackage, IXposedHookZygoteInit {
                     initHook(RestoreNearbyTile, "restore_near_by_tile")
                     initHook(NotificationSettingsNoWhiteList, "notification_settings_no_white_list")
                     initHook(LockscreenChargingInfo, "lockscreen_charging_info")
-                    initHook(WaveCharge,"wave_charge")
+                    initHook(WaveCharge, "wave_charge")
                 }
 
                 "com.miui.home" -> {
