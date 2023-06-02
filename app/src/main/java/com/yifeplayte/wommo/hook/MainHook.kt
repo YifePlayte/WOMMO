@@ -6,6 +6,7 @@ import com.github.kyuubiran.ezxhelper.LogExtensions.logexIfThrow
 import com.yifeplayte.wommo.hook.hooks.BaseHook
 import com.yifeplayte.wommo.hook.hooks.home.AddFreeformShortcut
 import com.yifeplayte.wommo.hook.hooks.home.RestoreGoogleAppIcon
+import com.yifeplayte.wommo.hook.hooks.home.RestoreSwitchMinusScreen
 import com.yifeplayte.wommo.hook.hooks.packageinstaller.AllowUnofficialSystemApplicationsInstallation
 import com.yifeplayte.wommo.hook.hooks.screenrecorder.EnablePlaybackCapture
 import com.yifeplayte.wommo.hook.hooks.screenrecorder.ModifyScreenRecorderConfig
@@ -53,6 +54,7 @@ class MainHook : IXposedHookLoadPackage, IXposedHookZygoteInit {
                 "com.miui.home" -> {
                     initHook(RestoreGoogleAppIcon, "restore_google_app_icon")
                     initHook(AddFreeformShortcut, "add_freeform_shortcut")
+                    initHook(RestoreSwitchMinusScreen, "restore_switch_minus_screen")
                 }
 
                 "com.miui.securitycenter" -> {

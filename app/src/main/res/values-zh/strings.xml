@@ -29,4 +29,5 @@
     <string name="lockscreen_charging_info">锁屏显示充电功率</string>
     <string name="lockscreen_charging_info_not_supported">暂不支持此设备</string>
     <string name="wave_charge">启用 Alpha 充电动画</string>
+    <string name="restore_switch_minus_screen">恢复切换负一屏</string>
 </resources>

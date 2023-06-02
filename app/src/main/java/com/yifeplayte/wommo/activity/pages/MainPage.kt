@@ -28,6 +28,12 @@ class MainPage : BasePage() {
             ),
             SwitchV("add_freeform_shortcut", false)
         )
+        TextSummaryWithSwitch(
+            TextSummaryV(
+                textId = R.string.restore_switch_minus_screen
+            ),
+            SwitchV("restore_switch_minus_screen", false)
+        )
 
         TitleText(textId = R.string.system_ui)
         TextSummaryWithSwitch(
