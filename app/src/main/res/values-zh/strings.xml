@@ -15,7 +15,7 @@
     <string name="system_ui">系统界面</string>
     <string name="restore_near_by_tile">恢复附近分享磁贴</string>
     <string name="miui_home">系统桌面</string>
-    <string name="restore_google_app_icon">恢复Google图标</string>
+    <string name="restore_google_app_icon">恢复 Google 图标</string>
     <string name="freeform">小窗</string>
     <string name="add_freeform_shortcut">快捷菜单添加小窗</string>
     <string name="notification_settings_no_white_list">移除通知设置白名单</string>
@@ -28,4 +28,5 @@
     <string name="allow_unofficial_system_applications_installation">允许从非官方渠道安装系统应用</string>
     <string name="lockscreen_charging_info">锁屏显示充电功率</string>
     <string name="lockscreen_charging_info_not_supported">暂不支持此设备</string>
+    <string name="wave_charge">启用 Alpha 充电动画</string>
 </resources>

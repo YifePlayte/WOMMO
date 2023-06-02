@@ -48,6 +48,12 @@ class MainPage : BasePage() {
             ),
             SwitchV("lockscreen_charging_info", false)
         )
+        TextSummaryWithSwitch(
+            TextSummaryV(
+                textId = R.string.wave_charge
+            ),
+            SwitchV("wave_charge", false)
+        )
 
         TitleText(textId = R.string.security_center)
         TextSummaryWithSwitch(

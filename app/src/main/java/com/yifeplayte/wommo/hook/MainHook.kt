@@ -13,6 +13,7 @@ import com.yifeplayte.wommo.hook.hooks.securitycenter.OpenByDefaultSetting
 import com.yifeplayte.wommo.hook.hooks.systemui.LockscreenChargingInfo
 import com.yifeplayte.wommo.hook.hooks.systemui.NotificationSettingsNoWhiteList
 import com.yifeplayte.wommo.hook.hooks.systemui.RestoreNearbyTile
+import com.yifeplayte.wommo.hook.hooks.systemui.WaveCharge
 import com.yifeplayte.wommo.hook.utils.DexKit
 import com.yifeplayte.wommo.hook.utils.XSharedPreferences.getBoolean
 import de.robv.android.xposed.IXposedHookLoadPackage
@@ -46,6 +47,7 @@ class MainHook : IXposedHookLoadPackage, IXposedHookZygoteInit {
                     initHook(RestoreNearbyTile, "restore_near_by_tile")
                     initHook(NotificationSettingsNoWhiteList, "notification_settings_no_white_list")
                     initHook(LockscreenChargingInfo, "lockscreen_charging_info")
+                    initHook(WaveCharge,"wave_charge")
                 }
 
                 "com.miui.home" -> {
