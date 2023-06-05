@@ -7,7 +7,7 @@ import cn.fkj233.ui.activity.data.BasePage
 import cn.fkj233.ui.activity.view.SwitchV
 import cn.fkj233.ui.activity.view.TextSummaryV
 import cn.fkj233.ui.dialog.MIUIDialog
-import com.yifeplayte.maxfreeform.utils.Terminal
+import com.yifeplayte.wommo.utils.Terminal
 import com.yifeplayte.wommo.R
 import com.yifeplayte.wommo.hook.PACKAGE_NAME_HOOKED
 

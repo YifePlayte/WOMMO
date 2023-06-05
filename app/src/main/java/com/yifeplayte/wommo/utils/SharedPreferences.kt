@@ -1,4 +1,4 @@
-package com.yifeplayte.maxfreeform.utils
+package com.yifeplayte.wommo.utils
 
 object SharedPreferences {
     fun android.content.SharedPreferences.putStringSet(
