@@ -8,6 +8,7 @@ import com.yifeplayte.wommo.hook.hooks.home.AddFreeformShortcut
 import com.yifeplayte.wommo.hook.hooks.home.RestoreGoogleAppIcon
 import com.yifeplayte.wommo.hook.hooks.home.RestoreSwitchMinusScreen
 import com.yifeplayte.wommo.hook.hooks.packageinstaller.AllowUnofficialSystemApplicationsInstallation
+import com.yifeplayte.wommo.hook.hooks.personalassistant.ExposureRefreshForNonMIUIWidget
 import com.yifeplayte.wommo.hook.hooks.screenrecorder.EnablePlaybackCapture
 import com.yifeplayte.wommo.hook.hooks.screenrecorder.ModifyScreenRecorderConfig
 import com.yifeplayte.wommo.hook.hooks.securitycenter.OpenByDefaultSetting
@@ -28,6 +29,7 @@ val PACKAGE_NAME_HOOKED = listOf(
     "com.miui.home",
     "com.miui.securitycenter",
     "com.miui.packageinstaller",
+    "com.miui.personalassistant",
 )
 
 @Suppress("unused")
@@ -66,6 +68,10 @@ class MainHook : IXposedHookLoadPackage, IXposedHookZygoteInit {
                         AllowUnofficialSystemApplicationsInstallation,
                         "allow_unofficial_system_applications_installation"
                     )
+                }
+
+                "com.miui.personalassistant" -> {
+                    initHook(ExposureRefreshForNonMIUIWidget, "exposure_refresh_for_non_miui_widget")
                 }
             }
             DexKit.closeDexKit()

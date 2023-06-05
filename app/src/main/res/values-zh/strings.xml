@@ -30,4 +30,6 @@
     <string name="lockscreen_charging_info_not_supported">暂不支持此设备</string>
     <string name="wave_charge">启用 Alpha 充电动画</string>
     <string name="restore_switch_minus_screen">恢复切换负一屏</string>
+    <string name="personal_assistant">智能助理（负一屏）</string>
+    <string name="exposure_refresh_for_non_miui_widget">为非MIUI小部件提供曝光刷新</string>
 </resources>

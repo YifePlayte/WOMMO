@@ -32,4 +32,6 @@
     <string name="lockscreen_charging_info_not_supported">Device currently unsupported</string>
     <string name="wave_charge">Enable wave charge animation</string>
     <string name="restore_switch_minus_screen">Restore switch minus screen</string>
+    <string name="personal_assistant">App vault</string>
+    <string name="exposure_refresh_for_non_miui_widget">Exposure refresh for non-MIUI-widgets</string>
 </resources>

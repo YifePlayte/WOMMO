@@ -6,5 +6,6 @@
         <item>com.miui.home</item>
         <item>com.miui.securitycenter</item>
         <item>com.miui.packageinstaller</item>
+        <item>com.miui.personalassistant</item>
     </string-array>
 </resources>

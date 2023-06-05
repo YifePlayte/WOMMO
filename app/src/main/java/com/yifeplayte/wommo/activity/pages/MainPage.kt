@@ -91,6 +91,14 @@ class MainPage : BasePage() {
             SwitchV("allow_unofficial_system_applications_installation", false)
         )
 
+        TitleText(textId = R.string.personal_assistant)
+        TextSummaryWithSwitch(
+            TextSummaryV(
+                textId = R.string.exposure_refresh_for_non_miui_widget
+            ),
+            SwitchV("exposure_refresh_for_non_miui_widget", false)
+        )
+
         TitleText(textId = R.string.reboot)
         TextSummaryWithArrow(
             TextSummaryV(
