@@ -5,6 +5,7 @@ import com.github.kyuubiran.ezxhelper.Log
 import com.github.kyuubiran.ezxhelper.LogExtensions.logexIfThrow
 import com.yifeplayte.wommo.hook.hooks.BaseHook
 import com.yifeplayte.wommo.hook.hooks.home.AddFreeformShortcut
+import com.yifeplayte.wommo.hook.hooks.home.AllowMoveNonMIUIWidgetToMinusScreen
 import com.yifeplayte.wommo.hook.hooks.home.RestoreGoogleAppIcon
 import com.yifeplayte.wommo.hook.hooks.home.RestoreSwitchMinusScreen
 import com.yifeplayte.wommo.hook.hooks.packageinstaller.AllowUnofficialSystemApplicationsInstallation
@@ -57,6 +58,7 @@ class MainHook : IXposedHookLoadPackage, IXposedHookZygoteInit {
                     initHook(RestoreGoogleAppIcon, "restore_google_app_icon")
                     initHook(AddFreeformShortcut, "add_freeform_shortcut")
                     initHook(RestoreSwitchMinusScreen, "restore_switch_minus_screen")
+                    initHook(AllowMoveNonMIUIWidgetToMinusScreen, "allow_move_non_miui_widget_to_minus_screen")
                 }
 
                 "com.miui.securitycenter" -> {

@@ -7,9 +7,9 @@ import cn.fkj233.ui.activity.data.BasePage
 import cn.fkj233.ui.activity.view.SwitchV
 import cn.fkj233.ui.activity.view.TextSummaryV
 import cn.fkj233.ui.dialog.MIUIDialog
-import com.yifeplayte.wommo.utils.Terminal
 import com.yifeplayte.wommo.R
 import com.yifeplayte.wommo.hook.PACKAGE_NAME_HOOKED
+import com.yifeplayte.wommo.utils.Terminal
 
 @SuppressLint("NonConstantResourceId")
 @BMMainPage(titleId = R.string.app_name)
@@ -33,6 +33,12 @@ class MainPage : BasePage() {
                 textId = R.string.restore_switch_minus_screen
             ),
             SwitchV("restore_switch_minus_screen", false)
+        )
+        TextSummaryWithSwitch(
+            TextSummaryV(
+                textId = R.string.allow_move_non_miui_widget_to_minus_screen
+            ),
+            SwitchV("allow_move_non_miui_widget_to_minus_screen", false)
         )
 
         TitleText(textId = R.string.system_ui)
