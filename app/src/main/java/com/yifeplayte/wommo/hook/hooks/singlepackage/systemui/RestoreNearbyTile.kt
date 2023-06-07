@@ -1,4 +1,4 @@
-package com.yifeplayte.wommo.hook.hooks.systemui
+package com.yifeplayte.wommo.hook.hooks.singlepackage.systemui
 
 import android.content.pm.ApplicationInfo
 import com.github.kyuubiran.ezxhelper.ClassUtils.loadClass
@@ -9,9 +9,9 @@ import com.github.kyuubiran.ezxhelper.Log
 import com.github.kyuubiran.ezxhelper.LogExtensions.logexIfThrow
 import com.github.kyuubiran.ezxhelper.MemberExtensions.paramCount
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder.`-Static`.methodFinder
-import com.yifeplayte.wommo.hook.hooks.BaseHook
+import com.yifeplayte.wommo.hook.hooks.BaseSingleHook
 
-object RestoreNearbyTile : BaseHook() {
+object RestoreNearbyTile : BaseSingleHook() {
     var isTrulyInit: Boolean = false
     override fun init() {
         loadClass("com.android.systemui.shared.plugins.PluginInstance\$Factory").methodFinder().first {

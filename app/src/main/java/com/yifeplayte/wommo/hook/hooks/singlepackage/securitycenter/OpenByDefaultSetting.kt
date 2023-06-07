@@ -1,4 +1,4 @@
-package com.yifeplayte.wommo.hook.hooks.securitycenter
+package com.yifeplayte.wommo.hook.hooks.singlepackage.securitycenter
 
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -16,12 +16,12 @@ import com.github.kyuubiran.ezxhelper.ObjectUtils.getObjectOrNull
 import com.github.kyuubiran.ezxhelper.ObjectUtils.invokeMethodBestMatch
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder.`-Static`.methodFinder
 import com.yifeplayte.wommo.R
-import com.yifeplayte.wommo.hook.hooks.BaseHook
+import com.yifeplayte.wommo.hook.hooks.BaseSingleHook
 import com.yifeplayte.wommo.hook.utils.DexKit.dexKitBridge
 import com.yifeplayte.wommo.hook.utils.DexKit.loadDexKit
 import io.luckypray.dexkit.enums.MatchType
 
-object OpenByDefaultSetting : BaseHook() {
+object OpenByDefaultSetting : BaseSingleHook() {
     @SuppressLint("DiscouragedApi")
     override fun init() {
         val domainVerificationManager: DomainVerificationManager by lazy {

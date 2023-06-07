@@ -1,4 +1,4 @@
-package com.yifeplayte.wommo.hook.hooks.personalassistant
+package com.yifeplayte.wommo.hook.hooks.singlepackage.personalassistant
 
 import android.content.ComponentName
 import android.content.Intent
@@ -9,10 +9,10 @@ import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
 import com.github.kyuubiran.ezxhelper.ObjectUtils.getObjectOrNull
 import com.github.kyuubiran.ezxhelper.ObjectUtils.setObject
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder.`-Static`.methodFinder
-import com.yifeplayte.wommo.hook.hooks.BaseHook
+import com.yifeplayte.wommo.hook.hooks.BaseSingleHook
 import de.robv.android.xposed.XposedHelpers
 
-object ExposureRefreshForNonMIUIWidget : BaseHook() {
+object ExposureRefreshForNonMIUIWidget : BaseSingleHook() {
     override fun init() {
         val clazzAppWidgetItemInfo = loadClass("com.miui.personalassistant.widget.iteminfo.AppWidgetItemInfo")
         clazzAppWidgetItemInfo.methodFinder().filterByName("parseWidgetMetaData").first().createHook {

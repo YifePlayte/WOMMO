@@ -1,12 +1,12 @@
-package com.yifeplayte.wommo.hook.hooks.screenrecorder
+package com.yifeplayte.wommo.hook.hooks.singlepackage.screenrecorder
 
 import com.github.kyuubiran.ezxhelper.ClassUtils.loadClass
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
 import com.github.kyuubiran.ezxhelper.MemberExtensions.paramCount
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder.`-Static`.methodFinder
-import com.yifeplayte.wommo.hook.hooks.BaseHook
+import com.yifeplayte.wommo.hook.hooks.BaseSingleHook
 
-object EnablePlaybackCapture : BaseHook() {
+object EnablePlaybackCapture : BaseSingleHook() {
     override fun init() {
         loadClass("android.os.SystemProperties").methodFinder().first {
             name == "getBoolean"

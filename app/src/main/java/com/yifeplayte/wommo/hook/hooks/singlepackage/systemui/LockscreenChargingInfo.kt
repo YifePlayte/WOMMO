@@ -1,4 +1,4 @@
-package com.yifeplayte.wommo.hook.hooks.systemui
+package com.yifeplayte.wommo.hook.hooks.singlepackage.systemui
 
 import android.widget.TextView
 import com.github.kyuubiran.ezxhelper.ClassUtils.loadClass
@@ -8,11 +8,11 @@ import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHooks
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder.`-Static`.methodFinder
 import com.yifeplayte.wommo.R
-import com.yifeplayte.wommo.hook.hooks.BaseHook
+import com.yifeplayte.wommo.hook.hooks.BaseSingleHook
 import java.io.BufferedReader
 import java.io.FileReader
 
-object LockscreenChargingInfo : BaseHook() {
+object LockscreenChargingInfo : BaseSingleHook() {
     override fun init() {
         loadClassOrNull("com.android.systemui.statusbar.phone.KeyguardIndicationTextView")?.constructors?.createHooks {
             after {

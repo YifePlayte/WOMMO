@@ -1,14 +1,14 @@
-package com.yifeplayte.wommo.hook.hooks.home
+package com.yifeplayte.wommo.hook.hooks.singlepackage.home
 
 import com.github.kyuubiran.ezxhelper.ClassUtils.loadClass
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
 import com.github.kyuubiran.ezxhelper.ObjectUtils.getObjectOrNullUntilSuperclassAs
 import com.github.kyuubiran.ezxhelper.ObjectUtils.invokeMethodBestMatch
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder.`-Static`.methodFinder
-import com.yifeplayte.wommo.hook.hooks.BaseHook
+import com.yifeplayte.wommo.hook.hooks.BaseSingleHook
 import de.robv.android.xposed.XposedHelpers.callMethod
 
-object AllowMoveNonMIUIWidgetToMinusScreen : BaseHook() {
+object AllowMoveNonMIUIWidgetToMinusScreen : BaseSingleHook() {
     override fun init() {
         loadClass("com.miui.home.launcher.widget.MIUIWidgetHelper").methodFinder().filterByName("canDragToPa")
             .filterByParamCount(2).first().createHook {

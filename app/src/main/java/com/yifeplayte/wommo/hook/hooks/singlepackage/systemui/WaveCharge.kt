@@ -1,12 +1,12 @@
-package com.yifeplayte.wommo.hook.hooks.systemui
+package com.yifeplayte.wommo.hook.hooks.singlepackage.systemui
 
 import com.github.kyuubiran.ezxhelper.ClassUtils.loadClass
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
 import com.github.kyuubiran.ezxhelper.ObjectHelper.Companion.objectHelper
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder.`-Static`.methodFinder
-import com.yifeplayte.wommo.hook.hooks.BaseHook
+import com.yifeplayte.wommo.hook.hooks.BaseSingleHook
 
-object WaveCharge : BaseHook() {
+object WaveCharge : BaseSingleHook() {
     override fun init() {
         loadClass("com.android.keyguard.charge.ChargeUtils").methodFinder().filterByName("supportWaveChargeAnimation")
             .first().createHook {

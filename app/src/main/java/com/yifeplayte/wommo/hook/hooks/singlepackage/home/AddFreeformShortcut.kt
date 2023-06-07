@@ -1,4 +1,4 @@
-package com.yifeplayte.wommo.hook.hooks.home
+package com.yifeplayte.wommo.hook.hooks.singlepackage.home
 
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -15,9 +15,9 @@ import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHooks
 import com.github.kyuubiran.ezxhelper.ObjectUtils.invokeMethodBestMatch
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder.`-Static`.methodFinder
 import com.yifeplayte.wommo.R
-import com.yifeplayte.wommo.hook.hooks.BaseHook
+import com.yifeplayte.wommo.hook.hooks.BaseSingleHook
 
-object AddFreeformShortcut : BaseHook() {
+object AddFreeformShortcut : BaseSingleHook() {
     @SuppressLint("DiscouragedApi")
     override fun init() {
         val clazzSystemShortcutMenuItem = loadClass("com.miui.home.launcher.shortcuts.SystemShortcutMenuItem")

@@ -1,4 +1,4 @@
-package com.yifeplayte.wommo.hook.hooks.home
+package com.yifeplayte.wommo.hook.hooks.singlepackage.home
 
 import android.content.Intent
 import android.os.Bundle
@@ -11,9 +11,9 @@ import com.github.kyuubiran.ezxhelper.ObjectHelper.Companion.objectHelper
 import com.github.kyuubiran.ezxhelper.ObjectUtils.getObjectOrNull
 import com.github.kyuubiran.ezxhelper.ObjectUtils.invokeMethodBestMatch
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder.`-Static`.methodFinder
-import com.yifeplayte.wommo.hook.hooks.BaseHook
+import com.yifeplayte.wommo.hook.hooks.BaseSingleHook
 
-object RestoreSwitchMinusScreen : BaseHook() {
+object RestoreSwitchMinusScreen : BaseSingleHook() {
     override fun init() {
         val clazzUtilities = loadClass("com.miui.home.launcher.common.Utilities")
         val clazzMiuiBuild = loadClass("miui.os.Build")

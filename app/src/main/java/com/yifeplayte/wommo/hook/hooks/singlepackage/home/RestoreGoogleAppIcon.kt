@@ -1,12 +1,12 @@
-package com.yifeplayte.wommo.hook.hooks.home
+package com.yifeplayte.wommo.hook.hooks.singlepackage.home
 
 import android.content.ComponentName
 import com.github.kyuubiran.ezxhelper.ClassUtils.loadClass
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHooks
 import com.github.kyuubiran.ezxhelper.ObjectUtils.getObjectOrNullAs
-import com.yifeplayte.wommo.hook.hooks.BaseHook
+import com.yifeplayte.wommo.hook.hooks.BaseSingleHook
 
-object RestoreGoogleAppIcon : BaseHook() {
+object RestoreGoogleAppIcon : BaseSingleHook() {
     override fun init() {
         loadClass("com.miui.home.launcher.AppFilter").declaredConstructors.createHooks {
             after { param ->

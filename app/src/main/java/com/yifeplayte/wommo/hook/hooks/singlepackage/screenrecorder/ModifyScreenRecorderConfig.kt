@@ -1,13 +1,13 @@
-package com.yifeplayte.wommo.hook.hooks.screenrecorder
+package com.yifeplayte.wommo.hook.hooks.singlepackage.screenrecorder
 
 import com.github.kyuubiran.ezxhelper.EzXHelper
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
 import com.github.kyuubiran.ezxhelper.MemberExtensions.isFinal
-import com.yifeplayte.wommo.hook.hooks.BaseHook
+import com.yifeplayte.wommo.hook.hooks.BaseSingleHook
 import com.yifeplayte.wommo.hook.utils.DexKit.dexKitBridge
 import com.yifeplayte.wommo.hook.utils.DexKit.loadDexKit
 
-object ModifyScreenRecorderConfig : BaseHook() {
+object ModifyScreenRecorderConfig : BaseSingleHook() {
     override fun init() {
         loadDexKit()
         dexKitBridge.findMethodUsingString {
