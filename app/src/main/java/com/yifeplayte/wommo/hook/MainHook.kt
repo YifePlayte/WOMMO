@@ -5,6 +5,7 @@ import com.github.kyuubiran.ezxhelper.Log
 import com.github.kyuubiran.ezxhelper.LogExtensions.logexIfThrow
 import com.yifeplayte.wommo.hook.hooks.BaseMultiHook
 import com.yifeplayte.wommo.hook.hooks.BaseSingleHook
+import com.yifeplayte.wommo.hook.hooks.multipackage.ForceSupportSendApp
 import com.yifeplayte.wommo.hook.hooks.singlepackage.home.AddFreeformShortcut
 import com.yifeplayte.wommo.hook.hooks.singlepackage.home.AllowMoveNonMIUIWidgetToMinusScreen
 import com.yifeplayte.wommo.hook.hooks.singlepackage.home.RestoreGoogleAppIcon
@@ -32,6 +33,8 @@ val PACKAGE_NAME_HOOKED = listOf(
     "com.miui.securitycenter",
     "com.miui.packageinstaller",
     "com.miui.personalassistant",
+    "com.milink.service",
+    "com.xiaomi.mirror"
 )
 
 @Suppress("unused")
@@ -80,6 +83,10 @@ class MainHook : IXposedHookLoadPackage, IXposedHookZygoteInit {
                     initSingleHook(ExposureRefreshForNonMIUIWidget, "exposure_refresh_for_non_miui_widget")
                 }
             }
+
+            // multiple package
+            initMultiHook(ForceSupportSendApp, "force_support_send_app")
+
             DexKit.closeDexKit()
         }
     }

@@ -33,4 +33,7 @@
     <string name="personal_assistant">智能助理（负一屏）</string>
     <string name="exposure_refresh_for_non_miui_widget">为非MIUI小部件提供曝光刷新</string>
     <string name="allow_move_non_miui_widget_to_minus_screen">允许将非MIUI小部件移至智能助理（负一屏）</string>
+    <string name="others">其他</string>
+    <string name="force_support_send_app">强制所有应用支持流转</string>
+    <string name="force_support_send_app_tips">投屏，MIUI+ Beta版</string>
 </resources>

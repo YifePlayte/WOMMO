@@ -7,5 +7,7 @@
         <item>com.miui.securitycenter</item>
         <item>com.miui.packageinstaller</item>
         <item>com.miui.personalassistant</item>
+        <item>com.milink.service</item>
+        <item>com.xiaomi.mirror</item>
     </string-array>
 </resources>

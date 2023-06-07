@@ -35,4 +35,7 @@
     <string name="personal_assistant">App vault</string>
     <string name="exposure_refresh_for_non_miui_widget">Exposure refresh for non-MIUI-widgets</string>
     <string name="allow_move_non_miui_widget_to_minus_screen">Allow to move non-MIUI-widgets to App vault</string>
+    <string name="others">Others</string>
+    <string name="force_support_send_app">Force all apps support Handoff</string>
+    <string name="force_support_send_app_tips">Cast, MIUI+ Beta</string>
 </resources>

@@ -105,6 +105,15 @@ class MainPage : BasePage() {
             SwitchV("exposure_refresh_for_non_miui_widget", false)
         )
 
+        TitleText(textId = R.string.others)
+        TextSummaryWithSwitch(
+            TextSummaryV(
+                textId = R.string.force_support_send_app,
+                tipsId = R.string.force_support_send_app_tips,
+            ),
+            SwitchV("force_support_send_app", false)
+        )
+
         TitleText(textId = R.string.reboot)
         TextSummaryWithArrow(
             TextSummaryV(
