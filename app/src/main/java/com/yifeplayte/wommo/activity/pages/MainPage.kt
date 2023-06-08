@@ -40,7 +40,7 @@ class MainPage : BasePage() {
             ),
             SwitchV("allow_move_non_miui_widget_to_minus_screen", false)
         )
-
+        Line()
         TitleText(textId = R.string.system_ui)
         TextSummaryWithSwitch(
             TextSummaryV(
@@ -66,7 +66,7 @@ class MainPage : BasePage() {
             ),
             SwitchV("wave_charge", false)
         )
-
+        Line()
         TitleText(textId = R.string.security_center)
         TextSummaryWithSwitch(
             TextSummaryV(
@@ -74,7 +74,7 @@ class MainPage : BasePage() {
             ),
             SwitchV("open_by_default_setting", false)
         )
-
+        Line()
         TitleText(textId = R.string.screen_recorder)
         TextSummaryWithSwitch(
             TextSummaryV(
@@ -88,7 +88,7 @@ class MainPage : BasePage() {
             ),
             SwitchV("modify_screen_recorder_config", false)
         )
-
+        Line()
         TitleText(textId = R.string.package_installer)
         TextSummaryWithSwitch(
             TextSummaryV(
@@ -96,7 +96,7 @@ class MainPage : BasePage() {
             ),
             SwitchV("allow_unofficial_system_applications_installation", false)
         )
-
+        Line()
         TitleText(textId = R.string.personal_assistant)
         TextSummaryWithSwitch(
             TextSummaryV(
@@ -104,7 +104,7 @@ class MainPage : BasePage() {
             ),
             SwitchV("exposure_refresh_for_non_miui_widget", false)
         )
-
+        Line()
         TitleText(textId = R.string.others)
         TextSummaryWithSwitch(
             TextSummaryV(
@@ -113,7 +113,7 @@ class MainPage : BasePage() {
             ),
             SwitchV("force_support_send_app", false)
         )
-
+        Line()
         TitleText(textId = R.string.reboot)
         TextSummaryWithArrow(
             TextSummaryV(
