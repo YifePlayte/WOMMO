@@ -11,6 +11,7 @@ import com.github.kyuubiran.ezxhelper.LogExtensions.logexIfThrow
 import com.github.kyuubiran.ezxhelper.MemberExtensions.paramCount
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder.`-Static`.methodFinder
 import com.yifeplayte.wommo.hook.hooks.BaseSingleHook
+import com.yifeplayte.wommo.hook.utils.Build.IS_INTERNATIONAL_BUILD
 
 object RestoreNearbyTile : BaseSingleHook() {
     var isTrulyInit: Boolean = false
@@ -33,7 +34,7 @@ object RestoreNearbyTile : BaseSingleHook() {
                 }.logexIfThrow("Failed truly init hook: ${this@RestoreNearbyTile.javaClass.simpleName}")
             }
         }
-        if (getStaticObjectOrNullAs<Boolean>(loadClass("miui.os.Build"), "IS_INTERNATIONAL_BUILD") != true) {
+        if (!IS_INTERNATIONAL_BUILD) {
             val isInternationalHook: HookFactory.() -> Unit = {
                 val constantsClazz = loadClass("com.android.systemui.controlcenter.utils.Constants")
                 before {
