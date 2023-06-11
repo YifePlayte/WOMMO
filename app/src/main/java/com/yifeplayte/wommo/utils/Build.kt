@@ -1,4 +1,4 @@
-package com.yifeplayte.wommo.hook.utils
+package com.yifeplayte.wommo.utils
 
 import com.github.kyuubiran.ezxhelper.ClassUtils.getStaticObjectOrNullAs
 import com.github.kyuubiran.ezxhelper.ClassUtils.loadClass

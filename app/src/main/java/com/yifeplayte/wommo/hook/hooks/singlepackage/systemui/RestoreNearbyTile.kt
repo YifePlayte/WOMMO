@@ -1,7 +1,6 @@
 package com.yifeplayte.wommo.hook.hooks.singlepackage.systemui
 
 import android.content.pm.ApplicationInfo
-import com.github.kyuubiran.ezxhelper.ClassUtils.getStaticObjectOrNullAs
 import com.github.kyuubiran.ezxhelper.ClassUtils.loadClass
 import com.github.kyuubiran.ezxhelper.ClassUtils.setStaticObject
 import com.github.kyuubiran.ezxhelper.HookFactory
@@ -11,7 +10,7 @@ import com.github.kyuubiran.ezxhelper.LogExtensions.logexIfThrow
 import com.github.kyuubiran.ezxhelper.MemberExtensions.paramCount
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder.`-Static`.methodFinder
 import com.yifeplayte.wommo.hook.hooks.BaseSingleHook
-import com.yifeplayte.wommo.hook.utils.Build.IS_INTERNATIONAL_BUILD
+import com.yifeplayte.wommo.utils.Build.IS_INTERNATIONAL_BUILD
 
 object RestoreNearbyTile : BaseSingleHook() {
     var isTrulyInit: Boolean = false
