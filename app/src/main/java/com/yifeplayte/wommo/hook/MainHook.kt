@@ -6,6 +6,7 @@ import com.github.kyuubiran.ezxhelper.LogExtensions.logexIfThrow
 import com.yifeplayte.wommo.hook.hooks.BaseMultiHook
 import com.yifeplayte.wommo.hook.hooks.BaseSingleHook
 import com.yifeplayte.wommo.hook.hooks.multipackage.ForceSupportSendApp
+import com.yifeplayte.wommo.hook.hooks.singlepackage.barrage.ForceSupportBarrage
 import com.yifeplayte.wommo.hook.hooks.singlepackage.home.AddFreeformShortcut
 import com.yifeplayte.wommo.hook.hooks.singlepackage.home.AllowMoveNonMIUIWidgetToMinusScreen
 import com.yifeplayte.wommo.hook.hooks.singlepackage.home.RestoreGoogleAppIcon
@@ -34,7 +35,8 @@ val PACKAGE_NAME_HOOKED = listOf(
     "com.miui.packageinstaller",
     "com.miui.personalassistant",
     "com.milink.service",
-    "com.xiaomi.mirror"
+    "com.xiaomi.mirror",
+    "com.xiaomi.barrage",
 )
 
 @Suppress("unused")
@@ -81,6 +83,10 @@ class MainHook : IXposedHookLoadPackage, IXposedHookZygoteInit {
 
                 "com.miui.personalassistant" -> {
                     initSingleHook(ExposureRefreshForNonMIUIWidget, "exposure_refresh_for_non_miui_widget")
+                }
+
+                "com.xiaomi.barrage" -> {
+                    initSingleHook(ForceSupportBarrage, "force_support_barrage")
                 }
             }
 

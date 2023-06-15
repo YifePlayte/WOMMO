@@ -36,4 +36,6 @@
     <string name="others">其他</string>
     <string name="force_support_send_app">强制所有应用支持流转</string>
     <string name="force_support_send_app_tips">投屏，MIUI+ Beta版</string>
+    <string name="barrage">弹幕通知</string>
+    <string name="force_support_barrage">强制所有应用支持弹幕通知</string>
 </resources>

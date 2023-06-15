@@ -105,6 +105,14 @@ class MainPage : BasePage() {
             SwitchV("exposure_refresh_for_non_miui_widget", false)
         )
         Line()
+        TitleText(textId = R.string.barrage)
+        TextSummaryWithSwitch(
+            TextSummaryV(
+                textId = R.string.force_support_barrage
+            ),
+            SwitchV("force_support_barrage", false)
+        )
+        Line()
         TitleText(textId = R.string.others)
         TextSummaryWithSwitch(
             TextSummaryV(

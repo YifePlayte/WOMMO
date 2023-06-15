@@ -38,4 +38,6 @@
     <string name="others">Others</string>
     <string name="force_support_send_app">Force all apps support Handoff</string>
     <string name="force_support_send_app_tips">Cast, MIUI+ Beta</string>
+    <string name="barrage">Bullet screen notification</string>
+    <string name="force_support_barrage">Force all apps support bullet screen notification</string>
 </resources>
