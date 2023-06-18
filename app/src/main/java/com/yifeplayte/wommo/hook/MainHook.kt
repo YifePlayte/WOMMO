@@ -7,7 +7,6 @@ import com.yifeplayte.wommo.hook.hooks.BaseMultiHook
 import com.yifeplayte.wommo.hook.hooks.BaseSingleHook
 import com.yifeplayte.wommo.hook.hooks.multipackage.ForceSupportSendApp
 import com.yifeplayte.wommo.hook.hooks.singlepackage.barrage.ForceSupportBarrage
-import com.yifeplayte.wommo.hook.hooks.singlepackage.home.AddFreeformShortcut
 import com.yifeplayte.wommo.hook.hooks.singlepackage.home.AllowMoveNonMIUIWidgetToMinusScreen
 import com.yifeplayte.wommo.hook.hooks.singlepackage.home.RestoreGoogleAppIcon
 import com.yifeplayte.wommo.hook.hooks.singlepackage.home.RestoreSwitchMinusScreen
@@ -65,7 +64,6 @@ class MainHook : IXposedHookLoadPackage, IXposedHookZygoteInit {
 
                 "com.miui.home" -> {
                     initSingleHook(RestoreGoogleAppIcon, "restore_google_app_icon")
-                    initSingleHook(AddFreeformShortcut, "add_freeform_shortcut")
                     initSingleHook(RestoreSwitchMinusScreen, "restore_switch_minus_screen")
                     initSingleHook(AllowMoveNonMIUIWidgetToMinusScreen, "allow_move_non_miui_widget_to_minus_screen")
                 }
