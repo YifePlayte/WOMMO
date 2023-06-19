@@ -26,7 +26,7 @@ import de.robv.android.xposed.IXposedHookZygoteInit
 import de.robv.android.xposed.callbacks.XC_LoadPackage
 
 private const val TAG = "WOMMO"
-val PACKAGE_NAME_HOOKED = listOf(
+val PACKAGE_NAME_HOOKED = setOf(
     "com.miui.screenrecorder",
     "com.android.systemui",
     "com.miui.home",
