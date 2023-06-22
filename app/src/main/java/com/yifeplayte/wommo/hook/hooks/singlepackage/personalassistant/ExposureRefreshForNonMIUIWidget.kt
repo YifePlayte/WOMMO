@@ -9,11 +9,12 @@ import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
 import com.github.kyuubiran.ezxhelper.ObjectUtils.getObjectOrNull
 import com.github.kyuubiran.ezxhelper.ObjectUtils.setObject
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder.`-Static`.methodFinder
-import com.yifeplayte.wommo.hook.hooks.BaseSingleHook
+import com.yifeplayte.wommo.hook.hooks.BaseHook
 import de.robv.android.xposed.XposedHelpers
 
-object ExposureRefreshForNonMIUIWidget : BaseSingleHook() {
-    override fun init() {
+object ExposureRefreshForNonMIUIWidget : BaseHook() {
+    override val key = "exposure_refresh_for_non_miui_widget"
+    override fun hook() {
         val clazzAppWidgetItemInfo = loadClass("com.miui.personalassistant.widget.iteminfo.AppWidgetItemInfo")
         clazzAppWidgetItemInfo.methodFinder().filterByName("parseWidgetMetaData").first().createHook {
             after {

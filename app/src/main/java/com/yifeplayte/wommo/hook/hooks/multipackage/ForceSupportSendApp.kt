@@ -8,6 +8,7 @@ import com.github.kyuubiran.ezxhelper.finders.MethodFinder.`-Static`.methodFinde
 import com.yifeplayte.wommo.hook.hooks.BaseMultiHook
 
 object ForceSupportSendApp : BaseMultiHook() {
+    override val key = "force_support_send_app"
     override val hooks: Map<String, () -> Unit> = mapOf(
         "com.milink.service" to { milink() },
         "com.xiaomi.mirror" to { mirror() }

@@ -16,12 +16,13 @@ import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHooks
 import com.github.kyuubiran.ezxhelper.ObjectUtils.invokeMethodBestMatch
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder.`-Static`.methodFinder
 import com.yifeplayte.wommo.R
-import com.yifeplayte.wommo.hook.hooks.BaseSingleHook
+import com.yifeplayte.wommo.hook.hooks.BaseHook
 import java.io.BufferedReader
 import java.io.FileReader
 
-object LockscreenChargingInfo : BaseSingleHook() {
-    override fun init() {
+object LockscreenChargingInfo : BaseHook() {
+    override val key = "lockscreen_charging_info"
+    override fun hook() {
         val clazzDependency = loadClass("com.android.systemui.Dependency")
         val clazzKeyguardIndicationController = loadClass("com.android.systemui.statusbar.KeyguardIndicationController")
         loadClassOrNull("com.android.systemui.statusbar.phone.KeyguardIndicationTextView")?.constructors?.createHooks {

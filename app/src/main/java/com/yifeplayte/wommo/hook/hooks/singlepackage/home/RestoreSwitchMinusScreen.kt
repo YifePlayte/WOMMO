@@ -11,10 +11,11 @@ import com.github.kyuubiran.ezxhelper.ObjectHelper.Companion.objectHelper
 import com.github.kyuubiran.ezxhelper.ObjectUtils.getObjectOrNull
 import com.github.kyuubiran.ezxhelper.ObjectUtils.invokeMethodBestMatch
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder.`-Static`.methodFinder
-import com.yifeplayte.wommo.hook.hooks.BaseSingleHook
+import com.yifeplayte.wommo.hook.hooks.BaseHook
 
-object RestoreSwitchMinusScreen : BaseSingleHook() {
-    override fun init() {
+object RestoreSwitchMinusScreen : BaseHook() {
+    override val key = "restore_switch_minus_screen"
+    override fun hook() {
         val clazzUtilities = loadClass("com.miui.home.launcher.common.Utilities")
         val clazzMiuiBuild = loadClass("miui.os.Build")
         val clazzLauncher = loadClass("com.miui.home.launcher.Launcher")

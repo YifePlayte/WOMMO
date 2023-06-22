@@ -4,10 +4,11 @@ import android.content.ComponentName
 import com.github.kyuubiran.ezxhelper.ClassUtils.loadClass
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHooks
 import com.github.kyuubiran.ezxhelper.ObjectUtils.getObjectOrNullAs
-import com.yifeplayte.wommo.hook.hooks.BaseSingleHook
+import com.yifeplayte.wommo.hook.hooks.BaseHook
 
-object RestoreGoogleAppIcon : BaseSingleHook() {
-    override fun init() {
+object RestoreGoogleAppIcon : BaseHook() {
+    override val key = "restore_google_app_icon"
+    override fun hook() {
         loadClass("com.miui.home.launcher.AppFilter").declaredConstructors.createHooks {
             after { param ->
                 getObjectOrNullAs<HashSet<ComponentName>>(param.thisObject, "mSkippedItems")!!.removeIf {

@@ -1,38 +1,16 @@
 package com.yifeplayte.wommo.hook.hooks.singlepackage.systemui
 
-import android.content.pm.ApplicationInfo
 import com.github.kyuubiran.ezxhelper.ClassUtils.loadClass
 import com.github.kyuubiran.ezxhelper.ClassUtils.setStaticObject
 import com.github.kyuubiran.ezxhelper.HookFactory
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
-import com.github.kyuubiran.ezxhelper.Log
-import com.github.kyuubiran.ezxhelper.LogExtensions.logexIfThrow
-import com.github.kyuubiran.ezxhelper.MemberExtensions.paramCount
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder.`-Static`.methodFinder
-import com.yifeplayte.wommo.hook.hooks.BaseSingleHook
+import com.yifeplayte.wommo.hook.hooks.BaseHook
 import com.yifeplayte.wommo.utils.Build.IS_INTERNATIONAL_BUILD
 
-object RestoreNearbyTile : BaseSingleHook() {
-    var isTrulyInit: Boolean = false
-    override fun init() {
-        loadClass("com.android.systemui.shared.plugins.PluginInstance\$Factory").methodFinder().first {
-            name == "getClassLoader" && paramCount == 2 && parameterTypes[0] == ApplicationInfo::class.java && parameterTypes[1] == ClassLoader::class.java
-        }.createHook {
-            after { param ->
-                if (!isTrulyInit) kotlin.runCatching {
-                    val applicationInfo = param.args[0] as ApplicationInfo
-                    val pluginClassLoader = param.result as? ClassLoader ?: return@after
-                    if (applicationInfo.packageName != "miui.systemui.plugin") return@after
-                    loadClass(
-                        "miui.systemui.controlcenter.qs.customize.TileQueryHelper\$Companion", pluginClassLoader
-                    ).methodFinder().filterByName("filterNearby").first().createHook {
-                        returnConstant(false)
-                    }
-                    isTrulyInit = true
-                    Log.ix("Truly inited hook: ${this@RestoreNearbyTile.javaClass.simpleName}")
-                }.logexIfThrow("Failed truly init hook: ${this@RestoreNearbyTile.javaClass.simpleName}")
-            }
-        }
+object RestoreNearbyTile : BaseHook() {
+    override val key = "restore_near_by_tile"
+    override fun hook() {
         if (!IS_INTERNATIONAL_BUILD) {
             val isInternationalHook: HookFactory.() -> Unit = {
                 val constantsClazz = loadClass("com.android.systemui.controlcenter.utils.Constants")

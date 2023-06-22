@@ -5,11 +5,12 @@ import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
 import com.github.kyuubiran.ezxhelper.ObjectUtils.getObjectOrNullUntilSuperclassAs
 import com.github.kyuubiran.ezxhelper.ObjectUtils.invokeMethodBestMatch
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder.`-Static`.methodFinder
-import com.yifeplayte.wommo.hook.hooks.BaseSingleHook
+import com.yifeplayte.wommo.hook.hooks.BaseHook
 import de.robv.android.xposed.XposedHelpers.callMethod
 
-object AllowMoveNonMIUIWidgetToMinusScreen : BaseSingleHook() {
-    override fun init() {
+object AllowMoveNonMIUIWidgetToMinusScreen : BaseHook() {
+    override val key = "allow_move_non_miui_widget_to_minus_screen"
+    override fun hook() {
         loadClass("com.miui.home.launcher.widget.MIUIWidgetHelper").methodFinder().filterByName("canDragToPa")
             .filterByParamCount(2).first().createHook {
                 before { param ->

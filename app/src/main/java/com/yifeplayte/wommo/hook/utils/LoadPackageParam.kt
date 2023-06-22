@@ -3,8 +3,6 @@ package com.yifeplayte.wommo.hook.utils
 import android.os.Build
 import com.github.kyuubiran.ezxhelper.ClassUtils.loadClass
 import com.github.kyuubiran.ezxhelper.ObjectHelper.Companion.objectHelper
-import com.github.kyuubiran.ezxhelper.paramTypes
-import com.github.kyuubiran.ezxhelper.params
 import de.robv.android.xposed.callbacks.XC_LoadPackage
 import java.io.File
 

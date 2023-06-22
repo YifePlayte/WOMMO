@@ -16,14 +16,16 @@ import com.github.kyuubiran.ezxhelper.ObjectUtils.getObjectOrNull
 import com.github.kyuubiran.ezxhelper.ObjectUtils.invokeMethodBestMatch
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder.`-Static`.methodFinder
 import com.yifeplayte.wommo.R
-import com.yifeplayte.wommo.hook.hooks.BaseSingleHook
+import com.yifeplayte.wommo.hook.hooks.BaseHook
 import com.yifeplayte.wommo.hook.utils.DexKit.dexKitBridge
 import com.yifeplayte.wommo.hook.utils.DexKit.loadDexKit
 import io.luckypray.dexkit.enums.MatchType
 
-object OpenByDefaultSetting : BaseSingleHook() {
+object OpenByDefaultSetting : BaseHook() {
+    override val key = "open_by_default_setting"
+
     @SuppressLint("DiscouragedApi")
-    override fun init() {
+    override fun hook() {
         val domainVerificationManager: DomainVerificationManager by lazy {
             appContext.getSystemService(
                 DomainVerificationManager::class.java
@@ -61,7 +63,6 @@ object OpenByDefaultSetting : BaseSingleHook() {
             matchType = MatchType.CONTAINS
             methodDeclareClass = "Lcom/miui/appmanager/ApplicationsDetailsActivity;"
             methodReturnType = "void"
-            methodParamTypes = arrayOf("", "Ljava/lang/Boolean;")
         }.firstOrNull()?.getMethodInstance(EzXHelper.safeClassLoader)?.createHook {
             after { param ->
                 EzXHelper.initAppContext(param.thisObject as Activity)
@@ -80,17 +81,11 @@ object OpenByDefaultSetting : BaseSingleHook() {
                     val view = getObjectOrNull(cleanOpenByDefaultView, it.name)
                     if (view !is TextView) return@forEach
                     invokeMethodBestMatch(
-                        view,
-                        "setText",
-                        null,
-                        moduleRes.getString(R.string.open_by_default)
+                        view, "setText", null, moduleRes.getString(R.string.open_by_default)
                     )
                 }
                 invokeMethodBestMatch(
-                    cleanOpenByDefaultView,
-                    "setSummary",
-                    null,
-                    moduleRes.getString(subTextId)
+                    cleanOpenByDefaultView, "setSummary", null, moduleRes.getString(subTextId)
                 )
             }
         }

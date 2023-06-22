@@ -5,10 +5,11 @@ import com.github.kyuubiran.ezxhelper.ClassUtils.loadClass
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
 import com.github.kyuubiran.ezxhelper.ObjectUtils.getObjectOrNullAs
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder.`-Static`.methodFinder
-import com.yifeplayte.wommo.hook.hooks.BaseSingleHook
+import com.yifeplayte.wommo.hook.hooks.BaseHook
 
-object ForceSupportBarrage : BaseSingleHook() {
-    override fun init() {
+object ForceSupportBarrage : BaseHook() {
+    override val key = "force_support_barrage"
+    override fun hook() {
         loadClass("com.xiaomi.barrage.service.NotificationMonitorService").methodFinder()
             .filterByName("filterNotification").first().createHook {
                 before { param ->
