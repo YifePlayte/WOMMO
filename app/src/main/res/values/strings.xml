@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name" translatable="false">WOMMO</string>
     <string name="xposed_desc" translatable="false">Works on my machine ONLY</string>
@@ -22,22 +23,22 @@
     <string name="notification_settings_no_white_list">Remove white list for notification settings</string>
     <string name="app_link_open_always">Allow app to open supported links</string>
     <string name="app_link_open_never">Don\'t allow app to open links</string>
-    <string name="open_by_default" >Open by default</string>
-    <string name="security_center">Security center</string>
+    <string name="open_by_default">Open by default</string>
+    <string name="security_center">Security Center</string>
     <string name="open_by_default_setting">Change App Info \"Clear defaults\" to \"Open by default\"</string>
-    <string name="package_installer">Package installer</string>
+    <string name="package_installer">Package Installer</string>
     <string name="allow_unofficial_system_applications_installation">Allow the installation of system applications from unofficial channels</string>
     <string name="lockscreen_charging_info">Display charging power on lock screen</string>
     <string name="lockscreen_charging_info_not_supported">Device currently unsupported</string>
     <string name="wave_charge">Enable wave charge animation</string>
     <string name="restore_switch_minus_screen">Restore switch minus screen</string>
-    <string name="personal_assistant">App vault</string>
+    <string name="personal_assistant">App Vault</string>
     <string name="exposure_refresh_for_non_miui_widget">Exposure refresh for non-MIUI-widgets</string>
     <string name="allow_move_non_miui_widget_to_minus_screen">Allow to move non-MIUI-widgets to App vault</string>
     <string name="others">Others</string>
     <string name="force_support_send_app">Force all apps support Handoff</string>
     <string name="force_support_send_app_tips">Cast, MIUI+ Beta</string>
-    <string name="barrage">Bullet screen notification</string>
-    <string name="force_support_barrage">Force all apps support bullet screen notification</string>
+    <string name="barrage">Bullet Screen Notification</string>
+    <string name="force_support_barrage">Allow all apps to use bullet screen notifications</string>
     <string name="widget_transition_animation">Enable transition animation for all widgets</string>
 </resources>
