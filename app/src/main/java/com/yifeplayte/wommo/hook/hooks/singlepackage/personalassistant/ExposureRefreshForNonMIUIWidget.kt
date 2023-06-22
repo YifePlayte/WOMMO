@@ -8,9 +8,11 @@ import com.github.kyuubiran.ezxhelper.EzXHelper
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
 import com.github.kyuubiran.ezxhelper.ObjectUtils.getObjectOrNull
 import com.github.kyuubiran.ezxhelper.ObjectUtils.setObject
+import com.github.kyuubiran.ezxhelper.ObjectUtils.setObjectUntilSuperclass
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder.`-Static`.methodFinder
 import com.yifeplayte.wommo.hook.hooks.BaseHook
-import de.robv.android.xposed.XposedHelpers
+import de.robv.android.xposed.XposedHelpers.getAdditionalInstanceField
+import de.robv.android.xposed.XposedHelpers.setAdditionalInstanceField
 
 object ExposureRefreshForNonMIUIWidget : BaseHook() {
     override val key = "exposure_refresh_for_non_miui_widget"
@@ -25,10 +27,9 @@ object ExposureRefreshForNonMIUIWidget : BaseHook() {
                     ) as ComponentName, PackageManager.GET_META_DATA
                 )
                 val isRealMIUIWidget = receiverInfo.metaData.getBoolean("miuiWidget")
-                XposedHelpers.setAdditionalInstanceField(it.thisObject, "isRealMIUIWidget", isRealMIUIWidget)
+                setAdditionalInstanceField(it.thisObject, "isRealMIUIWidget", isRealMIUIWidget)
                 if (!isRealMIUIWidget) {
-                    XposedHelpers.setBooleanField(it.thisObject, "isMIUIWidget", true)
-                    // setObjectUntilSuperclass(it.thisObject, "isMIUIWidget", true)
+                    setObjectUntilSuperclass(it.thisObject, "isMIUIWidget", true)
                     setObject(it.thisObject, "miuiWidgetRefresh", "exposure")
                     setObject(it.thisObject, "miuiWidgetRefreshMinInterval", 10000)
                 }
@@ -36,7 +37,7 @@ object ExposureRefreshForNonMIUIWidget : BaseHook() {
         }
         clazzAppWidgetItemInfo.methodFinder().filterByName("obtainMiuiWidgetUpdateIntent").first().createHook {
             after {
-                if (!(XposedHelpers.getAdditionalInstanceField(it.thisObject, "isRealMIUIWidget") as Boolean)) {
+                if (!(getAdditionalInstanceField(it.thisObject, "isRealMIUIWidget") as Boolean)) {
                     (it.result as Intent).action = "android.appwidget.action.APPWIDGET_UPDATE"
                 }
             }
