@@ -34,6 +34,12 @@ class MainPage : BasePage() {
             ),
             SwitchV("allow_move_non_miui_widget_to_minus_screen", false)
         )
+        TextSummaryWithSwitch(
+            TextSummaryV(
+                textId = R.string.widget_transition_animation
+            ),
+            SwitchV("widget_transition_animation", false)
+        )
         Line()
         TitleText(textId = R.string.system_ui)
         TextSummaryWithSwitch(

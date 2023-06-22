@@ -39,4 +39,5 @@
     <string name="force_support_send_app_tips">Cast, MIUI+ Beta</string>
     <string name="barrage">Bullet screen notification</string>
     <string name="force_support_barrage">Force all apps support bullet screen notification</string>
+    <string name="widget_transition_animation">Enable transition animation for all widgets</string>
 </resources>

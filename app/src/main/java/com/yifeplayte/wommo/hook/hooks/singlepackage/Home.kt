@@ -4,6 +4,7 @@ import com.yifeplayte.wommo.hook.hooks.BasePackage
 import com.yifeplayte.wommo.hook.hooks.singlepackage.home.AllowMoveNonMIUIWidgetToMinusScreen
 import com.yifeplayte.wommo.hook.hooks.singlepackage.home.RestoreGoogleAppIcon
 import com.yifeplayte.wommo.hook.hooks.singlepackage.home.RestoreSwitchMinusScreen
+import com.yifeplayte.wommo.hook.hooks.singlepackage.home.WidgetTransitionAnimation
 
 object Home : BasePackage() {
     override val packageName = "com.miui.home"
@@ -11,5 +12,6 @@ object Home : BasePackage() {
         AllowMoveNonMIUIWidgetToMinusScreen,
         RestoreGoogleAppIcon,
         RestoreSwitchMinusScreen,
+        WidgetTransitionAnimation,
     )
 }
