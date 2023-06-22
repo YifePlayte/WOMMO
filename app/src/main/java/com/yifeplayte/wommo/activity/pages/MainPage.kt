@@ -66,6 +66,12 @@ class MainPage : BasePage() {
             ),
             SwitchV("wave_charge", false)
         )
+        TextSummaryWithSwitch(
+            TextSummaryV(
+                textId = R.string.redirect_to_notification_channel_setting
+            ),
+            SwitchV("redirect_to_notification_channel_setting", false)
+        )
         Line()
         TitleText(textId = R.string.security_center)
         TextSummaryWithSwitch(

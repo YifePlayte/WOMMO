@@ -41,4 +41,5 @@
     <string name="barrage">Bullet Screen Notification</string>
     <string name="force_support_barrage">Allow all apps to use bullet screen notifications</string>
     <string name="widget_transition_animation">Enable transition animation for all widgets</string>
+    <string name="redirect_to_notification_channel_setting">Redirect notification setting to channel setting</string>
 </resources>

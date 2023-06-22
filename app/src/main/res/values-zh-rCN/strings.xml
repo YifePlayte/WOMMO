@@ -38,4 +38,5 @@
     <string name="barrage">弹幕通知</string>
     <string name="force_support_barrage">允许所有应用使用弹幕通知</string>
     <string name="widget_transition_animation">为所有小部件添加启动动画</string>
+    <string name="redirect_to_notification_channel_setting">重定向通知设置到频道设置</string>
 </resources>
