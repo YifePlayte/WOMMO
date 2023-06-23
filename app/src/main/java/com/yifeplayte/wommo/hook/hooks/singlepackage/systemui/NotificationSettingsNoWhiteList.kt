@@ -8,7 +8,7 @@ import com.yifeplayte.wommo.utils.Build.IS_INTERNATIONAL_BUILD
 object NotificationSettingsNoWhiteList : BaseHook() {
     override val key = "notification_settings_no_white_list"
     override fun hook() {
-        if (!IS_INTERNATIONAL_BUILD) return
+        if (IS_INTERNATIONAL_BUILD) return
         setStaticObject(
             loadClass("com.android.systemui.statusbar.notification.NotificationSettingsManager"),
             "USE_WHITE_LISTS",
