@@ -15,32 +15,6 @@ import com.yifeplayte.wommo.utils.Terminal
 @BMMainPage(titleId = R.string.app_name)
 class MainPage : BasePage() {
     override fun onCreate() {
-        TitleText(textId = R.string.miui_home)
-        TextSummaryWithSwitch(
-            TextSummaryV(
-                textId = R.string.restore_google_app_icon
-            ),
-            SwitchV("restore_google_app_icon", false)
-        )
-        TextSummaryWithSwitch(
-            TextSummaryV(
-                textId = R.string.restore_switch_minus_screen
-            ),
-            SwitchV("restore_switch_minus_screen", false)
-        )
-        TextSummaryWithSwitch(
-            TextSummaryV(
-                textId = R.string.allow_move_non_miui_widget_to_minus_screen
-            ),
-            SwitchV("allow_move_non_miui_widget_to_minus_screen", false)
-        )
-        TextSummaryWithSwitch(
-            TextSummaryV(
-                textId = R.string.widget_transition_animation
-            ),
-            SwitchV("widget_transition_animation", false)
-        )
-        Line()
         TitleText(textId = R.string.system_ui)
         TextSummaryWithSwitch(
             TextSummaryV(
@@ -71,6 +45,32 @@ class MainPage : BasePage() {
                 textId = R.string.redirect_to_notification_channel_setting
             ),
             SwitchV("redirect_to_notification_channel_setting", false)
+        )
+        Line()
+        TitleText(textId = R.string.miui_home)
+        TextSummaryWithSwitch(
+            TextSummaryV(
+                textId = R.string.restore_google_app_icon
+            ),
+            SwitchV("restore_google_app_icon", false)
+        )
+        TextSummaryWithSwitch(
+            TextSummaryV(
+                textId = R.string.restore_switch_minus_screen
+            ),
+            SwitchV("restore_switch_minus_screen", false)
+        )
+        TextSummaryWithSwitch(
+            TextSummaryV(
+                textId = R.string.allow_move_non_miui_widget_to_minus_screen
+            ),
+            SwitchV("allow_move_non_miui_widget_to_minus_screen", false)
+        )
+        TextSummaryWithSwitch(
+            TextSummaryV(
+                textId = R.string.widget_transition_animation
+            ),
+            SwitchV("widget_transition_animation", false)
         )
         Line()
         TitleText(textId = R.string.security_center)

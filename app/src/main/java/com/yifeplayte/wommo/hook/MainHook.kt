@@ -16,17 +16,29 @@ import de.robv.android.xposed.IXposedHookZygoteInit
 import de.robv.android.xposed.callbacks.XC_LoadPackage
 
 private const val TAG = "WOMMO"
-val PACKAGE_NAME_HOOKED = setOf(
-    "com.miui.screenrecorder",
-    "com.android.systemui",
-    "com.miui.home",
-    "com.miui.securitycenter",
-    "com.miui.packageinstaller",
-    "com.miui.personalassistant",
-    "com.milink.service",
-    "com.xiaomi.mirror",
-    "com.xiaomi.barrage",
+private val singlePackagesHooked = setOf(
+    Barrage,
+    Home,
+    PackageInstaller,
+    PersonalAssistant,
+    ScreenRecorder,
+    SecurityCenter,
+    SystemUI,
 )
+private val multiPackagesHooked = setOf(
+    ForceSupportSendApp,
+)
+private val subPackagesHooked = setOf(
+    SystemUIPlugin,
+)
+val PACKAGE_NAME_HOOKED: Set<String>
+    get() {
+        val packageNameHooked = mutableSetOf<String>()
+        singlePackagesHooked.forEach { packageNameHooked.add(it.packageName) }
+        multiPackagesHooked.forEach { packageNameHooked.addAll(it.hooks.keys) }
+        subPackagesHooked.forEach { packageNameHooked.add(it.packageName) }
+        return packageNameHooked
+    }
 
 @Suppress("unused")
 class MainHook : IXposedHookLoadPackage, IXposedHookZygoteInit {
@@ -40,25 +52,13 @@ class MainHook : IXposedHookLoadPackage, IXposedHookZygoteInit {
             EzXHelper.setToastTag(TAG)
 
             // single package
-            setOf(
-                Barrage,
-                Home,
-                PackageInstaller,
-                PersonalAssistant,
-                ScreenRecorder,
-                SecurityCenter,
-                SystemUI,
-            ).forEach { it.init() }
+            singlePackagesHooked.forEach { it.init() }
 
             // multiple package
-            setOf(
-                ForceSupportSendApp,
-            ).forEach { it.init() }
+            multiPackagesHooked.forEach { it.init() }
 
             // single sub-package
-            setOf(
-                SystemUIPlugin,
-            ).forEach { it.init() }
+            subPackagesHooked.forEach { it.init() }
 
             DexKit.closeDexKit()
         }

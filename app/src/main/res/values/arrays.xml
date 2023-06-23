@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="xposedscope">
-        <item>com.miui.screenrecorder</item>
         <item>com.android.systemui</item>
+        <item>com.milink.service</item>
         <item>com.miui.home</item>
-        <item>com.miui.securitycenter</item>
         <item>com.miui.packageinstaller</item>
         <item>com.miui.personalassistant</item>
-        <item>com.milink.service</item>
+        <item>com.miui.screenrecorder</item>
+        <item>com.miui.securitycenter</item>
         <item>com.xiaomi.mirror</item>
     </string-array>
 </resources>

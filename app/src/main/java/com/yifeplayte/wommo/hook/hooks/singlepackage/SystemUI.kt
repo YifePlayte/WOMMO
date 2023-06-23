@@ -10,10 +10,10 @@ import com.yifeplayte.wommo.hook.hooks.singlepackage.systemui.WaveCharge
 object SystemUI : BasePackage() {
     override val packageName = "com.android.systemui"
     override val hooks = setOf(
-        RestoreNearbyTile,
-        NotificationSettingsNoWhiteList,
         LockscreenChargingInfo,
-        WaveCharge,
+        NotificationSettingsNoWhiteList,
         RedirectToNotificationChannelSetting,
+        RestoreNearbyTile,
+        WaveCharge,
     )
 }

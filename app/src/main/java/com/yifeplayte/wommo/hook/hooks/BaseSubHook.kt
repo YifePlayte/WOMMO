@@ -8,7 +8,7 @@ abstract class BaseSubHook {
     var isInit: Boolean = false
     abstract val key: String
     abstract fun hook(subClassLoader: ClassLoader)
-    val isEnabled: Boolean
+    open val isEnabled: Boolean
         get() = getBoolean(key, false)
 
     fun init(subClassLoader: ClassLoader) {

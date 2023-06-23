@@ -8,7 +8,7 @@ abstract class BaseHook {
     var isInit: Boolean = false
     abstract val key: String
     abstract fun hook()
-    val isEnabled: Boolean
+    open val isEnabled: Boolean
         get() = getBoolean(key, false)
 
     fun init() {

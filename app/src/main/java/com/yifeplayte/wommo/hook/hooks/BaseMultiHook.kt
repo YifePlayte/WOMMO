@@ -9,7 +9,7 @@ abstract class BaseMultiHook {
     var isInit: Boolean = false
     abstract val key: String
     abstract val hooks: Map<String, () -> Unit>
-    val isEnabled: Boolean
+    open val isEnabled: Boolean
         get() = getBoolean(key, false)
 
     fun init() {
