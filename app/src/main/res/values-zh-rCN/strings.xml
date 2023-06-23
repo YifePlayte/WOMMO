@@ -39,4 +39,7 @@
     <string name="force_support_barrage">允许所有应用使用弹幕通知</string>
     <string name="widget_transition_animation">为所有小部件添加启动动画</string>
     <string name="redirect_to_notification_channel_setting">重定向通知设置到频道设置</string>
+    <string name="android">系统框架</string>
+    <string name="force_dark_mode_for_all_apps">允许所有应用使用强制深色模式</string>
+    <string name="force_dark_mode_for_all_apps_tips">可以在系统设置里管理应用的强制深色设置</string>
 </resources>

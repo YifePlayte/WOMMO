@@ -15,6 +15,15 @@ import com.yifeplayte.wommo.utils.Terminal
 @BMMainPage(titleId = R.string.app_name)
 class MainPage : BasePage() {
     override fun onCreate() {
+        TitleText(textId = R.string.android)
+        TextSummaryWithSwitch(
+            TextSummaryV(
+                textId = R.string.force_dark_mode_for_all_apps,
+                tipsId = R.string.force_dark_mode_for_all_apps_tips
+            ),
+            SwitchV("force_dark_mode_for_all_apps", false)
+        )
+        Line()
         TitleText(textId = R.string.system_ui)
         TextSummaryWithSwitch(
             TextSummaryV(

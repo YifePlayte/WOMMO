@@ -42,4 +42,7 @@
     <string name="force_support_barrage">Allow all apps to use bullet screen notifications</string>
     <string name="widget_transition_animation">Enable transition animation for all widgets</string>
     <string name="redirect_to_notification_channel_setting">Redirect notification setting to channel setting</string>
+    <string name="android">System Framework</string>
+    <string name="force_dark_mode_for_all_apps">Force dark mode for all apps</string>
+    <string name="force_dark_mode_for_all_apps_tips">You can configure this in system settings</string>
 </resources>

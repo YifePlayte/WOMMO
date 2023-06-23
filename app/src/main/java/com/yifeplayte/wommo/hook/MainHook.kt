@@ -2,6 +2,7 @@ package com.yifeplayte.wommo.hook
 
 import com.github.kyuubiran.ezxhelper.EzXHelper
 import com.yifeplayte.wommo.hook.hooks.multipackage.ForceSupportSendApp
+import com.yifeplayte.wommo.hook.hooks.singlepackage.Android
 import com.yifeplayte.wommo.hook.hooks.singlepackage.Barrage
 import com.yifeplayte.wommo.hook.hooks.singlepackage.Home
 import com.yifeplayte.wommo.hook.hooks.singlepackage.PackageInstaller
@@ -17,6 +18,7 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage
 
 private const val TAG = "WOMMO"
 private val singlePackagesHooked = setOf(
+    Android,
     Barrage,
     Home,
     PackageInstaller,
