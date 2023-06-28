@@ -9,6 +9,8 @@ plugins {
 android {
     compileSdk = 33
 
+    namespace = "com.yifeplayte.wommo"
+
     defaultConfig {
         applicationId = "com.yifeplayte.wommo"
         minSdk = 33
@@ -36,10 +38,17 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
+
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_11.toString()
     }
-    namespace = "com.yifeplayte.wommo"
+
+    externalNativeBuild {
+        cmake {
+            path = file("src/main/cpp/classhelper/CMakeLists.txt")
+            version = "3.22.1"
+        }
+    }
 }
 
 dependencies {
