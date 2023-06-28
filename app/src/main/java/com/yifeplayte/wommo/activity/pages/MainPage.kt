@@ -136,6 +136,13 @@ class MainPage : BasePage() {
             ),
             SwitchV("force_support_send_app", false)
         )
+        TextSummaryWithSwitch(
+            TextSummaryV(
+                textId = R.string.remove_miui_stroke_from_adaptive_icon,
+                tipsId = R.string.remove_miui_stroke_from_adaptive_icon_tips,
+            ),
+            SwitchV("remove_miui_stroke_from_adaptive_icon", false)
+        )
         Line()
         TitleText(textId = R.string.reboot)
         TextSummaryWithArrow(

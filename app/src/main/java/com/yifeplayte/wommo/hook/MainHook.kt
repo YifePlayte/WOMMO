@@ -11,6 +11,7 @@ import com.yifeplayte.wommo.hook.hooks.singlepackage.ScreenRecorder
 import com.yifeplayte.wommo.hook.hooks.singlepackage.SecurityCenter
 import com.yifeplayte.wommo.hook.hooks.singlepackage.SystemUI
 import com.yifeplayte.wommo.hook.hooks.subpackage.SystemUIPlugin
+import com.yifeplayte.wommo.hook.hooks.universal.RemoveMIUIStrokeFromAdaptiveIcon
 import com.yifeplayte.wommo.hook.utils.DexKit
 import de.robv.android.xposed.IXposedHookLoadPackage
 import de.robv.android.xposed.IXposedHookZygoteInit
@@ -33,6 +34,9 @@ private val multiPackagesHooked = setOf(
 private val subPackagesHooked = setOf(
     SystemUIPlugin,
 )
+private val universalHooks = setOf(
+    RemoveMIUIStrokeFromAdaptiveIcon,
+)
 val PACKAGE_NAME_HOOKED: Set<String>
     get() {
         val packageNameHooked = mutableSetOf<String>()
@@ -45,28 +49,35 @@ val PACKAGE_NAME_HOOKED: Set<String>
 @Suppress("unused")
 class MainHook : IXposedHookLoadPackage, IXposedHookZygoteInit {
     override fun handleLoadPackage(lpparam: XC_LoadPackage.LoadPackageParam) {
-        if (lpparam.packageName in PACKAGE_NAME_HOOKED) {
 
-            // init DexKit and EzXHelper
+        // init DexKit and EzXHelper
+        if (lpparam.isFirstApplication) {
             if (lpparam.packageName != "android") DexKit.initDexKit(lpparam)
             EzXHelper.initHandleLoadPackage(lpparam)
             EzXHelper.setLogTag(TAG)
             EzXHelper.setToastTag(TAG)
-
-            // single package
-            singlePackagesHooked.forEach { it.init() }
-
-            // multiple package
-            multiPackagesHooked.forEach { it.init() }
-
-            // single sub-package
-            subPackagesHooked.forEach { it.init() }
-
-            DexKit.closeDexKit()
         }
+
+        // single package
+        singlePackagesHooked.forEach { it.init() }
+
+        // multiple package
+        multiPackagesHooked.forEach { it.init() }
+
+        // single sub-package
+        subPackagesHooked.forEach { it.init() }
+
+        DexKit.closeDexKit()
     }
 
     override fun initZygote(startupParam: IXposedHookZygoteInit.StartupParam) {
+
+        // init EzXHelper
         EzXHelper.initZygote(startupParam)
+        EzXHelper.setLogTag(TAG)
+        EzXHelper.setToastTag(TAG)
+
+        // universal hook
+        universalHooks.forEach { it.init() }
     }
 }
