@@ -17,9 +17,6 @@ import com.github.kyuubiran.ezxhelper.ObjectUtils.invokeMethodBestMatch
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder.`-Static`.methodFinder
 import com.yifeplayte.wommo.R
 import com.yifeplayte.wommo.hook.hooks.BaseHook
-import com.yifeplayte.wommo.hook.utils.DexKit.dexKitBridge
-import com.yifeplayte.wommo.hook.utils.DexKit.loadDexKit
-import io.luckypray.dexkit.enums.MatchType
 
 object OpenByDefaultSetting : BaseHook() {
     override val key = "open_by_default_setting"
@@ -31,17 +28,15 @@ object OpenByDefaultSetting : BaseHook() {
                 DomainVerificationManager::class.java
             )
         }
-        loadClass("com.miui.appmanager.ApplicationsDetailsActivity").methodFinder().first {
-            name == "onClick"
-        }.createHook {
+        val idAmDetailDefault by lazy {
+            appContext.resources.getIdentifier("am_detail_default", "id", hostPackageName)
+        }
+        val clazzApplicationsDetailsActivity = loadClass("com.miui.appmanager.ApplicationsDetailsActivity")
+        clazzApplicationsDetailsActivity.methodFinder().filterByName("onClick").first().createHook {
             before { param ->
                 EzXHelper.initAppContext(param.thisObject as Activity)
                 val clickedView = param.args[0]
-                val cleanOpenByDefaultView = (param.thisObject as Activity).findViewById<View>(
-                    appContext.resources.getIdentifier(
-                        "am_detail_default", "id", hostPackageName
-                    )
-                )
+                val cleanOpenByDefaultView = (param.thisObject as Activity).findViewById<View>(idAmDetailDefault)
                 val pkgName = (param.thisObject as Activity).intent.getStringExtra("package_name")!!
                 if (clickedView == cleanOpenByDefaultView) {
                     val intent = Intent().apply {
@@ -56,21 +51,10 @@ object OpenByDefaultSetting : BaseHook() {
                 }
             }
         }
-
-        loadDexKit()
-        dexKitBridge.findMethodUsingString {
-            usingString = "enter_way"
-            matchType = MatchType.CONTAINS
-            methodDeclareClass = "Lcom/miui/appmanager/ApplicationsDetailsActivity;"
-            methodReturnType = "void"
-        }.firstOrNull()?.getMethodInstance(EzXHelper.safeClassLoader)?.createHook {
+        clazzApplicationsDetailsActivity.methodFinder().filterByName("initView").first().createHook {
             after { param ->
                 EzXHelper.initAppContext(param.thisObject as Activity)
-                val cleanOpenByDefaultView = (param.thisObject as Activity).findViewById<View>(
-                    appContext.resources.getIdentifier(
-                        "am_detail_default", "id", hostPackageName
-                    )
-                )
+                val cleanOpenByDefaultView = (param.thisObject as Activity).findViewById<View>(idAmDetailDefault)
                 val pkgName = (param.thisObject as Activity).intent.getStringExtra("package_name")!!
                 val isLinkHandlingAllowed = domainVerificationManager.getDomainVerificationUserState(
                     pkgName
@@ -80,13 +64,9 @@ object OpenByDefaultSetting : BaseHook() {
                 cleanOpenByDefaultView::class.java.declaredFields.forEach {
                     val view = getObjectOrNull(cleanOpenByDefaultView, it.name)
                     if (view !is TextView) return@forEach
-                    invokeMethodBestMatch(
-                        view, "setText", null, moduleRes.getString(R.string.open_by_default)
-                    )
+                    invokeMethodBestMatch(view, "setText", null, moduleRes.getString(R.string.open_by_default))
                 }
-                invokeMethodBestMatch(
-                    cleanOpenByDefaultView, "setSummary", null, moduleRes.getString(subTextId)
-                )
+                invokeMethodBestMatch(cleanOpenByDefaultView, "setSummary", null, moduleRes.getString(subTextId))
             }
         }
     }
