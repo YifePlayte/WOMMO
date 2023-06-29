@@ -44,4 +44,5 @@
     <string name="force_dark_mode_for_all_apps_tips">可以在系统设置里管理应用的强制深色设置</string>
     <string name="remove_miui_stroke_from_adaptive_icon">移除自适应图标边界线</string>
     <string name="remove_miui_stroke_from_adaptive_icon_tips">所有已勾选的作用域</string>
+    <string name="global_barrage">全局弹幕通知</string>
 </resources>

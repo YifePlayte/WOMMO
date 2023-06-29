@@ -47,4 +47,5 @@
     <string name="force_dark_mode_for_all_apps_tips">You can configure this in system settings</string>
     <string name="remove_miui_stroke_from_adaptive_icon">Remove MIUI stroke from adaptive icon</string>
     <string name="remove_miui_stroke_from_adaptive_icon_tips">All apps enabled in scope</string>
+    <string name="global_barrage">Global bullet screen notification</string>
 </resources>

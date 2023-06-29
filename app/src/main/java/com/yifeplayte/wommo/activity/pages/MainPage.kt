@@ -127,6 +127,12 @@ class MainPage : BasePage() {
             ),
             SwitchV("force_support_barrage", false)
         )
+        TextSummaryWithSwitch(
+            TextSummaryV(
+                textId = R.string.global_barrage
+            ),
+            SwitchV("global_barrage", false)
+        )
         Line()
         TitleText(textId = R.string.others)
         TextSummaryWithSwitch(
