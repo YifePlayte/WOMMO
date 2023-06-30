@@ -5,6 +5,7 @@ import com.yifeplayte.wommo.hook.hooks.singlepackage.systemui.LockscreenCharging
 import com.yifeplayte.wommo.hook.hooks.singlepackage.systemui.NotificationSettingsNoWhiteList
 import com.yifeplayte.wommo.hook.hooks.singlepackage.systemui.RedirectToNotificationChannelSetting
 import com.yifeplayte.wommo.hook.hooks.singlepackage.systemui.RestoreNearbyTile
+import com.yifeplayte.wommo.hook.hooks.singlepackage.systemui.UnlockControlCenterStyle
 import com.yifeplayte.wommo.hook.hooks.singlepackage.systemui.WaveCharge
 
 object SystemUI : BasePackage() {
@@ -14,6 +15,7 @@ object SystemUI : BasePackage() {
         NotificationSettingsNoWhiteList,
         RedirectToNotificationChannelSetting,
         RestoreNearbyTile,
+        UnlockControlCenterStyle,
         WaveCharge,
     )
 }

@@ -55,6 +55,12 @@ class MainPage : BasePage() {
             ),
             SwitchV("redirect_to_notification_channel_setting", false)
         )
+        TextSummaryWithSwitch(
+            TextSummaryV(
+                textId = R.string.unlock_control_center_style
+            ),
+            SwitchV("unlock_control_center_style", false)
+        )
         Line()
         TitleText(textId = R.string.miui_home)
         TextSummaryWithSwitch(
