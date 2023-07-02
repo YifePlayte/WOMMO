@@ -46,4 +46,5 @@
     <string name="warning">警告</string>
     <string name="wave_charge">启用 Alpha 充电动画</string>
     <string name="widget_transition_animation">为所有小部件添加启动动画</string>
+    <string name="remove_report_in_application_info">移除应用信息举报按钮</string>
 </resources>

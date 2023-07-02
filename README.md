@@ -17,6 +17,7 @@
 - 锁屏显示充电功率
 - 启用 Alpha 充电动画
 - 重定向通知设置到频道设置
+- 解锁控制中心样式
 
 #### 系统桌面
 
@@ -28,6 +29,7 @@
 #### 手机管家/平板管家
 
 - 将应用详情中“消除默认操作”改为“默认打开”设置
+- 移除应用信息举报按钮
 
 #### 屏幕录制
 
@@ -69,6 +71,8 @@
 [KyuubiRan/EzXHelper](https://github.com/KyuubiRan/EzXHelper)
 
 ##### GNU General Public License v3.0
+
+[hosizoraru/StarVoyager](https://github.com/hosizoraru/StarVoyager)
 
 [Simplicity-Team/WooBoxForMIUI](https://github.com/Simplicity-Team/WooBoxForMIUI)
 

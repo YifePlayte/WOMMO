@@ -95,6 +95,12 @@ class MainPage : BasePage() {
             ),
             SwitchV("open_by_default_setting", false)
         )
+        TextSummaryWithSwitch(
+            TextSummaryV(
+                textId = R.string.remove_report_in_application_info
+            ),
+            SwitchV("remove_report_in_application_info", false)
+        )
         Line()
         TitleText(textId = R.string.screen_recorder)
         TextSummaryWithSwitch(
