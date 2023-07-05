@@ -9,6 +9,7 @@ import com.yifeplayte.wommo.hook.hooks.singlepackage.PackageInstaller
 import com.yifeplayte.wommo.hook.hooks.singlepackage.PersonalAssistant
 import com.yifeplayte.wommo.hook.hooks.singlepackage.ScreenRecorder
 import com.yifeplayte.wommo.hook.hooks.singlepackage.SecurityCenter
+import com.yifeplayte.wommo.hook.hooks.singlepackage.Settings
 import com.yifeplayte.wommo.hook.hooks.singlepackage.SystemUI
 import com.yifeplayte.wommo.hook.hooks.subpackage.SystemUIPlugin
 import com.yifeplayte.wommo.hook.hooks.universal.RemoveMIUIStrokeFromAdaptiveIcon
@@ -26,6 +27,7 @@ private val singlePackagesHooked = setOf(
     PersonalAssistant,
     ScreenRecorder,
     SecurityCenter,
+    Settings,
     SystemUI,
 )
 private val multiPackagesHooked = setOf(

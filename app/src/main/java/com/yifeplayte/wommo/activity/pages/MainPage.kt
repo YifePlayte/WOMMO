@@ -146,6 +146,14 @@ class MainPage : BasePage() {
             SwitchV("global_barrage", false)
         )
         Line()
+        TitleText(textId = R.string.settings)
+        TextSummaryWithSwitch(
+            TextSummaryV(
+                textId = R.string.show_notification_importance
+            ),
+            SwitchV("show_notification_importance", false)
+        )
+        Line()
         TitleText(textId = R.string.others)
         TextSummaryWithSwitch(
             TextSummaryV(

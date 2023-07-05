@@ -36,6 +36,7 @@
     <string name="redirect_to_notification_channel_setting">Redirect notification setting to channel setting</string>
     <string name="remove_miui_stroke_from_adaptive_icon">Remove MIUI stroke from adaptive icon</string>
     <string name="remove_miui_stroke_from_adaptive_icon_tips">All apps enabled in scope</string>
+    <string name="remove_report_in_application_info">Remove report button in application info page</string>
     <string name="restart_all_scope">Restart all scope</string>
     <string name="restart_all_scope_tips">Are you sure to restart all scope?</string>
     <string name="restore_google_app_icon">Restore google app icon</string>
@@ -43,11 +44,12 @@
     <string name="restore_switch_minus_screen">Restore switch minus screen</string>
     <string name="screen_recorder">Screen Recorder</string>
     <string name="security_center">Security Center</string>
+    <string name="settings">Settings</string>
+    <string name="show_notification_importance">Show notification importance</string>
     <string name="system_ui">System UI</string>
     <string name="unlock_control_center_style">Unlock control center style</string>
     <string name="warning">Warning</string>
     <string name="wave_charge">Enable wave charge animation</string>
     <string name="widget_transition_animation">Enable transition animation for all widgets</string>
     <string name="xposed_desc" translatable="false">Works on my machine ONLY</string>
-    <string name="remove_report_in_application_info">Remove report button in application info page</string>
 </resources>

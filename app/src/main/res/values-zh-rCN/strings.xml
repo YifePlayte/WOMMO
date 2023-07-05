@@ -34,6 +34,7 @@
     <string name="redirect_to_notification_channel_setting">重定向通知设置到频道设置</string>
     <string name="remove_miui_stroke_from_adaptive_icon">移除自适应图标边界线</string>
     <string name="remove_miui_stroke_from_adaptive_icon_tips">所有已勾选的作用域</string>
+    <string name="remove_report_in_application_info">移除应用信息举报按钮</string>
     <string name="restart_all_scope">重启全部作用域</string>
     <string name="restart_all_scope_tips">确定重启全部作用域？</string>
     <string name="restore_google_app_icon">恢复 Google 图标</string>
@@ -41,10 +42,11 @@
     <string name="restore_switch_minus_screen">恢复切换负一屏</string>
     <string name="screen_recorder">屏幕录制</string>
     <string name="security_center">手机管家/平板管家</string>
+    <string name="settings">设置</string>
+    <string name="show_notification_importance">显示通知重要程度</string>
     <string name="system_ui">系统界面</string>
     <string name="unlock_control_center_style">解锁控制中心样式</string>
     <string name="warning">警告</string>
     <string name="wave_charge">启用 Alpha 充电动画</string>
     <string name="widget_transition_animation">为所有小部件添加启动动画</string>
-    <string name="remove_report_in_application_info">移除应用信息举报按钮</string>
 </resources>
