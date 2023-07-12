@@ -7,10 +7,13 @@
     <string name="app_link_open_never">Don\'t allow app to open links</string>
     <string name="app_name" translatable="false">WOMMO</string>
     <string name="barrage">Bullet Screen Notification</string>
+    <string name="barrage_length">Barrage length</string>
     <string name="cancel">Cancel</string>
     <string name="change_bitrate_and_frame_rate_range">Change bitrate and frame rate range</string>
     <string name="done">OK</string>
+    <string name="enable_perfect_icons">Enable perfect icons</string>
     <string name="exposure_refresh_for_non_miui_widget">Exposure refresh for non-MIUI-widgets</string>
+    <string name="fake_non_default_icon">Fake non-default icon</string>
     <string name="finished">Finished</string>
     <string name="force_dark_mode_for_all_apps">Force dark mode for all apps</string>
     <string name="force_dark_mode_for_all_apps_tips">You can configure this in system settings</string>
@@ -52,5 +55,4 @@
     <string name="wave_charge">Enable wave charge animation</string>
     <string name="widget_transition_animation">Enable transition animation for all widgets</string>
     <string name="xposed_desc" translatable="false">Works on my machine ONLY</string>
-    <string name="barrage_length">Barrage length</string>
 </resources>

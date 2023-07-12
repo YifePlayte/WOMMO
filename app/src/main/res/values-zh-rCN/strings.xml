@@ -5,10 +5,13 @@
     <string name="app_link_open_always">允许应用打开支持的链接</string>
     <string name="app_link_open_never">不允许应用打开链接</string>
     <string name="barrage">弹幕通知</string>
+    <string name="barrage_length">弹幕长度</string>
     <string name="cancel">取消</string>
     <string name="change_bitrate_and_frame_rate_range">修改码率与帧率范围</string>
     <string name="done">确定</string>
+    <string name="enable_perfect_icons">启用完美图标</string>
     <string name="exposure_refresh_for_non_miui_widget">为非 MIUI 小部件提供曝光刷新</string>
+    <string name="fake_non_default_icon">伪装为非默认图标</string>
     <string name="finished">运行完成</string>
     <string name="force_dark_mode_for_all_apps">允许所有应用使用强制深色模式</string>
     <string name="force_dark_mode_for_all_apps_tips">可以在系统设置里管理应用的强制深色设置</string>
@@ -49,5 +52,4 @@
     <string name="warning">警告</string>
     <string name="wave_charge">启用 Alpha 充电动画</string>
     <string name="widget_transition_animation">为所有小部件添加启动动画</string>
-    <string name="barrage_length">弹幕长度</string>
 </resources>

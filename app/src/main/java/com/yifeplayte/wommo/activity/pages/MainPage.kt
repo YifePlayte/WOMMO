@@ -76,6 +76,16 @@ class MainPage : BasePage() {
                 textId = R.string.widget_transition_animation
             ), SwitchV("widget_transition_animation", false)
         )
+        TextSummaryWithSwitch(
+            TextSummaryV(
+                textId = R.string.fake_non_default_icon
+            ), SwitchV("fake_non_default_icon", false)
+        )
+        TextSummaryWithSwitch(
+            TextSummaryV(
+                textId = R.string.enable_perfect_icons
+            ), SwitchV("enable_perfect_icons", false)
+        )
         Line()
         TitleText(textId = R.string.security_center)
         TextSummaryWithSwitch(
