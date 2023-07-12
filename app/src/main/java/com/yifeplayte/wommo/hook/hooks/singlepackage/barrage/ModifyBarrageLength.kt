@@ -10,7 +10,10 @@ object ModifyBarrageLength : BaseHook() {
     override val key = "modify_barrage_length"
     override val isEnabled: Boolean
         get() = barrageLength != 36
-    private val barrageLength = getInt("barrage_length", 36)
+    private val barrageLength by lazy {
+        getInt("barrage_length", 36)
+    }
+
     override fun hook() {
         val clazzString = loadClass("java.lang.String")
         clazzString.methodFinder().filterByName("subSequence").filterByParamCount(2).first().createHook {
@@ -20,14 +23,23 @@ object ModifyBarrageLength : BaseHook() {
                 }
             }
         }
-        if (barrageLength < 36) {
-            clazzString.methodFinder().filterByName("length").filterByParamCount(0).first().createHook {
-                after { param ->
-                    val stacktrace = Throwable().stackTrace
-                    if (stacktrace.any { it.className == "java.lang.String" }) return@after
-                    if (stacktrace.firstOrNull { it.className == "com.xiaomi.barrage.utils.BarrageWindowUtils" }
-                            ?.methodName in setOf("addBarrageNotification", "sendBarrage")) {
-                        if (param.result as Int > barrageLength) param.result = 37
+        clazzString.methodFinder().filterByName("length").filterByParamCount(0).first().createHook {
+            after { param ->
+                val stacktrace = Throwable().stackTrace
+                if (stacktrace.any { it.className == "java.lang.String" }) return@after
+                if (stacktrace.firstOrNull { it.className == "com.xiaomi.barrage.utils.BarrageWindowUtils" }?.methodName in setOf(
+                        "addBarrageNotification", "sendBarrage"
+                    )
+                ) {
+                    val realResult = (param.result as Int)
+                    param.result = if (barrageLength < 36) {
+                        if (realResult > barrageLength) {
+                            maxOf(37, realResult)
+                        } else realResult
+                    } else {
+                        if (realResult < barrageLength) {
+                            minOf(35, realResult)
+                        } else realResult
                     }
                 }
             }
