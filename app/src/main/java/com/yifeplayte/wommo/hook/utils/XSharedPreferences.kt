@@ -13,6 +13,14 @@ object XSharedPreferences {
         return prefs.getBoolean(key, defValue)
     }
 
+    fun getInt(key: String, defValue: Int): Int {
+        val prefs = XSharedPreferences(BuildConfig.APPLICATION_ID, prefFileName)
+        if (prefs.hasFileChanged()) {
+            prefs.reload()
+        }
+        return prefs.getInt(key, defValue)
+    }
+
     fun getString(key: String, defValue: String): String {
         val prefs = XSharedPreferences(BuildConfig.APPLICATION_ID, prefFileName)
         if (prefs.hasFileChanged()) {

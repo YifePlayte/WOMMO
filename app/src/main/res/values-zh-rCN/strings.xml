@@ -49,4 +49,5 @@
     <string name="warning">警告</string>
     <string name="wave_charge">启用 Alpha 充电动画</string>
     <string name="widget_transition_animation">为所有小部件添加启动动画</string>
+    <string name="barrage_length">弹幕长度</string>
 </resources>

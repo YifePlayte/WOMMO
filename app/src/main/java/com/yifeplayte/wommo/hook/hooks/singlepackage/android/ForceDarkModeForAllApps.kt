@@ -9,7 +9,6 @@ import com.github.kyuubiran.ezxhelper.finders.MethodFinder.`-Static`.methodFinde
 import com.yifeplayte.wommo.hook.hooks.BaseHook
 import com.yifeplayte.wommo.utils.Build.IS_INTERNATIONAL_BUILD
 
-
 object ForceDarkModeForAllApps : BaseHook() {
     override val key = "force_dark_mode_for_all_apps"
     override fun hook() {
