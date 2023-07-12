@@ -10,21 +10,25 @@ import com.yifeplayte.wommo.hook.hooks.BaseHook
 object EnablePerfectIcons : BaseHook() {
     override val key = "enable_perfect_icons"
     override fun hook() {
-        val clazzMiuiSettingsUtils = loadClass("com.miui.launcher.utils.MiuiSettingsUtils")
-        loadClass("com.miui.home.launcher.Application").methodFinder().filterByName("disablePerfectIcons").first()
-            .createHook {
-                replace {
-                    val contentResolver = (it.thisObject as Application).contentResolver
-                    clazzMiuiSettingsUtils.methodFinder().filterByName("putBool")
-                    invokeStaticMethodBestMatch(
-                        clazzMiuiSettingsUtils,
-                        "putBooleanToSystem",
-                        null,
-                        contentResolver,
-                        "key_miui_mod_icon_enable",
-                        true
-                    )
+        runCatching {
+            val clazzMiuiSettingsUtils = loadClass("com.miui.launcher.utils.MiuiSettingsUtils")
+            loadClass("com.miui.home.launcher.Application").methodFinder().filterByName("disablePerfectIcons").first()
+                .createHook {
+                    before {
+                        val contentResolver = (it.thisObject as Application).contentResolver
+                        invokeStaticMethodBestMatch(
+                            clazzMiuiSettingsUtils,
+                            "putBooleanToSystem",
+                            null,
+                            contentResolver,
+                            "key_miui_mod_icon_enable",
+                            true
+                        )
+                        it.result = null
+                    }
                 }
-            }
+        }
+        loadClass("miui.content.res.IconCustomizer").methodFinder().filterByName("isModIconEnabledForPackageName")
+            .first().createHook { returnConstant(true) }
     }
 }
