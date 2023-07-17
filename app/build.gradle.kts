@@ -31,7 +31,9 @@ android {
     }
 
     androidResources {
-        additionalParameters("--allow-reserved-package-id", "--package-id", "0x45")
+        additionalParameters += "--allow-reserved-package-id"
+        additionalParameters += "--package-id"
+        additionalParameters += "0x45"
     }
 
     compileOptions {

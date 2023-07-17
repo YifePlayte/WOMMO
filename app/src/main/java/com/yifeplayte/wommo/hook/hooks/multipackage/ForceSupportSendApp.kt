@@ -9,7 +9,7 @@ import com.yifeplayte.wommo.hook.hooks.BaseMultiHook
 
 object ForceSupportSendApp : BaseMultiHook() {
     override val key = "force_support_send_app"
-    override val hooks: Map<String, () -> Unit> = mapOf(
+    override val hooks = mapOf(
         "com.milink.service" to { milink() },
         "com.xiaomi.mirror" to { mirror() }
     )
