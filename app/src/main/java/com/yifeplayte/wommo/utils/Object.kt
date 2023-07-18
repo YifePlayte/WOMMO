@@ -1,10 +1,20 @@
 package com.yifeplayte.wommo.utils
 
+/**
+ * Object 工具
+ */
 object Object {
     init {
         System.loadLibrary("classhelper")
     }
 
+    /**
+     * 对当前 Object 直接调用父类方法
+     * @param obj Object
+     * @param methodName 方法名称
+     * @param methodSignature 方法签名
+     * @param args 参数
+     */
     external fun invokeSuperObjectMethod(obj: Any, methodName: String, methodSignature: String, vararg args: Any?): Any?
     external fun invokeSuperBooleanMethod(obj: Any, methodName: String, methodSignature: String, vararg args: Any?): Boolean
     external fun invokeSuperByteMethod(obj: Any, methodName: String, methodSignature: String, vararg args: Any?): Byte
@@ -18,5 +28,5 @@ object Object {
 
     @Suppress("UNCHECKED_CAST")
     fun <T> invokeSuperObjectMethodAs(obj: Any, methodName: String, methodSignature: String, vararg args: Any?): T? =
-        invokeSuperObjectMethod(obj,methodName,methodSignature,args) as? T?
+        invokeSuperObjectMethod(obj, methodName, methodSignature, args) as? T?
 }
