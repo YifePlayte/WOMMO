@@ -26,18 +26,19 @@ object ModifyBarrageLength : BaseHook() {
         clazzString.methodFinder().filterByName("length").filterByParamCount(0).first().createHook {
             after { param ->
                 val stacktrace = Throwable().stackTrace
-                if (stacktrace.any { it.className == "java.lang.String" }) return@after
-                if (stacktrace.firstOrNull { it.className == "com.xiaomi.barrage.utils.BarrageWindowUtils" }?.methodName in setOf(
-                        "addBarrageNotification", "sendBarrage"
-                    )
-                ) {
+                if (stacktrace.any { it.className in setOf("java.lang.String", "android.text.SpannableStringBuilder") }) return@after
+                if (stacktrace.any {
+                        it.className == "com.xiaomi.barrage.utils.BarrageWindowUtils" && it.methodName in setOf(
+                            "addBarrageNotification", "sendBarrage"
+                        )
+                    }) {
                     val realResult = (param.result as Int)
                     param.result = if (barrageLength < 36) {
                         if (realResult > barrageLength) {
                             maxOf(37, realResult)
                         } else realResult
                     } else {
-                        if (realResult < barrageLength) {
+                        if (realResult <= barrageLength) {
                             minOf(35, realResult)
                         } else realResult
                     }
