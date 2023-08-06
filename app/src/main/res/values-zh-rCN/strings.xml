@@ -21,6 +21,7 @@
     <string name="force_support_send_app_tips">投屏，MIUI+ Beta版</string>
     <string name="freeform">小窗</string>
     <string name="global_barrage">全局弹幕通知</string>
+    <string name="hide_landscape_nav_bar">隐藏横屏时的小白条</string>
     <string name="lockscreen_charging_info">锁屏显示充电功率</string>
     <string name="lockscreen_charging_info_not_supported">暂不支持此设备</string>
     <string name="miui_home">系统桌面</string>

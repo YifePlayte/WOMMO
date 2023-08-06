@@ -86,6 +86,11 @@ class MainPage : BasePage() {
                 textId = R.string.enable_perfect_icons
             ), SwitchV("enable_perfect_icons", false)
         )
+        TextSummaryWithSwitch(
+            TextSummaryV(
+                textId = R.string.hide_landscape_nav_bar
+            ), SwitchV("hide_landscape_nav_bar", false)
+        )
         Line()
         TitleText(textId = R.string.security_center)
         TextSummaryWithSwitch(

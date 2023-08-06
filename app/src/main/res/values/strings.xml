@@ -23,6 +23,7 @@
     <string name="force_support_send_app_tips">Cast, MIUI+ Beta</string>
     <string name="freeform">Freeform</string>
     <string name="global_barrage">Global bullet screen notification</string>
+    <string name="hide_landscape_nav_bar">Hide the navigation bar when in landscape mode</string>
     <string name="lockscreen_charging_info">Display charging power on lock screen</string>
     <string name="lockscreen_charging_info_not_supported">Device currently unsupported</string>
     <string name="miui_home">Launcher</string>
