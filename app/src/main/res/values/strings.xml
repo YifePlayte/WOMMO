@@ -11,6 +11,7 @@
     <string name="cancel">Cancel</string>
     <string name="change_bitrate_and_frame_rate_range">Change bitrate and frame rate range</string>
     <string name="done">OK</string>
+    <string name="download_provider">Downloads</string>
     <string name="enable_perfect_icons">Enable perfect icons</string>
     <string name="exposure_refresh_for_non_miui_widget">Exposure refresh for non-MIUI-widgets</string>
     <string name="fake_non_default_icon">Fake non-default icon</string>
@@ -41,6 +42,7 @@
     <string name="remove_miui_stroke_from_adaptive_icon">Remove MIUI stroke from adaptive icon</string>
     <string name="remove_miui_stroke_from_adaptive_icon_tips">All apps enabled in scope</string>
     <string name="remove_report_in_application_info">Remove report button in application info page</string>
+    <string name="remove_xl_download">Remove .xldownload folder</string>
     <string name="restart_all_scope">Restart all scope</string>
     <string name="restart_all_scope_tips">Are you sure to restart all scope?</string>
     <string name="restore_google_app_icon">Restore google app icon</string>

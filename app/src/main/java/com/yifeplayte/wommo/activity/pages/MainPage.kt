@@ -154,6 +154,13 @@ class MainPage : BasePage() {
             ), SwitchV("show_notification_importance", false)
         )
         Line()
+        TitleText(textId = R.string.download_provider)
+        TextSummaryWithSwitch(
+            TextSummaryV(
+                textId = R.string.remove_xl_download
+            ), SwitchV("remove_xl_download", false)
+        )
+        Line()
         TitleText(textId = R.string.others)
         TextSummaryWithSwitch(
             TextSummaryV(

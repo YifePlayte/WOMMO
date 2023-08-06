@@ -2,6 +2,7 @@
 <resources>
     <string-array name="xposedscope">
         <item>android</item>
+        <item>com.android.providers.downloads</item>
         <item>com.android.settings</item>
         <item>com.android.systemui</item>
         <item>com.milink.service</item>
