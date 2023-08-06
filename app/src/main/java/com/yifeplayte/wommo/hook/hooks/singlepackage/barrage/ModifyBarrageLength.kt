@@ -8,12 +8,8 @@ import com.yifeplayte.wommo.hook.utils.XSharedPreferences.getInt
 
 object ModifyBarrageLength : BaseHook() {
     override val key = "modify_barrage_length"
-    override val isEnabled: Boolean
-        get() = barrageLength != 36
-    private val barrageLength by lazy {
-        getInt("barrage_length", 36)
-    }
-
+    override val isEnabled get() = barrageLength != 36
+    private val barrageLength by lazy { getInt("barrage_length", 36) }
     override fun hook() {
         val clazzString = loadClass("java.lang.String")
         clazzString.methodFinder().filterByName("subSequence").filterByParamCount(2).first().createHook {

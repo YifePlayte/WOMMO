@@ -91,6 +91,16 @@ class MainPage : BasePage() {
                 textId = R.string.hide_landscape_nav_bar
             ), SwitchV("hide_landscape_nav_bar", false)
         )
+        TextSummaryWithSeekBar(
+            TextSummaryV(
+                textId = R.string.icon_label_size
+            ), SeekBarWithTextV("icon_label_size", 0, 30, 12)
+        )
+        TextSummaryWithSwitch(
+            TextSummaryV(
+                textId = R.string.icon_label_marquee
+            ), SwitchV("icon_label_marquee", false)
+        )
         Line()
         TitleText(textId = R.string.security_center)
         TextSummaryWithSwitch(

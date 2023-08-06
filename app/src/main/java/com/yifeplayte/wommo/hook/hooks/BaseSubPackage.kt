@@ -7,7 +7,7 @@ import com.github.kyuubiran.ezxhelper.LogExtensions.logexIfThrow
 abstract class BaseSubPackage {
     var isInit: Boolean = false
     lateinit var subClassLoader: ClassLoader
-    var safeSubClassLoader: ClassLoader
+    var safeSubClassLoader
         get() = if (this::subClassLoader.isInitialized) subClassLoader else EzXHelper.safeClassLoader
         set(value) {
             if (this::subClassLoader.isInitialized) return

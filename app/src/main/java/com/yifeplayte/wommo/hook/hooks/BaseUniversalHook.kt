@@ -7,9 +7,7 @@ import com.yifeplayte.wommo.hook.utils.XSharedPreferences.getBoolean
 abstract class BaseUniversalHook {
     abstract val key: String
     abstract fun hook()
-    open val isEnabled: Boolean
-        get() = getBoolean(key, false)
-
+    open val isEnabled get() = getBoolean(key, false)
     fun init() {
         if (isEnabled) runCatching {
             hook()

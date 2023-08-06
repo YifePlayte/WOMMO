@@ -5,6 +5,7 @@ import com.yifeplayte.wommo.hook.hooks.singlepackage.home.AllowMoveNonMIUIWidget
 import com.yifeplayte.wommo.hook.hooks.singlepackage.home.EnablePerfectIcons
 import com.yifeplayte.wommo.hook.hooks.singlepackage.home.FakeNonDefaultIcon
 import com.yifeplayte.wommo.hook.hooks.singlepackage.home.HideLandscapeNavBar
+import com.yifeplayte.wommo.hook.hooks.singlepackage.home.IconLabel
 import com.yifeplayte.wommo.hook.hooks.singlepackage.home.RestoreGoogleAppIcon
 import com.yifeplayte.wommo.hook.hooks.singlepackage.home.RestoreSwitchMinusScreen
 import com.yifeplayte.wommo.hook.hooks.singlepackage.home.WidgetTransitionAnimation
@@ -16,6 +17,7 @@ object Home : BasePackage() {
         EnablePerfectIcons,
         FakeNonDefaultIcon,
         HideLandscapeNavBar,
+        IconLabel,
         RestoreGoogleAppIcon,
         RestoreSwitchMinusScreen,
         WidgetTransitionAnimation,
