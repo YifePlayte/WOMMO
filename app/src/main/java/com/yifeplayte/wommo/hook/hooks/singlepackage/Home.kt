@@ -8,6 +8,7 @@ import com.yifeplayte.wommo.hook.hooks.singlepackage.home.HideLandscapeNavBar
 import com.yifeplayte.wommo.hook.hooks.singlepackage.home.IconLabel
 import com.yifeplayte.wommo.hook.hooks.singlepackage.home.RestoreGoogleAppIcon
 import com.yifeplayte.wommo.hook.hooks.singlepackage.home.RestoreSwitchMinusScreen
+import com.yifeplayte.wommo.hook.hooks.singlepackage.home.UnlockGrids
 import com.yifeplayte.wommo.hook.hooks.singlepackage.home.WidgetTransitionAnimation
 
 object Home : BasePackage() {
@@ -20,6 +21,7 @@ object Home : BasePackage() {
         IconLabel,
         RestoreGoogleAppIcon,
         RestoreSwitchMinusScreen,
+        UnlockGrids,
         WidgetTransitionAnimation,
     )
 }

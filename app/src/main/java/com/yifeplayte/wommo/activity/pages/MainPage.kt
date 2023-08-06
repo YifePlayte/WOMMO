@@ -101,6 +101,11 @@ class MainPage : BasePage() {
                 textId = R.string.icon_label_marquee
             ), SwitchV("icon_label_marquee", false)
         )
+        TextSummaryWithSwitch(
+            TextSummaryV(
+                textId = R.string.unlock_grids
+            ), SwitchV("unlock_grids", false)
+        )
         Line()
         TitleText(textId = R.string.security_center)
         TextSummaryWithSwitch(

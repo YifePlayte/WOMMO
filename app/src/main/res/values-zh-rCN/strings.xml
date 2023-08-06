@@ -54,6 +54,7 @@
     <string name="show_notification_importance">显示通知重要程度</string>
     <string name="system_ui">系统界面</string>
     <string name="unlock_control_center_style">解锁控制中心样式</string>
+    <string name="unlock_grids">解锁桌面图标布局限制</string>
     <string name="warning">警告</string>
     <string name="wave_charge">启用 Alpha 充电动画</string>
     <string name="widget_transition_animation">为所有小部件添加启动动画</string>
