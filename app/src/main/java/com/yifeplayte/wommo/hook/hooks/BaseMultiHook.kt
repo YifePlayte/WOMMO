@@ -6,7 +6,7 @@ import com.github.kyuubiran.ezxhelper.LogExtensions.logexIfThrow
 import com.yifeplayte.wommo.hook.utils.XSharedPreferences.getBoolean
 
 abstract class BaseMultiHook {
-    var isInit: Boolean = false
+    private var isInit: Boolean = false
     abstract val key: String
     abstract val hooks: Map<String, () -> Unit>
     open val isEnabled get() = getBoolean(key, false)
