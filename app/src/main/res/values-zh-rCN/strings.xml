@@ -35,6 +35,8 @@
     <string name="others">其他</string>
     <string name="package_installer">应用包管理组件</string>
     <string name="personal_assistant">智能助理（负一屏）</string>
+    <string name="quick_manage_overlay_permission">快速管理悬浮窗权限</string>
+    <string name="quick_manage_unknown_app_sources">快速管理未知来源安装权限</string>
     <string name="reboot">重启</string>
     <string name="reboot_system">重启系统</string>
     <string name="reboot_tips">确定重启系统？</string>

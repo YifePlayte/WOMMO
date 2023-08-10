@@ -37,6 +37,8 @@
     <string name="others">Others</string>
     <string name="package_installer">Package Installer</string>
     <string name="personal_assistant">App Vault</string>
+    <string name="quick_manage_overlay_permission">Quick manage overlay permission</string>
+    <string name="quick_manage_unknown_app_sources">Quick manage unknown app sources</string>
     <string name="reboot">Reboot</string>
     <string name="reboot_system">Reboot system</string>
     <string name="reboot_tips">Are you sure to reboot?</string>

@@ -168,6 +168,16 @@ class MainPage : BasePage() {
                 textId = R.string.show_notification_importance
             ), SwitchV("show_notification_importance", false)
         )
+        TextSummaryWithSwitch(
+            TextSummaryV(
+                textId = R.string.quick_manage_unknown_app_sources
+            ), SwitchV("quick_manage_unknown_app_sources", false)
+        )
+        TextSummaryWithSwitch(
+            TextSummaryV(
+                textId = R.string.quick_manage_overlay_permission
+            ), SwitchV("quick_manage_overlay_permission", false)
+        )
         Line()
         TitleText(textId = R.string.download_provider)
         TextSummaryWithSwitch(
