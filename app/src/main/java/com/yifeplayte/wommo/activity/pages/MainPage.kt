@@ -118,6 +118,11 @@ class MainPage : BasePage() {
                 textId = R.string.remove_report_in_application_info
             ), SwitchV("remove_report_in_application_info", false)
         )
+        TextSummaryWithSwitch(
+            TextSummaryV(
+                textId = R.string.skip_count_down
+            ), SwitchV("skip_count_down", false)
+        )
         Line()
         TitleText(textId = R.string.screen_recorder)
         TextSummaryWithSwitch(
