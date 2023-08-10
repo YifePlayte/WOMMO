@@ -11,7 +11,7 @@ import com.yifeplayte.wommo.hook.hooks.BaseHook
 object QuickManageOverlayPermission : BaseHook() {
     override val key = "quick_manage_overlay_permission"
     override fun hook() {
-        loadClass("com.android.settings.SettingsActivity").methodFinder().filterByName("onCreate").first().createHook {
+        loadClass("com.android.settings.SettingsActivity").methodFinder().filterByName("redirectTabletActivity").first().createHook {
             before {
                 val intent = (it.thisObject as Activity).intent
                 if (intent.action != Settings.ACTION_MANAGE_OVERLAY_PERMISSION || intent.data == null || intent.data!!.scheme != "package") return@before
