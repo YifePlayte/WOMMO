@@ -9,7 +9,6 @@ import com.yifeplayte.wommo.hook.hooks.BaseHook
 
 object UnlockControlCenterStyle : BaseHook() {
     override val key = "unlock_control_center_style"
-    override val isEnabled = true
     override fun hook() {
         loadClass("com.android.systemui.controlcenter.policy.ControlCenterControllerImpl").declaredConstructors.createHooks {
             after {
