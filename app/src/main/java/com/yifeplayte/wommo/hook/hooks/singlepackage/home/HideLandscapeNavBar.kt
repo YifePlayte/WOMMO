@@ -11,7 +11,7 @@ object HideLandscapeNavBar : BaseHook() {
         loadClass("com.miui.home.recents.views.RecentsContainer").methodFinder().filterByName("hideFakeNavBarForHidingGestureLine")
             .first().createHook {
                 before {
-                    it.args[0] = true;
+                    it.args[0] = true
                 }
             }
     }

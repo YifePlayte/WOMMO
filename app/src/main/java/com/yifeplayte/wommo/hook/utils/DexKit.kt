@@ -7,8 +7,8 @@ import io.luckypray.dexkit.DexKitBridge
  * DexKit 工具
  */
 object DexKit {
-    lateinit var hostDir: String
-    lateinit var dexKitBridge: DexKitBridge
+    private lateinit var hostDir: String
+    private lateinit var dexKitBridge: DexKitBridge
     val safeDexKitBridge: DexKitBridge
         get() {
             loadDexKit()

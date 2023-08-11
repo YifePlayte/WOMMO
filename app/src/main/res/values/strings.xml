@@ -22,7 +22,6 @@
     <string name="force_support_barrage">Allow all apps to use bullet screen notifications</string>
     <string name="force_support_send_app">Force all apps support Handoff</string>
     <string name="force_support_send_app_tips">Cast, MIUI+ Beta</string>
-    <string name="freeform">Freeform</string>
     <string name="global_barrage">Global bullet screen notification</string>
     <string name="hide_landscape_nav_bar">Hide the navigation bar when in landscape mode</string>
     <string name="icon_label_marquee">Icon label marquee</string>

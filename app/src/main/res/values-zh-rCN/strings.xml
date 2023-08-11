@@ -20,7 +20,6 @@
     <string name="force_support_barrage">允许所有应用使用弹幕通知</string>
     <string name="force_support_send_app">强制所有应用支持流转</string>
     <string name="force_support_send_app_tips">投屏，MIUI+ Beta版</string>
-    <string name="freeform">小窗</string>
     <string name="global_barrage">全局弹幕通知</string>
     <string name="hide_landscape_nav_bar">隐藏横屏时的小白条</string>
     <string name="icon_label_marquee">图标标题滚动</string>
