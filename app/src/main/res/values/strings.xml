@@ -54,6 +54,7 @@
     <string name="screen_recorder">Screen Recorder</string>
     <string name="security_center">Security Center</string>
     <string name="settings">Settings</string>
+    <string name="show_notification_history_and_log">Show entry for Notification history &amp; log in Notification &amp; Control center</string>
     <string name="show_notification_importance">Show notification importance</string>
     <string name="skip_count_down">Skip count down</string>
     <string name="system_ui">System UI</string>

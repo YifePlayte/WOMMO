@@ -183,6 +183,11 @@ class MainPage : BasePage() {
                 textId = R.string.quick_manage_overlay_permission
             ), SwitchV("quick_manage_overlay_permission", false)
         )
+        TextSummaryWithSwitch(
+            TextSummaryV(
+                textId = R.string.show_notification_history_and_log
+            ), SwitchV("show_notification_history_and_log", false)
+        )
         Line()
         TitleText(textId = R.string.download_provider)
         TextSummaryWithSwitch(

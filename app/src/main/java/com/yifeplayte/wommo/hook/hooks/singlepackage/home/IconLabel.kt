@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.github.kyuubiran.ezxhelper.ClassUtils.loadClass
+import com.github.kyuubiran.ezxhelper.EzXHelper.hostPackageName
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
 import com.github.kyuubiran.ezxhelper.ObjectHelper.Companion.objectHelper
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder.`-Static`.methodFinder
@@ -60,7 +61,7 @@ object IconLabel : BaseHook() {
             .createHook {
                 after {
                     val mTitle = it.args[1] as TextView
-                    if (mTitle.id == mTitle.resources.getIdentifier("icon_title", "id", "com.miui.home")) {
+                    if (mTitle.id == mTitle.resources.getIdentifier("icon_title", "id", hostPackageName)) {
                         mTitle.modify()
                     }
                 }

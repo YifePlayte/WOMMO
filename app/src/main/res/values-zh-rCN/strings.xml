@@ -52,6 +52,7 @@
     <string name="screen_recorder">屏幕录制</string>
     <string name="security_center">手机管家/平板管家</string>
     <string name="settings">设置</string>
+    <string name="show_notification_history_and_log">在通知与控制中心中显示通知历史记录与日志入口</string>
     <string name="show_notification_importance">显示通知重要程度</string>
     <string name="skip_count_down">跳过倒计时</string>
     <string name="system_ui">系统界面</string>
