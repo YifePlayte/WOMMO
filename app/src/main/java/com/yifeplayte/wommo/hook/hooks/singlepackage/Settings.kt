@@ -3,6 +3,7 @@ package com.yifeplayte.wommo.hook.hooks.singlepackage
 import com.yifeplayte.wommo.hook.hooks.BasePackage
 import com.yifeplayte.wommo.hook.hooks.singlepackage.settings.QuickManageOverlayPermission
 import com.yifeplayte.wommo.hook.hooks.singlepackage.settings.QuickManageUnknownAppSources
+import com.yifeplayte.wommo.hook.hooks.singlepackage.settings.ShowGoogleSettingsEntry
 import com.yifeplayte.wommo.hook.hooks.singlepackage.settings.ShowNotificationHistoryAndLogEntry
 import com.yifeplayte.wommo.hook.hooks.singlepackage.settings.ShowNotificationImportance
 
@@ -11,6 +12,7 @@ object Settings : BasePackage() {
     override val hooks = setOf(
         QuickManageOverlayPermission,
         QuickManageUnknownAppSources,
+        ShowGoogleSettingsEntry,
         ShowNotificationHistoryAndLogEntry,
         ShowNotificationImportance,
     )
