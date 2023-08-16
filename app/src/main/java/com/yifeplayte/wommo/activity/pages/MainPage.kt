@@ -185,8 +185,8 @@ class MainPage : BasePage() {
         )
         TextSummaryWithSwitch(
             TextSummaryV(
-                textId = R.string.show_notification_history_and_log
-            ), SwitchV("show_notification_history_and_log", false)
+                textId = R.string.show_notification_history_and_log_entry
+            ), SwitchV("show_notification_history_and_log_entry", false)
         )
         Line()
         TitleText(textId = R.string.download_provider)

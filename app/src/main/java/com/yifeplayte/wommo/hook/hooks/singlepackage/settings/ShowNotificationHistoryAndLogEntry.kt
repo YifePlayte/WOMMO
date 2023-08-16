@@ -12,8 +12,8 @@ import com.github.kyuubiran.ezxhelper.ObjectUtils.invokeMethodBestMatch
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder.`-Static`.methodFinder
 import com.yifeplayte.wommo.hook.hooks.BaseHook
 
-object ShowNotificationHistoryAndLog : BaseHook() {
-    override val key = "show_notification_history_and_log"
+object ShowNotificationHistoryAndLogEntry : BaseHook() {
+    override val key = "show_notification_history_and_log_entry"
     override fun hook() {
         loadClass("com.android.settings.NotificationControlCenterSettings").methodFinder().filterByName("onCreate").first()
             .createHook {
