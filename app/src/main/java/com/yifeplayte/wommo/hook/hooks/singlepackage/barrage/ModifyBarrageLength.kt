@@ -18,6 +18,12 @@ object ModifyBarrageLength : BaseHook() {
                     param.args[1] = barrageLength
                 }
             }
+            after {
+                if (it.throwable != null) {
+                    it.throwable = null
+                    it.result = it.thisObject
+                }
+            }
         }
         clazzString.methodFinder().filterByName("length").filterByParamCount(0).first().createHook {
             after { param ->
