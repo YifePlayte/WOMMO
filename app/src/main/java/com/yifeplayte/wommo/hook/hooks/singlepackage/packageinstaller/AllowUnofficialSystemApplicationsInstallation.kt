@@ -4,12 +4,12 @@ import android.content.pm.ApplicationInfo
 import com.github.kyuubiran.ezxhelper.EzXHelper
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
 import com.yifeplayte.wommo.hook.hooks.BaseHook
-import com.yifeplayte.wommo.hook.utils.DexKit.safeDexKitBridge
+import com.yifeplayte.wommo.hook.utils.DexKit.dexKitBridge
 
 object AllowUnofficialSystemApplicationsInstallation : BaseHook() {
     override val key = "allow_unofficial_system_applications_installation"
     override fun hook() {
-        safeDexKitBridge.findMethod {
+        dexKitBridge.findMethod {
             methodParamTypes = arrayOf("Landroid/content/pm/ApplicationInfo;")
             methodReturnType = "boolean"
         }.forEach {

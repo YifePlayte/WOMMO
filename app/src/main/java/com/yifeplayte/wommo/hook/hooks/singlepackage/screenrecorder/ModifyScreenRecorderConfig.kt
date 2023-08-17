@@ -4,12 +4,12 @@ import com.github.kyuubiran.ezxhelper.EzXHelper
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
 import com.github.kyuubiran.ezxhelper.MemberExtensions.isFinal
 import com.yifeplayte.wommo.hook.hooks.BaseHook
-import com.yifeplayte.wommo.hook.utils.DexKit.safeDexKitBridge
+import com.yifeplayte.wommo.hook.utils.DexKit.dexKitBridge
 
 object ModifyScreenRecorderConfig : BaseHook() {
     override val key = "modify_screen_recorder_config"
     override fun hook() {
-        safeDexKitBridge.findMethodUsingString {
+        dexKitBridge.findMethodUsingString {
             usingString = "Error when set frame value, maxValue = "
             methodParamTypes = arrayOf("I", "I")
         }.firstOrNull()?.getMethodInstance(EzXHelper.safeClassLoader)?.createHook {
@@ -29,7 +29,7 @@ object ModifyScreenRecorderConfig : BaseHook() {
                 }?.set(null, intArrayOf(15, 24, 30, 48, 60, 90, 120, 144))
             }
         }
-        safeDexKitBridge.findMethodUsingString {
+        dexKitBridge.findMethodUsingString {
             usingString = "defaultBitRate = "
         }.map {
             it.getMethodInstance(EzXHelper.safeClassLoader)
