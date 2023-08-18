@@ -1,3 +1,4 @@
+import com.android.build.gradle.internal.api.BaseVariantOutputImpl
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -17,6 +18,13 @@ android {
         targetSdk = 33
         versionCode = 1
         versionName = "1.0.0"
+        applicationVariants.configureEach {
+            outputs.configureEach {
+                if (this is BaseVariantOutputImpl) {
+                    outputFileName = "${rootProject.name}_${versionName}.${outputFileName.substringAfterLast('.')}"
+                }
+            }
+        }
     }
 
     buildTypes {
