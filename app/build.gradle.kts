@@ -18,10 +18,25 @@ android {
         targetSdk = 33
         versionCode = 1
         versionName = "1.0.0"
+
+        ndk {
+            abiFilters.add("armeabi-v7a")
+            abiFilters.add("arm64-v8a")
+        }
+
+        splits {
+            abi {
+                isEnable = true
+                reset()
+                include("armeabi-v7a", "arm64-v8a")
+                isUniversalApk = true
+            }
+        }
+
         applicationVariants.configureEach {
             outputs.configureEach {
                 if (this is BaseVariantOutputImpl) {
-                    outputFileName = "${rootProject.name}_${versionName}.${outputFileName.substringAfterLast('.')}"
+                    outputFileName = outputFileName.replace("app", "WOMMO").replace(Regex("debug|release"), versionName)
                 }
             }
         }
