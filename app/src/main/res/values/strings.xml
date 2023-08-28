@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="allow_move_non_miui_widget_to_minus_screen">Allow to move non-MIUI-widgets to App vault</string>
+    <string name="allow_move_non_miui_widgets_to_minus_screen">Allow to move non-MIUI-widgets to App vault</string>
     <string name="allow_unofficial_system_applications_installation">Allow the installation of system applications from unofficial channels</string>
     <string name="android">System Framework</string>
     <string name="app_link_open_always">Allow app to open supported links</string>
@@ -55,6 +55,7 @@
     <string name="security_center">Security Center</string>
     <string name="settings">Settings</string>
     <string name="show_google_settings_entry">Show entry for Google settings</string>
+    <string name="show_miui_widgets_in_android_widgets_list">Show MIUI widgets in Android widgets list</string>
     <string name="show_notification_history_and_log_entry">Show entry for Notification history &amp; log in Notification &amp; Control center</string>
     <string name="show_notification_importance">Show notification importance</string>
     <string name="skip_count_down">Skip count down</string>

@@ -1,5 +1,5 @@
 <resources>
-    <string name="allow_move_non_miui_widget_to_minus_screen">允许将非 MIUI 小部件移至智能助理（负一屏）</string>
+    <string name="allow_move_non_miui_widgets_to_minus_screen">允许将非 MIUI 小部件移至智能助理（负一屏）</string>
     <string name="allow_unofficial_system_applications_installation">允许从非官方渠道安装系统应用</string>
     <string name="android">系统框架</string>
     <string name="app_link_open_always">允许应用打开支持的链接</string>
@@ -53,6 +53,7 @@
     <string name="security_center">手机管家/平板管家</string>
     <string name="settings">设置</string>
     <string name="show_google_settings_entry">显示 Google 设置</string>
+    <string name="show_miui_widgets_in_android_widgets_list">在安卓小部件中显示 MIUI 小部件</string>
     <string name="show_notification_history_and_log_entry">在通知与控制中心中显示通知历史记录与日志入口</string>
     <string name="show_notification_importance">显示通知重要程度</string>
     <string name="skip_count_down">跳过倒计时</string>

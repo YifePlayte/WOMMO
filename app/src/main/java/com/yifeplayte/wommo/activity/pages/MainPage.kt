@@ -68,8 +68,13 @@ class MainPage : BasePage() {
         )
         TextSummaryWithSwitch(
             TextSummaryV(
-                textId = R.string.allow_move_non_miui_widget_to_minus_screen
-            ), SwitchV("allow_move_non_miui_widget_to_minus_screen", false)
+                textId = R.string.allow_move_non_miui_widgets_to_minus_screen
+            ), SwitchV("allow_move_non_miui_widgets_to_minus_screen", false)
+        )
+        TextSummaryWithSwitch(
+            TextSummaryV(
+                textId = R.string.show_miui_widgets_in_android_widgets_list
+            ), SwitchV("show_miui_widgets_in_android_widgets_list", false)
         )
         TextSummaryWithSwitch(
             TextSummaryV(
