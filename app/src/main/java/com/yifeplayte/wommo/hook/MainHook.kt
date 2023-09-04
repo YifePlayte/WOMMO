@@ -12,6 +12,7 @@ import com.yifeplayte.wommo.hook.hooks.singlepackage.ScreenRecorder
 import com.yifeplayte.wommo.hook.hooks.singlepackage.SecurityCenter
 import com.yifeplayte.wommo.hook.hooks.singlepackage.Settings
 import com.yifeplayte.wommo.hook.hooks.singlepackage.SystemUI
+import com.yifeplayte.wommo.hook.hooks.singlepackage.VoiceAssist
 import com.yifeplayte.wommo.hook.hooks.subpackage.SystemUIPlugin
 import com.yifeplayte.wommo.hook.hooks.universal.RemoveMIUIStrokeFromAdaptiveIcon
 import com.yifeplayte.wommo.hook.utils.DexKit
@@ -31,6 +32,7 @@ private val singlePackagesHooked = setOf(
     SecurityCenter,
     Settings,
     SystemUI,
+    VoiceAssist,
 )
 private val multiPackagesHooked = setOf(
     ForceSupportSendApp,

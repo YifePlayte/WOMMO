@@ -10,6 +10,7 @@
     <string name="barrage_length">Barrage length</string>
     <string name="cancel">Cancel</string>
     <string name="change_bitrate_and_frame_rate_range">Change bitrate and frame rate range</string>
+    <string name="change_browser_for_mi_ai">Change browser for Mi Ai</string>
     <string name="done">OK</string>
     <string name="download_provider">Downloads</string>
     <string name="enable_perfect_icons">Enable perfect icons</string>
@@ -62,6 +63,7 @@
     <string name="system_ui">System UI</string>
     <string name="unlock_control_center_style">Unlock control center style</string>
     <string name="unlock_grids">Unlock launcher icon grids</string>
+    <string name="voice_assist">Mi Ai</string>
     <string name="warning">Warning</string>
     <string name="wave_charge">Enable wave charge animation</string>
     <string name="widget_transition_animation">Enable transition animation for all widgets</string>

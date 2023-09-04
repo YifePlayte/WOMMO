@@ -206,6 +206,13 @@ class MainPage : BasePage() {
             ), SwitchV("remove_xl_download", false)
         )
         Line()
+        TitleText(textId = R.string.voice_assist)
+        TextSummaryWithSwitch(
+            TextSummaryV(
+                textId = R.string.change_browser_for_mi_ai
+            ), SwitchV("change_browser_for_mi_ai", false)
+        )
+        Line()
         TitleText(textId = R.string.others)
         TextSummaryWithSwitch(
             TextSummaryV(

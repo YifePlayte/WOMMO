@@ -8,6 +8,7 @@
     <string name="barrage_length">弹幕长度</string>
     <string name="cancel">取消</string>
     <string name="change_bitrate_and_frame_rate_range">修改码率与帧率范围</string>
+    <string name="change_browser_for_mi_ai">修改小爱同学使用的浏览器</string>
     <string name="done">确定</string>
     <string name="download_provider">下载管理程序</string>
     <string name="enable_perfect_icons">启用完美图标</string>
@@ -60,6 +61,7 @@
     <string name="system_ui">系统界面</string>
     <string name="unlock_control_center_style">解锁控制中心样式</string>
     <string name="unlock_grids">解锁桌面图标布局限制</string>
+    <string name="voice_assist">小爱同学</string>
     <string name="warning">警告</string>
     <string name="wave_charge">启用 Alpha 充电动画</string>
     <string name="widget_transition_animation">为所有小部件添加启动动画</string>

@@ -11,6 +11,7 @@
         <item>com.miui.personalassistant</item>
         <item>com.miui.screenrecorder</item>
         <item>com.miui.securitycenter</item>
+        <item>com.miui.voiceassist</item>
         <item>com.xiaomi.barrage</item>
         <item>com.xiaomi.mirror</item>
     </string-array>
