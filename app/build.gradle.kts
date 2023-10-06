@@ -36,7 +36,7 @@ android {
         applicationVariants.configureEach {
             outputs.configureEach {
                 if (this is BaseVariantOutputImpl) {
-                    outputFileName = outputFileName.replace("app", "WOMMO").replace(Regex("debug|release"), versionName)
+                    outputFileName = outputFileName.replace("app", rootProject.name).replace(Regex("debug|release"), versionName)
                 }
             }
         }
@@ -79,7 +79,7 @@ android {
 
 dependencies {
     compileOnly("de.robv.android.xposed:api:82")
-    implementation("com.github.kyuubiran:EzXHelper:2.0.6")
+    implementation("com.github.kyuubiran:EzXHelper:2.0.7")
     implementation("org.luckypray:DexKit:1.1.8")
     implementation(project(":blockmiui"))
 }
