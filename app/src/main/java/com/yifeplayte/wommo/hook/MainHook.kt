@@ -1,13 +1,13 @@
 package com.yifeplayte.wommo.hook
 
 import com.github.kyuubiran.ezxhelper.EzXHelper
+import com.yifeplayte.wommo.hook.hooks.multipackage.ExposureRefreshForNonMIUIWidget
 import com.yifeplayte.wommo.hook.hooks.multipackage.ForceSupportSendApp
 import com.yifeplayte.wommo.hook.hooks.singlepackage.Android
 import com.yifeplayte.wommo.hook.hooks.singlepackage.Barrage
 import com.yifeplayte.wommo.hook.hooks.singlepackage.DownloadProvider
 import com.yifeplayte.wommo.hook.hooks.singlepackage.Home
 import com.yifeplayte.wommo.hook.hooks.singlepackage.PackageInstaller
-import com.yifeplayte.wommo.hook.hooks.singlepackage.PersonalAssistant
 import com.yifeplayte.wommo.hook.hooks.singlepackage.ScreenRecorder
 import com.yifeplayte.wommo.hook.hooks.singlepackage.SecurityCenter
 import com.yifeplayte.wommo.hook.hooks.singlepackage.Settings
@@ -27,7 +27,6 @@ private val singlePackagesHooked = setOf(
     DownloadProvider,
     Home,
     PackageInstaller,
-    PersonalAssistant,
     ScreenRecorder,
     SecurityCenter,
     Settings,
@@ -35,6 +34,7 @@ private val singlePackagesHooked = setOf(
     VoiceAssist,
 )
 private val multiPackagesHooked = setOf(
+    ExposureRefreshForNonMIUIWidget,
     ForceSupportSendApp,
 )
 private val subPackagesHooked = setOf(
