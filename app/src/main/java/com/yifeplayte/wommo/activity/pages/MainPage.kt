@@ -128,6 +128,11 @@ class MainPage : BasePage() {
                 textId = R.string.skip_count_down
             ), SwitchV("skip_count_down", false)
         )
+        TextSummaryWithSwitch(
+            TextSummaryV(
+                textId = R.string.remove_adb_install_intercept
+            ), SwitchV("remove_adb_install_intercept", false)
+        )
         Line()
         TitleText(textId = R.string.screen_recorder)
         TextSummaryWithSwitch(

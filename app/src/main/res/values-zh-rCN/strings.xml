@@ -41,6 +41,7 @@
     <string name="reboot_system">重启系统</string>
     <string name="reboot_tips">确定重启系统？</string>
     <string name="redirect_to_notification_channel_setting">重定向通知设置到频道设置</string>
+    <string name="remove_adb_install_intercept">移除adb安装拦截弹窗</string>
     <string name="remove_miui_stroke_from_adaptive_icon">移除自适应图标边界线</string>
     <string name="remove_miui_stroke_from_adaptive_icon_tips">所有已勾选的作用域</string>
     <string name="remove_report_in_application_info">移除应用信息举报按钮</string>

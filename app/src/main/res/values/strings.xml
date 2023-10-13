@@ -43,6 +43,7 @@
     <string name="reboot_system">Reboot system</string>
     <string name="reboot_tips">Are you sure to reboot?</string>
     <string name="redirect_to_notification_channel_setting">Redirect notification setting to channel setting</string>
+    <string name="remove_adb_install_intercept">Remove adb install intercept</string>
     <string name="remove_miui_stroke_from_adaptive_icon">Remove MIUI stroke from adaptive icon</string>
     <string name="remove_miui_stroke_from_adaptive_icon_tips">All apps enabled in scope</string>
     <string name="remove_report_in_application_info">Remove report button in application info page</string>
