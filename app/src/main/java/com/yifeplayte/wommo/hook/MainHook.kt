@@ -8,6 +8,7 @@ import com.yifeplayte.wommo.hook.hooks.singlepackage.Barrage
 import com.yifeplayte.wommo.hook.hooks.singlepackage.DownloadProvider
 import com.yifeplayte.wommo.hook.hooks.singlepackage.Home
 import com.yifeplayte.wommo.hook.hooks.singlepackage.PackageInstaller
+import com.yifeplayte.wommo.hook.hooks.singlepackage.PowerKeeper
 import com.yifeplayte.wommo.hook.hooks.singlepackage.ScreenRecorder
 import com.yifeplayte.wommo.hook.hooks.singlepackage.SecurityCenter
 import com.yifeplayte.wommo.hook.hooks.singlepackage.Settings
@@ -27,6 +28,7 @@ private val singlePackagesHooked = setOf(
     DownloadProvider,
     Home,
     PackageInstaller,
+    PowerKeeper,
     ScreenRecorder,
     SecurityCenter,
     Settings,

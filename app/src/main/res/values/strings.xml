@@ -13,6 +13,7 @@
     <string name="change_browser_for_mi_ai">Change browser for Mi Ai</string>
     <string name="done">OK</string>
     <string name="download_provider">Downloads</string>
+    <string name="enable_battery_monitor_service">Enable battery monitor service</string>
     <string name="enable_perfect_icons">Enable perfect icons</string>
     <string name="exposure_refresh_for_non_miui_widget">Exposure refresh for non-MIUI-widgets</string>
     <string name="exposure_refresh_for_non_miui_widget_tips">System Framework, App Vault</string>
@@ -33,10 +34,12 @@
     <string name="miui_home">Launcher</string>
     <string name="not_support">You seem to be using an outdated version of LSPosed or LSPosed is not active, please update LSPosed or activate it and try again.</string>
     <string name="notification_settings_no_white_list">Remove white list for notification settings</string>
+    <string name="open_battery_status_activity">Open battery status activity</string>
     <string name="open_by_default">Open by default</string>
     <string name="open_by_default_setting">Change App Info \"Clear defaults\" to \"Open by default\"</string>
     <string name="others">Others</string>
     <string name="package_installer">Package Installer</string>
+    <string name="power_keeper">Battery and performance</string>
     <string name="quick_manage_overlay_permission">Quick manage overlay permission</string>
     <string name="quick_manage_unknown_app_sources">Quick manage unknown app sources</string>
     <string name="reboot">Reboot</string>

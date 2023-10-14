@@ -1,7 +1,9 @@
 package com.yifeplayte.wommo.activity.pages
 
 import android.annotation.SuppressLint
+import android.view.View
 import android.widget.Toast
+import cn.fkj233.ui.activity.MIUIActivity.Companion.safeSP
 import cn.fkj233.ui.activity.annotation.BMMainPage
 import cn.fkj233.ui.activity.data.BasePage
 import cn.fkj233.ui.activity.view.SeekBarWithTextV
@@ -19,7 +21,8 @@ class MainPage : BasePage() {
         TitleText(textId = R.string.android)
         TextSummaryWithSwitch(
             TextSummaryV(
-                textId = R.string.force_dark_mode_for_all_apps, tipsId = R.string.force_dark_mode_for_all_apps_tips
+                textId = R.string.force_dark_mode_for_all_apps,
+                tipsId = R.string.force_dark_mode_for_all_apps_tips
             ), SwitchV("force_dark_mode_for_all_apps", false)
         )
         Line()
@@ -209,6 +212,31 @@ class MainPage : BasePage() {
             TextSummaryV(
                 textId = R.string.change_browser_for_mi_ai
             ), SwitchV("change_browser_for_mi_ai", false)
+        )
+        Line()
+        TitleText(textId = R.string.power_keeper)
+        val bindingEnableBatteryMonitorService = GetDataBinding({
+            safeSP.getBoolean("enable_battery_monitor_service", false)
+        }) { view, flags, data ->
+            when (flags) {
+                1 -> view.visibility = if (data as Boolean) View.VISIBLE else View.GONE
+            }
+        }
+        TextSummaryWithSwitch(
+            TextSummaryV(
+                textId = R.string.enable_battery_monitor_service
+            ), SwitchV(
+                "enable_battery_monitor_service",
+                false,
+                dataBindingSend = bindingEnableBatteryMonitorService.bindingSend
+            )
+        )
+        TextSummaryWithArrow(
+            TextSummaryV(
+                textId = R.string.open_battery_status_activity
+            ) {
+                Terminal.exec("am start -n com.miui.powerkeeper/.ui.powertools.module.batterylife.BatteryStatusActivity")
+            }, bindingEnableBatteryMonitorService.getRecv(1)
         )
         Line()
         TitleText(textId = R.string.others)

@@ -11,6 +11,7 @@
     <string name="change_browser_for_mi_ai">修改小爱同学使用的浏览器</string>
     <string name="done">确定</string>
     <string name="download_provider">下载管理程序</string>
+    <string name="enable_battery_monitor_service">启用电池监控服务</string>
     <string name="enable_perfect_icons">启用完美图标</string>
     <string name="exposure_refresh_for_non_miui_widget">为非 MIUI 小部件提供曝光刷新</string>
     <string name="exposure_refresh_for_non_miui_widget_tips">系统框架，智能助理（负一屏）</string>
@@ -31,10 +32,12 @@
     <string name="miui_home">系统桌面</string>
     <string name="not_support">您似乎正在使用过时的 LSPosed 版本或 LSPosed 未激活，请更新 LSPosed 或者激活后再试。</string>
     <string name="notification_settings_no_white_list">移除通知设置白名单</string>
+    <string name="open_battery_status_activity">启动电池续航活动</string>
     <string name="open_by_default">默认打开</string>
     <string name="open_by_default_setting">将应用详情中“消除默认操作”改为“默认打开”设置</string>
     <string name="others">其他</string>
     <string name="package_installer">应用包管理组件</string>
+    <string name="power_keeper">电量和性能</string>
     <string name="quick_manage_overlay_permission">快速管理悬浮窗权限</string>
     <string name="quick_manage_unknown_app_sources">快速管理未知来源安装权限</string>
     <string name="reboot">重启</string>
