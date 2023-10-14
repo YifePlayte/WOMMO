@@ -38,6 +38,7 @@
 - 将应用详情中“消除默认操作”改为“默认打开”设置
 - 移除应用信息举报按钮
 - 跳过倒计时
+- 移除adb安装拦截弹窗
 
 #### 屏幕录制
 
@@ -47,10 +48,6 @@
 #### 应用包管理组件
 
 - 允许从非官方渠道安装系统应用
-
-#### 智能助理（负一屏）
-
-- 为非 MIUI 小部件提供曝光刷新
 
 #### 弹幕通知
 
@@ -74,9 +71,14 @@
 
 - 修改小爱同学使用的浏览器
 
+#### 电量和性能
+
+- 启用电池监控服务
+
 #### 其他
 
 - 强制所有应用支持流转（投屏，MIUI+ Beta 版）
+- 为非 MIUI 小部件提供曝光刷新
 - 移除自适应图标边界线（所有已勾选的作用域）
 
 ---
@@ -85,7 +87,7 @@
 
 ##### GNU Lesser General Public License v2.1
 
-[577fkj/blockmiui](https://github.com/577fkj/blockmiui)
+[577fkj/blockmiui](https://github.com/Block-Network/blockmiui)
 
 ##### GNU Lesser General Public License v3.0
 
