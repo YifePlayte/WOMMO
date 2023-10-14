@@ -148,13 +148,6 @@ class MainPage : BasePage() {
             ), SwitchV("allow_unofficial_system_applications_installation", false)
         )
         Line()
-        TitleText(textId = R.string.personal_assistant)
-        TextSummaryWithSwitch(
-            TextSummaryV(
-                textId = R.string.exposure_refresh_for_non_miui_widget
-            ), SwitchV("exposure_refresh_for_non_miui_widget", false)
-        )
-        Line()
         TitleText(textId = R.string.barrage)
         TextSummaryWithSwitch(
             TextSummaryV(
@@ -219,6 +212,12 @@ class MainPage : BasePage() {
                 textId = R.string.force_support_send_app,
                 tipsId = R.string.force_support_send_app_tips,
             ), SwitchV("force_support_send_app", false)
+        )
+        TextSummaryWithSwitch(
+            TextSummaryV(
+                textId = R.string.exposure_refresh_for_non_miui_widget,
+                tipsId = R.string.exposure_refresh_for_non_miui_widget_tips,
+            ), SwitchV("exposure_refresh_for_non_miui_widget", false)
         )
         TextSummaryWithSwitch(
             TextSummaryV(

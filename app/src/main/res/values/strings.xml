@@ -15,6 +15,7 @@
     <string name="download_provider">Downloads</string>
     <string name="enable_perfect_icons">Enable perfect icons</string>
     <string name="exposure_refresh_for_non_miui_widget">Exposure refresh for non-MIUI-widgets</string>
+    <string name="exposure_refresh_for_non_miui_widget_tips">System Framework, App Vault</string>
     <string name="fake_non_default_icon">Fake non-default icon</string>
     <string name="finished">Finished</string>
     <string name="force_dark_mode_for_all_apps">Force dark mode for all apps</string>
@@ -36,7 +37,6 @@
     <string name="open_by_default_setting">Change App Info \"Clear defaults\" to \"Open by default\"</string>
     <string name="others">Others</string>
     <string name="package_installer">Package Installer</string>
-    <string name="personal_assistant">App Vault</string>
     <string name="quick_manage_overlay_permission">Quick manage overlay permission</string>
     <string name="quick_manage_unknown_app_sources">Quick manage unknown app sources</string>
     <string name="reboot">Reboot</string>
