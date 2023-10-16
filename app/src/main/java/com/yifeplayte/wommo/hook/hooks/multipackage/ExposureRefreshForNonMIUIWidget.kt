@@ -60,7 +60,6 @@ object ExposureRefreshForNonMIUIWidget : BaseMultiHook() {
                             AppWidgetManager.ACTION_APPWIDGET_CONFIGURE
                         )
                     ) {
-                        it.args[0]?.apply { objectHelper().invokeMethodBestMatch("setPersistent", null, true) }
                         it.args[1] = intent.component?.packageName
                     }
                 }
