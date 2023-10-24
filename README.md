@@ -111,6 +111,10 @@
 
 [YifePlayte/WaveCharge](https://github.com/YifePlayte/WaveCharge)
 
+##### MIT License
+
+[Haocen2004/PortalHook](https://github.com/Haocen2004/PortalHook)
+
 ##### 啥也不知道，咱也不敢问（
 
 [chsbuffer/MIUIQOL](https://github.com/chsbuffer/MIUIQOL)

@@ -25,9 +25,7 @@ object ChangeBrowserForContentExtension : BaseHook() {
         }
         clazzAppsUtils.methodFinder().filterByName("getIntentWithBrowser").first().createHook {
             before {
-                it.result = Intent(Intent.ACTION_VIEW).apply {
-                    data = Uri.parse(it.args[0].toString())
-                }
+                it.result = Intent(Intent.ACTION_VIEW, Uri.parse(it.args[0].toString()))
             }
         }
     }
