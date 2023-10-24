@@ -6,6 +6,7 @@
         <item>com.android.settings</item>
         <item>com.android.systemui</item>
         <item>com.milink.service</item>
+        <item>com.miui.contentextension</item>
         <item>com.miui.home</item>
         <item>com.miui.packageinstaller</item>
         <item>com.miui.personalassistant</item>

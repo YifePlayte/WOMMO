@@ -214,6 +214,13 @@ class MainPage : BasePage() {
             ), SwitchV("change_browser_for_mi_ai", false)
         )
         Line()
+        TitleText(textId = R.string.content_extension)
+        TextSummaryWithSwitch(
+            TextSummaryV(
+                textId = R.string.change_browser_for_content_extension
+            ), SwitchV("change_browser_for_content_extension", false)
+        )
+        Line()
         TitleText(textId = R.string.power_keeper)
         val bindingEnableBatteryMonitorService = GetDataBinding({
             safeSP.getBoolean("enable_battery_monitor_service", false)

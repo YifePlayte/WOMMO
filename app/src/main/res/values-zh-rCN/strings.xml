@@ -8,7 +8,9 @@
     <string name="barrage_length">弹幕长度</string>
     <string name="cancel">取消</string>
     <string name="change_bitrate_and_frame_rate_range">修改码率与帧率范围</string>
+    <string name="change_browser_for_content_extension">修改传送门使用的浏览器</string>
     <string name="change_browser_for_mi_ai">修改小爱同学使用的浏览器</string>
+    <string name="content_extension">传送门</string>
     <string name="done">确定</string>
     <string name="download_provider">下载管理程序</string>
     <string name="enable_battery_monitor_service">启用电池监控服务</string>
