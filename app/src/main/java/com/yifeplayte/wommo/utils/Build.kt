@@ -1,5 +1,6 @@
 package com.yifeplayte.wommo.utils
 
+import com.github.kyuubiran.ezxhelper.ClassHelper.Companion.classHelper
 import com.github.kyuubiran.ezxhelper.ClassUtils.getStaticObjectOrNullAs
 import com.github.kyuubiran.ezxhelper.ClassUtils.loadClass
 
@@ -9,6 +10,10 @@ import com.github.kyuubiran.ezxhelper.ClassUtils.loadClass
 object Build {
     private val clazzMiuiBuild by lazy {
         loadClass("miui.os.Build")
+    }
+
+    private val clazzSystemProperties by lazy {
+        loadClass("android.os.SystemProperties")
     }
 
     /**
@@ -23,5 +28,13 @@ object Build {
      */
     val IS_INTERNATIONAL_BUILD by lazy {
         getStaticObjectOrNullAs<Boolean>(clazzMiuiBuild, "IS_INTERNATIONAL_BUILD") ?: false
+    }
+
+    /**
+     * 是否为HyperOS
+     */
+    val IS_HYPER_OS by lazy {
+        clazzSystemProperties.classHelper()
+            .invokeStaticMethodBestMatch("get", null, "ro.mi.os.version.code", null) != null
     }
 }
