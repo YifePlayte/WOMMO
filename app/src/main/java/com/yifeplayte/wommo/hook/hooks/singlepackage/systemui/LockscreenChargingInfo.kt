@@ -15,6 +15,7 @@ import com.github.kyuubiran.ezxhelper.ClassUtils.loadClassOrNull
 import com.github.kyuubiran.ezxhelper.ClassUtils.loadFirstClass
 import com.github.kyuubiran.ezxhelper.EzXHelper
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
+import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHooks
 import com.github.kyuubiran.ezxhelper.ObjectUtils.getObjectOrNull
 import com.github.kyuubiran.ezxhelper.ObjectUtils.invokeMethodBestMatch
 import com.github.kyuubiran.ezxhelper.ObjectUtils.setObject
@@ -31,111 +32,105 @@ object LockscreenChargingInfo : BaseHook() {
         val clazzDependency = loadClass("com.android.systemui.Dependency")
         val clazzKeyguardIndicationController =
             loadClass("com.android.systemui.statusbar.KeyguardIndicationController")
-        loadClassOrNull("com.android.systemui.statusbar.phone.KeyguardIndicationTextView")?.constructors?.first()
-            ?.createHook {
-                after { param ->
-                    (param.thisObject as TextView).isSingleLine = false
-                    val screenOnOffReceiver = object : BroadcastReceiver() {
-                        val keyguardIndicationController = runCatching {
-                            invokeStaticMethodBestMatch(
-                                clazzDependency, "get", null, clazzKeyguardIndicationController
-                            )!!
-                        }.getOrElse {
-                            val clazzMiuiStub = loadClass("miui.stub.MiuiStub")
-                            val instanceMiuiStub =
-                                getStaticObjectOrNull(clazzMiuiStub, "INSTANCE")!!
-                            val mSysUIProvider =
-                                getObjectOrNull(instanceMiuiStub, "mSysUIProvider")!!
-                            val mKeyguardIndicationController =
-                                getObjectOrNull(mSysUIProvider, "mKeyguardIndicationController")!!
-                            invokeMethodBestMatch(mKeyguardIndicationController, "get")!!
-                        }
-                        val handler = Handler((param.thisObject as TextView).context.mainLooper)
-                        val runnable = object : Runnable {
-                            val clazzMiuiDependency = loadClass("com.miui.systemui.MiuiDependency")
-                            val clazzMiuiChargeController =
-                                loadClass("com.miui.charge.MiuiChargeController")
-                            val sDependency =
-                                getStaticObjectOrNull(clazzMiuiDependency, "sDependency")!!
-                            val mProviders =
-                                getObjectOrNull(sDependency, "mProviders") as ArrayMap<*, *>
-                            val mMiuiChargeControllerProvider =
-                                mProviders[clazzMiuiChargeController]!!
-                            val instanceMiuiChargeController = invokeMethodBestMatch(
-                                mMiuiChargeControllerProvider, "createDependency"
-                            )!!
+        loadClassOrNull("com.android.systemui.statusbar.phone.KeyguardIndicationTextView")?.constructors?.createHooks {
+            after { param ->
+                (param.thisObject as TextView).isSingleLine = false
+                val screenOnOffReceiver = object : BroadcastReceiver() {
+                    val keyguardIndicationController = runCatching {
+                        invokeStaticMethodBestMatch(
+                            clazzDependency, "get", null, clazzKeyguardIndicationController
+                        )!!
+                    }.getOrElse {
+                        val clazzMiuiStub = loadClass("miui.stub.MiuiStub")
+                        val instanceMiuiStub = getStaticObjectOrNull(clazzMiuiStub, "INSTANCE")!!
+                        val mSysUIProvider = getObjectOrNull(instanceMiuiStub, "mSysUIProvider")!!
+                        val mKeyguardIndicationController =
+                            getObjectOrNull(mSysUIProvider, "mKeyguardIndicationController")!!
+                        invokeMethodBestMatch(mKeyguardIndicationController, "get")!!
+                    }
+                    val handler = Handler((param.thisObject as TextView).context.mainLooper)
+                    val runnable = object : Runnable {
+                        val clazzMiuiDependency = loadClass("com.miui.systemui.MiuiDependency")
+                        val clazzMiuiChargeController =
+                            loadClass("com.miui.charge.MiuiChargeController")
+                        val sDependency =
+                            getStaticObjectOrNull(clazzMiuiDependency, "sDependency")!!
+                        val mProviders =
+                            getObjectOrNull(sDependency, "mProviders") as ArrayMap<*, *>
+                        val mMiuiChargeControllerProvider = mProviders[clazzMiuiChargeController]!!
+                        val instanceMiuiChargeController = invokeMethodBestMatch(
+                            mMiuiChargeControllerProvider, "createDependency"
+                        )!!
 
-                            override fun run() {
-                                if (IS_HYPER_OS) {
-                                    doUpdateForHyperOS()
-                                } else {
-                                    invokeMethodBestMatch(
-                                        keyguardIndicationController, "updatePowerIndication"
-                                    )
-                                }
-                                handler.postDelayed(this, 1000)
-                            }
-
-                            fun doUpdateForHyperOS() {
-                                val mBatteryStatus = getObjectOrNull(
-                                    instanceMiuiChargeController, "mBatteryStatus"
-                                )!!
-                                val level = getObjectOrNull(mBatteryStatus, "level")
-                                val isPluggedIn =
-                                    invokeMethodBestMatch(mBatteryStatus, "isPluggedIn")
-                                val mContext =
-                                    getObjectOrNull(instanceMiuiChargeController, "mContext")
-                                val clazzChargeUtils = loadClass("com.miui.charge.ChargeUtils")
-                                val chargingHintText = invokeStaticMethodBestMatch(
-                                    clazzChargeUtils,
-                                    "getChargingHintText",
-                                    null,
-                                    level,
-                                    isPluggedIn,
-                                    mContext
-                                )
-                                setObject(
-                                    keyguardIndicationController,
-                                    "mComputePowerIndication",
-                                    chargingHintText
-                                )
+                        override fun run() {
+                            if (IS_HYPER_OS) {
+                                doUpdateForHyperOS()
+                            } else {
                                 invokeMethodBestMatch(
-                                    keyguardIndicationController,
-                                    "updateDeviceEntryIndication",
-                                    null,
-                                    false
+                                    keyguardIndicationController, "updatePowerIndication"
                                 )
                             }
+                            handler.postDelayed(this, 1000)
                         }
 
-                        init {
-                            if (((param.thisObject as TextView).context.getSystemService(Context.POWER_SERVICE) as PowerManager).isInteractive) {
+                        fun doUpdateForHyperOS() {
+                            val mBatteryStatus = getObjectOrNull(
+                                instanceMiuiChargeController, "mBatteryStatus"
+                            )!!
+                            val level = getObjectOrNull(mBatteryStatus, "level")
+                            val isPluggedIn = invokeMethodBestMatch(mBatteryStatus, "isPluggedIn")
+                            val mContext = getObjectOrNull(instanceMiuiChargeController, "mContext")
+                            val clazzChargeUtils = loadClass("com.miui.charge.ChargeUtils")
+                            val chargingHintText = invokeStaticMethodBestMatch(
+                                clazzChargeUtils,
+                                "getChargingHintText",
+                                null,
+                                level,
+                                isPluggedIn,
+                                mContext
+                            )
+                            setObject(
+                                keyguardIndicationController,
+                                "mComputePowerIndication",
+                                chargingHintText
+                            )
+                            invokeMethodBestMatch(
+                                keyguardIndicationController,
+                                "updateDeviceEntryIndication",
+                                null,
+                                false
+                            )
+                        }
+                    }
+
+                    init {
+                        if (((param.thisObject as TextView).context.getSystemService(Context.POWER_SERVICE) as PowerManager).isInteractive) {
+                            handler.post(runnable)
+                        }
+                    }
+
+                    override fun onReceive(context: Context, intent: Intent) {
+                        when (intent.action) {
+                            Intent.ACTION_SCREEN_ON -> {
                                 handler.post(runnable)
                             }
-                        }
 
-                        override fun onReceive(context: Context, intent: Intent) {
-                            when (intent.action) {
-                                Intent.ACTION_SCREEN_ON -> {
-                                    handler.post(runnable)
-                                }
-
-                                Intent.ACTION_SCREEN_OFF -> {
-                                    handler.removeCallbacks(runnable)
-                                }
+                            Intent.ACTION_SCREEN_OFF -> {
+                                handler.removeCallbacks(runnable)
                             }
                         }
                     }
-
-                    val filter = IntentFilter().apply {
-                        addAction(Intent.ACTION_SCREEN_ON)
-                        addAction(Intent.ACTION_SCREEN_OFF)
-                    }
-                    (param.thisObject as TextView).context.registerReceiver(
-                        screenOnOffReceiver, filter
-                    )
                 }
+
+                val filter = IntentFilter().apply {
+                    addAction(Intent.ACTION_SCREEN_ON)
+                    addAction(Intent.ACTION_SCREEN_OFF)
+                }
+                (param.thisObject as TextView).context.registerReceiver(
+                    screenOnOffReceiver, filter
+                )
             }
+        }
         loadFirstClass(
             "com.miui.charge.ChargeUtils", "com.android.keyguard.charge.ChargeUtils"
         ).methodFinder().filterByName("getChargingHintText").filterByParamCount(3).first()
