@@ -8,9 +8,11 @@ import com.yifeplayte.wommo.hook.utils.DexKit.dexKitBridge
 object RemoveReportInApplicationInfo : BaseHook() {
     override val key = "remove_report_in_application_info"
     override fun hook() {
-        dexKitBridge.findMethodUsingString {
-            usingString = "com.xiaomi.market"
-            methodDeclareClass = "com.miui.appmanager.ApplicationsDetailsActivity"
+        dexKitBridge.findMethod {
+            matcher {
+                usingStrings = listOf("com.xiaomi.market")
+                declaredClass = "com.miui.appmanager.ApplicationsDetailsActivity"
+            }
         }.firstOrNull()?.getMethodInstance(safeClassLoader)?.createHook {
             returnConstant(false)
         }

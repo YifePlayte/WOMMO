@@ -8,9 +8,11 @@ import com.yifeplayte.wommo.hook.utils.DexKit.dexKitBridge
 object RemoveAdbInstallIntercept : BaseHook() {
     override val key = "remove_adb_install_intercept"
     override fun hook() {
-        dexKitBridge.findMethodUsingString {
-            usingString = "permcenter_install_intercept_enabled"
-            methodReturnType = "boolean"
+        dexKitBridge.findMethod {
+            matcher {
+                usingStrings = listOf("permcenter_install_intercept_enabled")
+                returnType = "boolean"
+            }
         }.first().getMethodInstance(safeClassLoader).createHook {
             returnConstant(false)
         }

@@ -13,10 +13,8 @@ import com.yifeplayte.wommo.hook.utils.DexKit.dexKitBridge
 
 object ForceSupportSendApp : BaseMultiHook() {
     override val key = "force_support_send_app"
-    override val hooks = mapOf(
-        "com.milink.service" to { milink() },
-        "com.xiaomi.mirror" to { if (!mirror()) mirrorNew() }
-    )
+    override val hooks = mapOf("com.milink.service" to { milink() },
+        "com.xiaomi.mirror" to { if (!mirror()) mirrorNew() })
 
     private fun milink() {
         val clazzMiuiSynergySdk = loadClass("com.xiaomi.mirror.synergy.MiuiSynergySdk")
@@ -54,24 +52,19 @@ object ForceSupportSendApp : BaseMultiHook() {
             .createHook {
                 returnConstant(true)
             }
-        dexKitBridge.findMethodUsingString {
-            usingString = "support_all_app_sub_screen"
-            methodReturnType = "boolean"
+        dexKitBridge.findMethod {
+            matcher {
+                usingStrings = listOf("support_all_app_sub_screen")
+                returnType = "boolean"
+            }
         }.first().getMethodInstance(safeClassLoader).createHook {
             returnConstant(true)
         }
-        var clazzRelayAppMessage: Class<*>? = null
-        dexKitBridge.batchFindClassesUsingStrings {
-            addQuery(
-                "clazzRelayAppMessage", listOf("RelayAppMessage{type=", ", isRelay=")
-            )
-        }.forEach { (key, classes) ->
-            when (key) {
-                "clazzRelayAppMessage" -> {
-                    clazzRelayAppMessage = classes.first().getClassInstance(safeClassLoader)
-                }
+        val clazzRelayAppMessage = dexKitBridge.findClass {
+            matcher {
+                usingStrings = listOf("RelayAppMessage{type=", ", isRelay=")
             }
-        }
+        }.first().getInstance(safeClassLoader)
         clazzRelayAppMessage?.let { clazz ->
             val fieldNameIsHideIcon =
                 clazz.fieldFinder().filterByType(Boolean::class.javaPrimitiveType!!).toList()

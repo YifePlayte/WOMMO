@@ -9,9 +9,11 @@ import com.yifeplayte.wommo.hook.utils.DexKit.dexKitBridge
 object ChangeBrowserForMiAi : BaseHook() {
     override val key = "change_browser_for_mi_ai"
     override fun hook() {
-        dexKitBridge.findMethodUsingString {
-            usingString = "addBackForUri intent is null"
-            methodReturnType = "Landroid/content/Intent;"
+        dexKitBridge.findMethod {
+            matcher{
+                usingStrings = listOf("addBackForUri intent is null")
+                returnType = "android.content.Intent"
+            }
         }.map { it.getMethodInstance(safeClassLoader) }.createHooks {
             after {
                 val intent = it.result as Intent

@@ -1,6 +1,6 @@
 package com.yifeplayte.wommo.hook.hooks.singlepackage.screenrecorder
 
-import com.github.kyuubiran.ezxhelper.EzXHelper
+import com.github.kyuubiran.ezxhelper.EzXHelper.safeClassLoader
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
 import com.github.kyuubiran.ezxhelper.MemberExtensions.isFinal
 import com.yifeplayte.wommo.hook.hooks.BaseHook
@@ -9,10 +9,12 @@ import com.yifeplayte.wommo.hook.utils.DexKit.dexKitBridge
 object ModifyScreenRecorderConfig : BaseHook() {
     override val key = "modify_screen_recorder_config"
     override fun hook() {
-        dexKitBridge.findMethodUsingString {
-            usingString = "Error when set frame value, maxValue = "
-            methodParamTypes = arrayOf("I", "I")
-        }.firstOrNull()?.getMethodInstance(EzXHelper.safeClassLoader)?.createHook {
+        dexKitBridge.findMethod {
+            matcher {
+                usingStrings = listOf("Error when set frame value, maxValue = ")
+                paramTypes = listOf("int", "int")
+            }
+        }.first().getMethodInstance(safeClassLoader).createHook {
             before { param ->
                 param.args[0] = 3600
                 param.args[1] = 1
@@ -29,13 +31,13 @@ object ModifyScreenRecorderConfig : BaseHook() {
                 }?.set(null, intArrayOf(15, 24, 30, 48, 60, 90, 120, 144))
             }
         }
-        dexKitBridge.findMethodUsingString {
-            usingString = "defaultBitRate = "
-        }.map {
-            it.getMethodInstance(EzXHelper.safeClassLoader)
-        }.firstOrNull {
-            it.parameterCount == 2 && it.parameterTypes[0] == Int::class.java && it.parameterTypes[1] == Int::class.java
-        }?.createHook {
+        dexKitBridge.findMethod {
+            matcher {
+                usingStrings = listOf("defaultBitRate = ")
+                paramCount = 2
+                paramTypes = listOf("int", "int")
+            }
+        }.firstOrNull()?.getMethodInstance(safeClassLoader)?.createHook {
             before { param ->
                 param.args[0] = 3600
                 param.args[1] = 1
@@ -45,11 +47,18 @@ object ModifyScreenRecorderConfig : BaseHook() {
                     }.let { fieldAccessible ->
                         fieldAccessible.isFinal && fieldAccessible.get(null).let {
                             kotlin.runCatching {
-                                (it as IntArray).contentEquals(intArrayOf(200, 100, 50, 32, 24, 16, 8, 6, 4, 1))
+                                (it as IntArray).contentEquals(
+                                    intArrayOf(
+                                        200, 100, 50, 32, 24, 16, 8, 6, 4, 1
+                                    )
+                                )
                             }.getOrDefault(false)
                         }
                     }
-                }?.set(null, intArrayOf(3600, 2400, 1200, 800, 400, 200, 100, 50, 32, 24, 16, 8, 6, 4, 1))
+                }?.set(
+                    null,
+                    intArrayOf(3600, 2400, 1200, 800, 400, 200, 100, 50, 32, 24, 16, 8, 6, 4, 1)
+                )
             }
         }
     }
