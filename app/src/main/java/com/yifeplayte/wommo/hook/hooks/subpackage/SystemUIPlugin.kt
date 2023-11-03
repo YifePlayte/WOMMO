@@ -3,7 +3,7 @@ package com.yifeplayte.wommo.hook.hooks.subpackage
 import android.content.pm.ApplicationInfo
 import com.github.kyuubiran.ezxhelper.ClassUtils.loadClass
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
-import com.github.kyuubiran.ezxhelper.ObjectHelper.Companion.objectHelper
+import com.github.kyuubiran.ezxhelper.ObjectUtils.invokeMethodBestMatch
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder.`-Static`.methodFinder
 import com.yifeplayte.wommo.hook.hooks.BaseSubPackage
 import com.yifeplayte.wommo.hook.hooks.subpackage.systemuiplugin.RestoreNearbyTile
@@ -25,8 +25,7 @@ object SystemUIPlugin : BaseSubPackage() {
                         before { param ->
                             val appInfo = param.args[2] as ApplicationInfo
                             if (appInfo.packageName != subPackageName) return@before
-                            val pathClassLoader =
-                                param.args[6].objectHelper().invokeMethodBestMatch("get")
+                            val pathClassLoader = invokeMethodBestMatch(param.args[6], "get")
                             safeSubClassLoader = pathClassLoader as? ClassLoader ?: return@before
                             hook?.unhook()
                         }

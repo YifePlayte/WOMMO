@@ -13,8 +13,10 @@ import com.yifeplayte.wommo.hook.utils.DexKit.dexKitBridge
 
 object ForceSupportSendApp : BaseMultiHook() {
     override val key = "force_support_send_app"
-    override val hooks = mapOf("com.milink.service" to { milink() },
-        "com.xiaomi.mirror" to { if (!mirror()) mirrorNew() })
+    override val hooks = mapOf(
+        "com.milink.service" to { milink() },
+        "com.xiaomi.mirror" to { if (!mirror()) mirrorNew() }
+    )
 
     private fun milink() {
         val clazzMiuiSynergySdk = loadClass("com.xiaomi.mirror.synergy.MiuiSynergySdk")
@@ -65,7 +67,7 @@ object ForceSupportSendApp : BaseMultiHook() {
                 usingStrings = listOf("RelayAppMessage{type=", ", isRelay=")
             }
         }.first().getInstance(safeClassLoader)
-        clazzRelayAppMessage?.let { clazz ->
+        clazzRelayAppMessage.let { clazz ->
             val fieldNameIsHideIcon =
                 clazz.fieldFinder().filterByType(Boolean::class.javaPrimitiveType!!).toList()
                     .sortedBy { it.name }[1].name

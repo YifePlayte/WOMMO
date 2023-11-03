@@ -3,6 +3,7 @@ package com.yifeplayte.wommo.hook
 import com.github.kyuubiran.ezxhelper.EzXHelper
 import com.yifeplayte.wommo.hook.hooks.multipackage.ExposureRefreshForNonMIUIWidget
 import com.yifeplayte.wommo.hook.hooks.multipackage.ForceSupportSendApp
+import com.yifeplayte.wommo.hook.hooks.multipackage.ShowNotificationImportance
 import com.yifeplayte.wommo.hook.hooks.singlepackage.Android
 import com.yifeplayte.wommo.hook.hooks.singlepackage.Barrage
 import com.yifeplayte.wommo.hook.hooks.singlepackage.ContentExtension
@@ -40,6 +41,7 @@ private val singlePackagesHooked = setOf(
 private val multiPackagesHooked = setOf(
     ExposureRefreshForNonMIUIWidget,
     ForceSupportSendApp,
+    ShowNotificationImportance,
 )
 private val subPackagesHooked = setOf(
     SystemUIPlugin,

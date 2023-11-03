@@ -79,7 +79,7 @@ object RedirectToNotificationChannelSetting : BaseHook() {
             }
     }
 
-    fun startChannelNotificationSettings(statusBarNotification: StatusBarNotification) {
+    private fun startChannelNotificationSettings(statusBarNotification: StatusBarNotification) {
         val intent = Intent(Intent.ACTION_MAIN).apply {
             addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)

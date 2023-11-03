@@ -176,11 +176,6 @@ class MainPage : BasePage() {
         TitleText(textId = R.string.settings)
         TextSummaryWithSwitch(
             TextSummaryV(
-                textId = R.string.show_notification_importance
-            ), SwitchV("show_notification_importance", false)
-        )
-        TextSummaryWithSwitch(
-            TextSummaryV(
                 textId = R.string.quick_manage_unknown_app_sources
             ), SwitchV("quick_manage_unknown_app_sources", false)
         )
@@ -258,6 +253,12 @@ class MainPage : BasePage() {
                 textId = R.string.exposure_refresh_for_non_miui_widget,
                 tipsId = R.string.exposure_refresh_for_non_miui_widget_tips,
             ), SwitchV("exposure_refresh_for_non_miui_widget", false)
+        )
+        TextSummaryWithSwitch(
+            TextSummaryV(
+                textId = R.string.show_notification_importance,
+                tipsId = R.string.show_notification_importance_tips
+            ), SwitchV("show_notification_importance", false)
         )
         TextSummaryWithSwitch(
             TextSummaryV(
