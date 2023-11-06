@@ -2,6 +2,7 @@ package com.yifeplayte.wommo.hook.hooks.singlepackage
 
 import com.yifeplayte.wommo.hook.hooks.BasePackage
 import com.yifeplayte.wommo.hook.hooks.singlepackage.home.AllowMoveNonMIUIWidgetsToMinusScreen
+import com.yifeplayte.wommo.hook.hooks.singlepackage.home.EnableBlurForHome
 import com.yifeplayte.wommo.hook.hooks.singlepackage.home.EnablePerfectIcons
 import com.yifeplayte.wommo.hook.hooks.singlepackage.home.FakeNonDefaultIcon
 import com.yifeplayte.wommo.hook.hooks.singlepackage.home.HideLandscapeNavBar
@@ -16,6 +17,7 @@ object Home : BasePackage() {
     override val packageName = "com.miui.home"
     override val hooks = setOf(
         AllowMoveNonMIUIWidgetsToMinusScreen,
+        EnableBlurForHome,
         EnablePerfectIcons,
         FakeNonDefaultIcon,
         HideLandscapeNavBar,

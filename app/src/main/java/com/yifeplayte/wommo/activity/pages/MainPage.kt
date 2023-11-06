@@ -91,6 +91,11 @@ class MainPage : BasePage() {
         )
         TextSummaryWithSwitch(
             TextSummaryV(
+                textId = R.string.enable_blur_for_home
+            ), SwitchV("enable_blur_for_home", false)
+        )
+        TextSummaryWithSwitch(
+            TextSummaryV(
                 textId = R.string.enable_perfect_icons
             ), SwitchV("enable_perfect_icons", false)
         )
