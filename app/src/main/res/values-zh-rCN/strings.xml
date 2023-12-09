@@ -37,7 +37,7 @@
     <string name="notification_settings_no_white_list">移除通知设置白名单</string>
     <string name="open_battery_status_activity">启动电池续航活动</string>
     <string name="open_by_default">默认打开</string>
-    <string name="open_by_default_setting">向应用详情页添加“消除默认操作”设置</string>
+    <string name="open_by_default_setting">向应用详情页添加“默认打开”设置</string>
     <string name="others">其他</string>
     <string name="package_installer">应用包管理组件</string>
     <string name="power_keeper">电量和性能</string>
