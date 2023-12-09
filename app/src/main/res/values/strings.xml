@@ -39,7 +39,7 @@
     <string name="notification_settings_no_white_list">Remove white list for notification settings</string>
     <string name="open_battery_status_activity">Open battery status activity</string>
     <string name="open_by_default">Open by default</string>
-    <string name="open_by_default_setting">Change App Info \"Clear defaults\" to \"Open by default\"</string>
+    <string name="open_by_default_setting">Add \"Open by default\" to Application Details page</string>
     <string name="others">Others</string>
     <string name="package_installer">Package Installer</string>
     <string name="power_keeper">Battery and performance</string>
