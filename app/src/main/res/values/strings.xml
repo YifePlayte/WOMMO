@@ -2,6 +2,7 @@
 <resources>
     <string name="add_aosp_app_info_entry">Add entry for \"AOSP App Info\" to App Info page</string>
     <string name="add_aosp_app_manager_entry">Add entry for \"AOSP App Manager\" to App Manager page</string>
+    <string name="add_open_by_default_entry">Add entry for \"Open by default\" to App Info page</string>
     <string name="allow_move_non_miui_widgets_to_minus_screen">Allow to move non-MIUI-widgets to App vault</string>
     <string name="allow_unofficial_system_applications_installation">Allow the installation of system applications from unofficial channels</string>
     <string name="android">System Framework</string>
@@ -43,7 +44,6 @@
     <string name="notification_settings_no_white_list">Remove white list for notification settings</string>
     <string name="open_battery_status_activity">Open battery status activity</string>
     <string name="open_by_default">Open by default</string>
-    <string name="open_by_default_setting">Add \"Open by default\" to Application Details page</string>
     <string name="others">Others</string>
     <string name="package_installer">Package Installer</string>
     <string name="power_keeper">Battery and performance</string>

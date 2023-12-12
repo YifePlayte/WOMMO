@@ -133,8 +133,8 @@ class MainPage : BasePage() {
         )
         TextSummaryWithSwitch(
             TextSummaryV(
-                textId = R.string.open_by_default_setting
-            ), SwitchV("open_by_default_setting", false)
+                textId = R.string.add_open_by_default_entry
+            ), SwitchV("add_open_by_default_entry", false)
         )
         TextSummaryWithSwitch(
             TextSummaryV(

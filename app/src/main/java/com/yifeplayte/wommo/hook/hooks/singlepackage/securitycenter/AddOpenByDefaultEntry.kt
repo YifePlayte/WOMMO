@@ -21,8 +21,8 @@ import de.robv.android.xposed.XposedHelpers.getAdditionalInstanceField
 import de.robv.android.xposed.XposedHelpers.setAdditionalInstanceField
 
 @SuppressLint("DiscouragedApi")
-object OpenByDefaultSetting : BaseHook() {
-    override val key = "open_by_default_setting"
+object AddOpenByDefaultEntry : BaseHook() {
+    override val key = "add_open_by_default_entry"
     private val domainVerificationManager: DomainVerificationManager by lazy {
         appContext.getSystemService(
             DomainVerificationManager::class.java
