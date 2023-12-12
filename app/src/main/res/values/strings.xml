@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="add_aosp_app_info_entry">Add entry for \"AOSP App Info\" to App Info page</string>
     <string name="allow_move_non_miui_widgets_to_minus_screen">Allow to move non-MIUI-widgets to App vault</string>
     <string name="allow_unofficial_system_applications_installation">Allow the installation of system applications from unofficial channels</string>
     <string name="android">System Framework</string>
+    <string name="aosp_app_info">AOSP app info</string>
     <string name="app_link_open_always">Allow app to open supported links</string>
     <string name="app_link_open_never">Don\'t allow app to open links</string>
     <string name="app_name" translatable="false">WOMMO</string>

@@ -1,7 +1,9 @@
 <resources>
+    <string name="add_aosp_app_info_entry">向应用详情页添加“原生应用信息”入口</string>
     <string name="allow_move_non_miui_widgets_to_minus_screen">允许将非 MIUI 小部件移至智能助理（负一屏）</string>
     <string name="allow_unofficial_system_applications_installation">允许从非官方渠道安装系统应用</string>
     <string name="android">系统框架</string>
+    <string name="aosp_app_info">原生应用信息</string>
     <string name="app_link_open_always">允许应用打开支持的链接</string>
     <string name="app_link_open_never">不允许应用打开链接</string>
     <string name="barrage">弹幕通知</string>
