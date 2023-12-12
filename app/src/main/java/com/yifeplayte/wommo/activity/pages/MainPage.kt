@@ -123,6 +123,11 @@ class MainPage : BasePage() {
         TitleText(textId = R.string.security_center)
         TextSummaryWithSwitch(
             TextSummaryV(
+                textId = R.string.add_aosp_app_manager_entry
+            ), SwitchV("add_aosp_app_manager_entry", false)
+        )
+        TextSummaryWithSwitch(
+            TextSummaryV(
                 textId = R.string.add_aosp_app_info_entry
             ), SwitchV("add_aosp_app_info_entry", false)
         )
