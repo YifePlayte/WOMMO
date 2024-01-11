@@ -30,8 +30,8 @@ object IconLabel : BaseHook() {
             .first().createHook {
                 after {
                     val mTitle = getObjectOrNullUntilSuperclass(it.thisObject, "mTitle")
-                    if (mTitle is TextView?) {
-                        mTitle?.modify()
+                    if (mTitle is TextView) {
+                        mTitle.modify()
                     } else {
                         val mTitleView =
                             getObjectOrNullUntilSuperclassAs<TextView>(it.thisObject, "mTitleView")
@@ -72,8 +72,8 @@ object IconLabel : BaseHook() {
                         it.args[3], "getBuddyIconView", null, it.args[2]
                     ) as View
                     val mTitle = getObjectOrNullUntilSuperclass(buddyIconView, "mTitle")
-                    if (mTitle is TextView?) {
-                        mTitle?.modify()
+                    if (mTitle is TextView) {
+                        mTitle.modify()
                     } else {
                         val mTitleView =
                             getObjectOrNullUntilSuperclassAs<TextView>(buddyIconView, "mTitleView")
