@@ -57,6 +57,11 @@ class MainPage : BasePage() {
                 textId = R.string.unlock_control_center_style
             ), SwitchV("unlock_control_center_style", false)
         )
+        TextSummaryWithSwitch(
+            TextSummaryV(
+                textId = R.string.restore_hidden_custom_media_action
+            ), SwitchV("restore_hidden_custom_media_action", false)
+        )
         Line()
         TitleText(textId = R.string.miui_home)
         TextSummaryWithSwitch(
