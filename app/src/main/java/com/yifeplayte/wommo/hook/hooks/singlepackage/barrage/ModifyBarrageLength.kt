@@ -14,7 +14,7 @@ object ModifyBarrageLength : BaseHook() {
         val clazzString = loadClass("java.lang.String")
         clazzString.methodFinder().filterByName("subSequence").filterByParamCount(2).first().createHook {
             before { param ->
-                if (Throwable().stackTrace.any { it.className == "com.xiaomi.barrage.utils.BarrageWindowUtils" }) {
+                if (Thread.currentThread().stackTrace.any { it.className == "com.xiaomi.barrage.utils.BarrageWindowUtils" }) {
                     param.args[1] = barrageLength
                 }
             }
@@ -27,7 +27,7 @@ object ModifyBarrageLength : BaseHook() {
         }
         clazzString.methodFinder().filterByName("length").filterByParamCount(0).first().createHook {
             after { param ->
-                val stacktrace = Throwable().stackTrace
+                val stacktrace = Thread.currentThread().stackTrace
                 if (stacktrace.any { it.className in setOf("java.lang.String", "android.text.SpannableStringBuilder") }) return@after
                 if (stacktrace.any {
                         it.className == "com.xiaomi.barrage.utils.BarrageWindowUtils" && it.methodName in setOf(

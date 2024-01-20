@@ -10,7 +10,7 @@ object ShowMIUIWidgetsInAndroidWidgetsList : BaseHook() {
     override fun hook() {
         loadClass("com.miui.home.launcher.MIUIWidgetUtil").methodFinder().filterByName("isMIUIWidgetSupport").first().createHook {
             after { param ->
-                if (Throwable().stackTrace.any {
+                if (Thread.currentThread().stackTrace.any {
                         it.className in setOf(
                             "com.miui.home.launcher.widget.WidgetsVerticalAdapter",
                             "com.miui.home.launcher.widget.BaseWidgetsVerticalAdapter"

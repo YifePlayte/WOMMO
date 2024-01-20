@@ -16,7 +16,7 @@ object WaveCharge : BaseHook() {
                         "com.android.keyguard.charge.ChargeUtils",
                         "com.android.keyguard.charge.container.MiuiChargeContainerView"
                     )
-                    param.result = Throwable().stackTrace.any { it.className in clazzTrue }
+                    param.result = Thread.currentThread().stackTrace.any { it.className in clazzTrue }
                 }
             }
         loadClass("com.android.keyguard.charge.wave.WaveView").methodFinder().filterByName("updateWaveHeight").first()
