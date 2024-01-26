@@ -8,8 +8,9 @@ import com.yifeplayte.wommo.hook.hooks.BaseHook
 object EnableBatteryMonitorService : BaseHook() {
     override val key = "enable_battery_monitor_service"
     override fun hook() {
-        loadClass("com.miui.powerkeeper.utils.Utils").methodFinder().filterByName("isDevelopmentOrDebugVersion").first().createHook {
-            returnConstant(true)
-        }
+        loadClass("com.miui.powerkeeper.utils.Utils").methodFinder()
+            .filterByName("isDevelopmentOrDebugVersion").first().createHook {
+                returnConstant(true)
+            }
     }
 }

@@ -8,6 +8,12 @@ import com.yifeplayte.wommo.hook.utils.DexKit.dexKitBridge
 
 object ModifyScreenRecorderConfig : BaseHook() {
     override val key = "modify_screen_recorder_config"
+    private val intArrayBitRateOld = intArrayOf(200, 100, 50, 32, 24, 16, 8, 6, 4, 1)
+    private val intArrayBitRateNew =
+        intArrayOf(3600, 2400, 1200, 800, 400, 200, 100, 50, 32, 24, 16, 8, 6, 4, 1)
+    private val intArrayFrameRateOld = intArrayOf(15, 24, 30, 48, 60, 90)
+    private val intArrayFrameRateNew = intArrayOf(15, 24, 30, 48, 60, 90, 120, 144)
+
     override fun hook() {
         dexKitBridge.findMethod {
             matcher {
@@ -23,12 +29,12 @@ object ModifyScreenRecorderConfig : BaseHook() {
                         it.isAccessible = true
                     }.let { fieldAccessible ->
                         fieldAccessible.isFinal && fieldAccessible.get(null).let {
-                            kotlin.runCatching {
-                                (it as IntArray).contentEquals(intArrayOf(15, 24, 30, 48, 60, 90))
+                            runCatching {
+                                (it as IntArray).contentEquals(intArrayFrameRateOld)
                             }.getOrDefault(false)
                         }
                     }
-                }?.set(null, intArrayOf(15, 24, 30, 48, 60, 90, 120, 144))
+                }?.set(null, intArrayFrameRateNew)
             }
         }
         dexKitBridge.findMethod {
@@ -46,19 +52,12 @@ object ModifyScreenRecorderConfig : BaseHook() {
                         it.isAccessible = true
                     }.let { fieldAccessible ->
                         fieldAccessible.isFinal && fieldAccessible.get(null).let {
-                            kotlin.runCatching {
-                                (it as IntArray).contentEquals(
-                                    intArrayOf(
-                                        200, 100, 50, 32, 24, 16, 8, 6, 4, 1
-                                    )
-                                )
+                            runCatching {
+                                (it as IntArray).contentEquals(intArrayBitRateOld)
                             }.getOrDefault(false)
                         }
                     }
-                }?.set(
-                    null,
-                    intArrayOf(3600, 2400, 1200, 800, 400, 200, 100, 50, 32, 24, 16, 8, 6, 4, 1)
-                )
+                }?.set(null, intArrayBitRateNew)
             }
         }
     }

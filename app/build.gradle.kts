@@ -36,7 +36,8 @@ android {
         applicationVariants.configureEach {
             outputs.configureEach {
                 if (this is BaseVariantOutputImpl) {
-                    outputFileName = outputFileName.replace("app", rootProject.name).replace(Regex("debug|release"), versionName)
+                    outputFileName = outputFileName.replace("app", rootProject.name)
+                        .replace(Regex("debug|release"), versionName)
                 }
             }
         }
@@ -49,7 +50,8 @@ android {
             proguardFiles("proguard-rules.pro")
         }
         named("debug") {
-            versionNameSuffix = "-debug-" + DateTimeFormatter.ofPattern("yyyyMMddHHmmss").format(LocalDateTime.now())
+            versionNameSuffix = "-debug-" + DateTimeFormatter.ofPattern("yyyyMMddHHmmss")
+                .format(LocalDateTime.now())
         }
     }
 
