@@ -1,7 +1,9 @@
 package com.yifeplayte.wommo.utils
 
 import com.github.kyuubiran.ezxhelper.ClassHelper.Companion.classHelper
+import com.github.kyuubiran.ezxhelper.ClassUtils
 import com.github.kyuubiran.ezxhelper.ClassUtils.getStaticObjectOrNullAs
+import com.github.kyuubiran.ezxhelper.ClassUtils.invokeStaticMethodBestMatch
 import com.github.kyuubiran.ezxhelper.ClassUtils.loadClass
 
 /**
@@ -34,7 +36,8 @@ object Build {
      * 是否为HyperOS
      */
     val IS_HYPER_OS by lazy {
-        clazzSystemProperties.classHelper()
-            .invokeStaticMethodBestMatch("get", null, "ro.mi.os.version.code", null) != null
+        invokeStaticMethodBestMatch(
+            clazzSystemProperties, "getInt", null, "ro.mi.os.version.code", -1
+        ) != -1
     }
 }
