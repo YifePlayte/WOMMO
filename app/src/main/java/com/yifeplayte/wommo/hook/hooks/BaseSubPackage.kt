@@ -1,6 +1,7 @@
 package com.yifeplayte.wommo.hook.hooks
 
-import com.github.kyuubiran.ezxhelper.EzXHelper
+import com.github.kyuubiran.ezxhelper.EzXHelper.hostPackageName
+import com.github.kyuubiran.ezxhelper.EzXHelper.safeClassLoader
 import com.github.kyuubiran.ezxhelper.Log
 import com.github.kyuubiran.ezxhelper.LogExtensions.logexIfThrow
 
@@ -8,7 +9,7 @@ abstract class BaseSubPackage {
     private var isInit: Boolean = false
     private lateinit var subClassLoader: ClassLoader
     var safeSubClassLoader
-        get() = if (this::subClassLoader.isInitialized) subClassLoader else EzXHelper.safeClassLoader
+        get() = if (this::subClassLoader.isInitialized) subClassLoader else safeClassLoader
         set(value) {
             if (this::subClassLoader.isInitialized) return
             subClassLoader = value
@@ -19,7 +20,7 @@ abstract class BaseSubPackage {
     abstract val subPackageName: String
     abstract val hooks: Set<BaseSubHook>
     fun init() {
-        if (EzXHelper.hostPackageName != packageName) return
+        if (hostPackageName != packageName) return
         if (isInit) return
         kotlin.runCatching {
             initClassLoader()

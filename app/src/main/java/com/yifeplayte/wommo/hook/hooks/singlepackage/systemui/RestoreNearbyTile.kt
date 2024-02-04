@@ -12,8 +12,8 @@ import java.lang.reflect.Method
 
 object RestoreNearbyTile : BaseHook() {
     override val key = "restore_near_by_tile"
+    override val isEnabled get() = !IS_INTERNATIONAL_BUILD and super.isEnabled
     override fun hook() {
-        if (IS_INTERNATIONAL_BUILD) return
         val isInternationalHook: HookFactory.() -> Unit = {
             val constantsClazz = loadClass("com.android.systemui.controlcenter.utils.Constants")
             before {

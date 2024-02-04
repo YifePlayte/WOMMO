@@ -12,11 +12,11 @@ import com.github.kyuubiran.ezxhelper.ObjectUtils.invokeMethodBestMatch
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder.`-Static`.methodFinder
 import com.yifeplayte.wommo.hook.hooks.BaseHook
 
-val clazzFolderPreviewIconView by lazy { loadClass("com.miui.home.launcher.folder.FolderPreviewIconView") }
-val clazzPathDataIconUtil by lazy { loadClass("com.miui.home.launcher.PathDataIconUtil") }
 
 object FakeNonDefaultIcon : BaseHook() {
     override val key = "fake_non_default_icon"
+    private val clazzFolderPreviewIconView by lazy { loadClass("com.miui.home.launcher.folder.FolderPreviewIconView") }
+    private val clazzPathDataIconUtil by lazy { loadClass("com.miui.home.launcher.PathDataIconUtil") }
     override fun hook() {
         loadClass("com.miui.home.launcher.DeviceConfig").methodFinder()
             .filterByName("isDefaultIcon").first().createHook {

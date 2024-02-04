@@ -120,6 +120,6 @@ object AddOpenByDefaultEntry : BaseHook() {
             addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
             addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
         }
-        invokeMethodBestMatch(activity, "startActivity", null, intent)
+        activity.startActivity(intent)
     }
 }

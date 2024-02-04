@@ -12,6 +12,7 @@ import cn.fkj233.ui.activity.view.TextSummaryV
 import cn.fkj233.ui.dialog.MIUIDialog
 import com.yifeplayte.wommo.R
 import com.yifeplayte.wommo.hook.PACKAGE_NAME_HOOKED
+import com.yifeplayte.wommo.utils.Build.IS_INTERNATIONAL_BUILD
 import com.yifeplayte.wommo.utils.Terminal
 
 @SuppressLint("NonConstantResourceId")
@@ -19,7 +20,7 @@ import com.yifeplayte.wommo.utils.Terminal
 class MainPage : BasePage() {
     override fun onCreate() {
         TitleText(textId = R.string.android)
-        TextSummaryWithSwitch(
+        if (!IS_INTERNATIONAL_BUILD) TextSummaryWithSwitch(
             TextSummaryV(
                 textId = R.string.force_dark_mode_for_all_apps,
                 tipsId = R.string.force_dark_mode_for_all_apps_tips
@@ -27,12 +28,12 @@ class MainPage : BasePage() {
         )
         Line()
         TitleText(textId = R.string.system_ui)
-        TextSummaryWithSwitch(
+        if (!IS_INTERNATIONAL_BUILD) TextSummaryWithSwitch(
             TextSummaryV(
                 textId = R.string.restore_near_by_tile
             ), SwitchV("restore_near_by_tile", false)
         )
-        TextSummaryWithSwitch(
+        if (!IS_INTERNATIONAL_BUILD) TextSummaryWithSwitch(
             TextSummaryV(
                 textId = R.string.notification_settings_no_white_list
             ), SwitchV("notification_settings_no_white_list", false)
@@ -209,7 +210,7 @@ class MainPage : BasePage() {
                 textId = R.string.show_notification_history_and_log_entry
             ), SwitchV("show_notification_history_and_log_entry", false)
         )
-        TextSummaryWithSwitch(
+        if (!IS_INTERNATIONAL_BUILD) TextSummaryWithSwitch(
             TextSummaryV(
                 textId = R.string.show_google_settings_entry
             ), SwitchV("show_google_settings_entry", false)

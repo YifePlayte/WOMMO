@@ -11,8 +11,8 @@ import com.yifeplayte.wommo.utils.Build.IS_INTERNATIONAL_BUILD
 
 object ForceDarkModeForAllApps : BaseHook() {
     override val key = "force_dark_mode_for_all_apps"
+    override val isEnabled get() = !IS_INTERNATIONAL_BUILD and super.isEnabled
     override fun hook() {
-        if (IS_INTERNATIONAL_BUILD) return
         val clazzForceDarkAppListManager = loadClass("com.android.server.ForceDarkAppListManager")
         clazzForceDarkAppListManager.methodFinder().filterByName("getDarkModeAppList").toList().createHooks {
             before {

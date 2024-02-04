@@ -9,6 +9,7 @@ import com.yifeplayte.wommo.utils.Build.IS_INTERNATIONAL_BUILD
 
 object ShowGoogleSettingsEntry : BaseHook() {
     override val key = "show_google_settings_entry"
+    override val isEnabled get() = !IS_INTERNATIONAL_BUILD and super.isEnabled
     override fun hook() {
         loadClass("com.android.settings.MiuiSettings").methodFinder().filterByName("updateHeaderList").first().createHook {
             after {

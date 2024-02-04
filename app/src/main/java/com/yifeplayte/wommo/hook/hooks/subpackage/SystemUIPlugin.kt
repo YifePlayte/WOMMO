@@ -17,34 +17,36 @@ object SystemUIPlugin : BaseSubPackage() {
         RestoreNearbyTile
     )
     var hook: Unhook? = null
-    override fun initClassLoader() {
-        if (IS_HYPER_OS) {
-            hook =
-                loadClass("com.android.systemui.shared.plugins.PluginInstance\$PluginFactory").declaredConstructors.first()
-                    .createHook {
-                        before { param ->
-                            val appInfo = param.args[2] as ApplicationInfo
-                            if (appInfo.packageName != subPackageName) return@before
-                            val pathClassLoader = invokeMethodBestMatch(param.args[6], "get")
-                            safeSubClassLoader = pathClassLoader as? ClassLoader ?: return@before
-                            hook?.unhook()
-                        }
+    override fun initClassLoader() = if (IS_HYPER_OS) initForHyperOS() else initForMIUI()
+
+    private fun initForHyperOS() {
+        hook =
+            loadClass("com.android.systemui.shared.plugins.PluginInstance\$PluginFactory").declaredConstructors.first()
+                .createHook {
+                    before { param ->
+                        val appInfo = param.args[2] as ApplicationInfo
+                        if (appInfo.packageName != subPackageName) return@before
+                        val pathClassLoader = invokeMethodBestMatch(param.args[6], "get")
+                        safeSubClassLoader = pathClassLoader as? ClassLoader ?: return@before
+                        hook?.unhook()
                     }
-        } else {
-            hook =
-                loadClass("com.android.systemui.shared.plugins.PluginInstance\$Factory").methodFinder()
-                    .filterByName("getClassLoader")
-                    .filterByAssignableParamTypes(
-                        ApplicationInfo::class.java,
-                        ClassLoader::class.java
-                    )
-                    .first().createHook {
-                        after { param ->
-                            if ((param.args[0] as ApplicationInfo).packageName != subPackageName) return@after
-                            safeSubClassLoader = param.result as? ClassLoader ?: return@after
-                            hook?.unhook()
-                        }
+                }
+    }
+
+    private fun initForMIUI() {
+        hook =
+            loadClass("com.android.systemui.shared.plugins.PluginInstance\$Factory").methodFinder()
+                .filterByName("getClassLoader")
+                .filterByAssignableParamTypes(
+                    ApplicationInfo::class.java,
+                    ClassLoader::class.java
+                )
+                .first().createHook {
+                    after { param ->
+                        if ((param.args[0] as ApplicationInfo).packageName != subPackageName) return@after
+                        safeSubClassLoader = param.result as? ClassLoader ?: return@after
+                        hook?.unhook()
                     }
-        }
+                }
     }
 }
