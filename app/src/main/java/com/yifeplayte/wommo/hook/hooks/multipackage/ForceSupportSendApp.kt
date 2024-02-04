@@ -15,7 +15,7 @@ object ForceSupportSendApp : BaseMultiHook() {
     override val key = "force_support_send_app"
     override val hooks = mapOf(
         "com.milink.service" to { milink() },
-        "com.xiaomi.mirror" to { if (!mirror()) mirrorNew() }
+        "com.xiaomi.mirror" to { if (!mirror()) mirrorNew() },
     )
 
     private fun milink() {

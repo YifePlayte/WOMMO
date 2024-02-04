@@ -19,8 +19,10 @@ import de.robv.android.xposed.XposedHelpers.setAdditionalInstanceField
 
 object ExposureRefreshForNonMIUIWidget : BaseMultiHook() {
     override val key = "exposure_refresh_for_non_miui_widget"
-    override val hooks =
-        mapOf("com.miui.personalassistant" to { personalAssistant() }, "android" to { android() })
+    override val hooks = mapOf(
+        "com.miui.personalassistant" to { personalAssistant() },
+        "android" to { android() },
+    )
 
     private fun personalAssistant() {
         val clazzAppWidgetItemInfo =

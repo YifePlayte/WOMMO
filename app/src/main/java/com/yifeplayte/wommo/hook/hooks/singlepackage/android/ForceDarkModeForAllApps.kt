@@ -12,22 +12,26 @@ import com.yifeplayte.wommo.utils.Build.IS_INTERNATIONAL_BUILD
 object ForceDarkModeForAllApps : BaseHook() {
     override val key = "force_dark_mode_for_all_apps"
     override val isEnabled get() = !IS_INTERNATIONAL_BUILD and super.isEnabled
+    private val clazzBuild by lazy { loadClass("miui.os.Build") }
     override fun hook() {
         val clazzForceDarkAppListManager = loadClass("com.android.server.ForceDarkAppListManager")
-        clazzForceDarkAppListManager.methodFinder().filterByName("getDarkModeAppList").toList().createHooks {
-            before {
-                setStaticObject(loadClass("miui.os.Build"), "IS_INTERNATIONAL_BUILD", true)
+        clazzForceDarkAppListManager.methodFinder().filterByName("getDarkModeAppList").toList()
+            .createHooks {
+                before {
+                    setStaticObject(clazzBuild, "IS_INTERNATIONAL_BUILD", true)
+                }
+                after {
+                    setStaticObject(clazzBuild, "IS_INTERNATIONAL_BUILD", IS_INTERNATIONAL_BUILD)
+                }
             }
-            after {
-                setStaticObject(loadClass("miui.os.Build"), "IS_INTERNATIONAL_BUILD", IS_INTERNATIONAL_BUILD)
+        clazzForceDarkAppListManager.methodFinder().filterByName("shouldShowInSettings").toList()
+            .createHooks {
+                before { param ->
+                    val info = param.args[0] as ApplicationInfo?
+                    param.result = !(info == null || (invokeMethodBestMatch(
+                        info, "isSystemApp"
+                    ) as Boolean) || info.uid < 10000)
+                }
             }
-        }
-        clazzForceDarkAppListManager.methodFinder().filterByName("shouldShowInSettings").toList().createHooks {
-            before { param ->
-                val info = param.args[0] as ApplicationInfo?
-                param.result =
-                    !(info == null || (invokeMethodBestMatch(info, "isSystemApp") as Boolean) || info.uid < 10000)
-            }
-        }
     }
 }

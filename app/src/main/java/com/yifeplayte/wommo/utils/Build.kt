@@ -1,7 +1,5 @@
 package com.yifeplayte.wommo.utils
 
-import com.github.kyuubiran.ezxhelper.ClassHelper.Companion.classHelper
-import com.github.kyuubiran.ezxhelper.ClassUtils
 import com.github.kyuubiran.ezxhelper.ClassUtils.getStaticObjectOrNullAs
 import com.github.kyuubiran.ezxhelper.ClassUtils.invokeStaticMethodBestMatch
 import com.github.kyuubiran.ezxhelper.ClassUtils.loadClass

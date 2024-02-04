@@ -17,7 +17,7 @@ object ShowNotificationImportance : BaseMultiHook() {
     override val key = "show_notification_importance"
     override val hooks = mapOf(
         "com.android.settings" to { settings() },
-        "com.android.systemui" to { systemUi() }
+        "com.android.systemui" to { systemUi() },
     )
 
     private fun settings() {

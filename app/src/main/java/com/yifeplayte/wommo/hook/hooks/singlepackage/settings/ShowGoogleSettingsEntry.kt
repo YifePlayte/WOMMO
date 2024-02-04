@@ -11,10 +11,13 @@ object ShowGoogleSettingsEntry : BaseHook() {
     override val key = "show_google_settings_entry"
     override val isEnabled get() = !IS_INTERNATIONAL_BUILD and super.isEnabled
     override fun hook() {
-        loadClass("com.android.settings.MiuiSettings").methodFinder().filterByName("updateHeaderList").first().createHook {
-            after {
-                if (!IS_INTERNATIONAL_BUILD) invokeMethodBestMatch(it.thisObject, "AddGoogleSettingsHeaders", null, it.args[0])
+        loadClass("com.android.settings.MiuiSettings").methodFinder()
+            .filterByName("updateHeaderList").first().createHook {
+                after {
+                    if (!IS_INTERNATIONAL_BUILD) invokeMethodBestMatch(
+                        it.thisObject, "AddGoogleSettingsHeaders", null, it.args[0]
+                    )
+                }
             }
-        }
     }
 }
