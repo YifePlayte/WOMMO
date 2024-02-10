@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.FrameLayout
 import com.github.kyuubiran.ezxhelper.ClassUtils.invokeStaticMethodBestMatch
 import com.github.kyuubiran.ezxhelper.ClassUtils.loadClass
+import com.github.kyuubiran.ezxhelper.ClassUtils.loadClassOrNull
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
 import com.github.kyuubiran.ezxhelper.ObjectUtils.getObjectOrNullAs
 import com.github.kyuubiran.ezxhelper.ObjectUtils.invokeMethodBestMatch
@@ -15,7 +16,7 @@ import com.yifeplayte.wommo.hook.hooks.BaseHook
 
 object FakeNonDefaultIcon : BaseHook() {
     override val key = "fake_non_default_icon"
-    private val clazzFolderPreviewIconView by lazy { loadClass("com.miui.home.launcher.folder.FolderPreviewIconView") }
+    private val clazzFolderPreviewIconView by lazy { loadClassOrNull("com.miui.home.launcher.folder.FolderPreviewIconView") }
     private val clazzPathDataIconUtil by lazy { loadClass("com.miui.home.launcher.PathDataIconUtil") }
     override fun hook() {
         loadClass("com.miui.home.launcher.DeviceConfig").methodFinder()
@@ -33,7 +34,7 @@ object FakeNonDefaultIcon : BaseHook() {
                     val scaleFactor = param.args[1] as Float
 
                     val animTarget = invokeMethodBestMatch(param.thisObject, "getAnimTarget")
-                    if (!clazzFolderPreviewIconView.isInstance(animTarget)) return@before
+                    if (clazzFolderPreviewIconView?.isInstance(animTarget) != true) return@before
                     val iconImageView =
                         invokeMethodBestMatch(animTarget!!, "getIconImageView") as? View
                             ?: return@before
