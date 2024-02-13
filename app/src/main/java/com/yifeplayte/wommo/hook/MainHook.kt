@@ -18,6 +18,7 @@ import com.yifeplayte.wommo.hook.hooks.singlepackage.SystemUI
 import com.yifeplayte.wommo.hook.hooks.singlepackage.VoiceAssist
 import com.yifeplayte.wommo.hook.hooks.subpackage.SystemUIPlugin
 import com.yifeplayte.wommo.hook.hooks.universal.RemoveMIUIStrokeFromAdaptiveIcon
+import com.yifeplayte.wommo.hook.hooks.universal.UseAOSPShareSheet
 import com.yifeplayte.wommo.hook.utils.DexKit
 import de.robv.android.xposed.IXposedHookLoadPackage
 import de.robv.android.xposed.IXposedHookZygoteInit
@@ -48,6 +49,7 @@ private val subPackagesHooked = setOf(
 )
 private val universalHooks = setOf(
     RemoveMIUIStrokeFromAdaptiveIcon,
+    UseAOSPShareSheet,
 )
 val PACKAGE_NAME_HOOKED: Set<String>
     get() {

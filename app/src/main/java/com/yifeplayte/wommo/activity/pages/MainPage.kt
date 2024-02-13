@@ -287,6 +287,12 @@ class MainPage : BasePage() {
                 tipsId = R.string.remove_miui_stroke_from_adaptive_icon_tips,
             ), SwitchV("remove_miui_stroke_from_adaptive_icon", false)
         )
+        TextSummaryWithSwitch(
+            TextSummaryV(
+                textId = R.string.use_aosp_share_sheet,
+                tipsId = R.string.use_aosp_share_sheet_tips,
+            ), SwitchV("use_aosp_share_sheet", false)
+        )
         Line()
         TitleText(textId = R.string.reboot)
         TextSummaryWithArrow(TextSummaryV(
