@@ -14,6 +14,7 @@ import com.github.kyuubiran.ezxhelper.ObjectUtils.invokeMethodBestMatch
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder.`-Static`.methodFinder
 import com.yifeplayte.wommo.hook.hooks.BaseHook
 
+@Suppress("unused")
 object ShowNotificationHistoryAndLogEntry : BaseHook() {
     override val key = "show_notification_history_and_log_entry"
     override fun hook() {

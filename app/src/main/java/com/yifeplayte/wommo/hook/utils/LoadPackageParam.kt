@@ -9,6 +9,7 @@ import java.io.File
 /**
  * LoadPackageParam 工具
  */
+@Suppress("unused")
 object LoadPackageParam {
     /**
      * 获取被 hook 应用的版本号
@@ -18,7 +19,7 @@ object LoadPackageParam {
         if (packageName == "android") {
             Build.VERSION.SDK_INT
         } else {
-            val parser = loadClass("android.content.pm.PackageParser").newInstance()
+            val parser = loadClass("android.content.pm.PackageParser").getConstructor().newInstance()
             val apkPath = File(appInfo.sourceDir)
             val pkg = parser.objectHelper().invokeMethodBestMatch("parsePackage", null, apkPath, 0)
             pkg?.objectHelper()?.getObjectOrNullAs<Int>("mVersionCode") ?: 0

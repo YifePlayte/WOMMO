@@ -20,6 +20,7 @@ import com.yifeplayte.wommo.hook.hooks.BaseHook
 import de.robv.android.xposed.XposedHelpers.getAdditionalInstanceField
 import de.robv.android.xposed.XposedHelpers.setAdditionalInstanceField
 
+@Suppress("unused")
 @SuppressLint("DiscouragedApi")
 object AddOpenByDefaultEntry : BaseHook() {
     override val key = "add_open_by_default_entry"

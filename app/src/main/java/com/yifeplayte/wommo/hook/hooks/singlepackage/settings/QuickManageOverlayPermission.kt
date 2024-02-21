@@ -8,6 +8,7 @@ import com.github.kyuubiran.ezxhelper.ObjectHelper.Companion.objectHelper
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder.`-Static`.methodFinder
 import com.yifeplayte.wommo.hook.hooks.BaseHook
 
+@Suppress("unused")
 object QuickManageOverlayPermission : BaseHook() {
     override val key = "quick_manage_overlay_permission"
     override fun hook() {

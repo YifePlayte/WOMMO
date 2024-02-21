@@ -26,6 +26,7 @@ import com.yifeplayte.wommo.utils.Build.IS_HYPER_OS
 import java.io.BufferedReader
 import java.io.FileReader
 
+@Suppress("unused")
 object LockscreenChargingInfo : BaseHook() {
     override val key = "lockscreen_charging_info"
     override fun hook() {

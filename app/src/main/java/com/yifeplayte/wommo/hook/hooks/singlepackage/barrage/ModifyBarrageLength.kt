@@ -6,6 +6,7 @@ import com.github.kyuubiran.ezxhelper.finders.MethodFinder.`-Static`.methodFinde
 import com.yifeplayte.wommo.hook.hooks.BaseHook
 import com.yifeplayte.wommo.hook.utils.XSharedPreferences.getInt
 
+@Suppress("unused")
 object ModifyBarrageLength : BaseHook() {
     override val key = "modify_barrage_length"
     override val isEnabled get() = barrageLength != 36

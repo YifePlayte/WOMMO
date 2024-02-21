@@ -7,6 +7,7 @@ import com.github.kyuubiran.ezxhelper.ClassUtils.loadClass
 /**
  * 获取系统信息
  */
+@Suppress("unused")
 object Build {
     private val clazzMiuiBuild by lazy {
         loadClass("miui.os.Build")

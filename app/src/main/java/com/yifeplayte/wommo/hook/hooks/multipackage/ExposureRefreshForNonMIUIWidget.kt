@@ -17,6 +17,7 @@ import com.yifeplayte.wommo.hook.hooks.BaseMultiHook
 import de.robv.android.xposed.XposedHelpers.getAdditionalInstanceField
 import de.robv.android.xposed.XposedHelpers.setAdditionalInstanceField
 
+@Suppress("unused")
 object ExposureRefreshForNonMIUIWidget : BaseMultiHook() {
     override val key = "exposure_refresh_for_non_miui_widget"
     override val hooks = mapOf(

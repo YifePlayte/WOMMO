@@ -3,6 +3,7 @@ package com.yifeplayte.wommo.utils
 /**
  * SharedPreferences 工具
  */
+@Suppress("unused")
 object SharedPreferences {
     /**
      * 向当前 SharedPreferences 中放入一个 StringSet 属性

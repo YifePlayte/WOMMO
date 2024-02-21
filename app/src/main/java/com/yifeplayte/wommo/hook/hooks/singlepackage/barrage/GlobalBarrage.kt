@@ -7,6 +7,7 @@ import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHooks
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder.`-Static`.methodFinder
 import com.yifeplayte.wommo.hook.hooks.BaseHook
 
+@Suppress("unused")
 object GlobalBarrage : BaseHook() {
     override val key = "global_barrage"
     override fun hook() {

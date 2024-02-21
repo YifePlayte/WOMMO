@@ -13,6 +13,7 @@ import com.github.kyuubiran.ezxhelper.ObjectUtils.invokeMethodBestMatch
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder.`-Static`.methodFinder
 import com.yifeplayte.wommo.hook.hooks.BaseHook
 
+@Suppress("unused")
 object RestoreSwitchMinusScreen : BaseHook() {
     override val key = "restore_switch_minus_screen"
     override fun hook() {

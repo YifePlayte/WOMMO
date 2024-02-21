@@ -4,6 +4,7 @@ import com.github.kyuubiran.ezxhelper.EzXHelper.hostPackageName
 import com.github.kyuubiran.ezxhelper.EzXHelper.safeClassLoader
 import com.github.kyuubiran.ezxhelper.Log
 import com.github.kyuubiran.ezxhelper.LogExtensions.logexIfThrow
+import com.yifeplayte.wommo.utils.ClassScanner.scanObjectOf
 
 abstract class BaseSubPackage {
     private var isInit: Boolean = false
@@ -18,7 +19,13 @@ abstract class BaseSubPackage {
 
     abstract val packageName: String
     abstract val subPackageName: String
-    abstract val hooks: Set<BaseSubHook>
+    open val hooks: List<BaseSubHook> = scanObjectOf<BaseSubHook>(buildString {
+        val javaClass = this.javaClass
+        append(javaClass.packageName)
+        append('.')
+        append(javaClass.simpleName.lowercase())
+    })
+
     fun init() {
         if (hostPackageName != packageName) return
         if (isInit) return

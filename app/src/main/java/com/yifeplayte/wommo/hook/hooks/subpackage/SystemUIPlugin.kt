@@ -6,16 +6,13 @@ import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
 import com.github.kyuubiran.ezxhelper.ObjectUtils.invokeMethodBestMatch
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder.`-Static`.methodFinder
 import com.yifeplayte.wommo.hook.hooks.BaseSubPackage
-import com.yifeplayte.wommo.hook.hooks.subpackage.systemuiplugin.RestoreNearbyTile
 import com.yifeplayte.wommo.utils.Build.IS_HYPER_OS
 import de.robv.android.xposed.XC_MethodHook.Unhook
 
+@Suppress("unused")
 object SystemUIPlugin : BaseSubPackage() {
     override val packageName = "com.android.systemui"
     override val subPackageName = "miui.systemui.plugin"
-    override val hooks = setOf(
-        RestoreNearbyTile
-    )
     var hook: Unhook? = null
     override fun initClassLoader() = if (IS_HYPER_OS) initForHyperOS() else initForMIUI()
 

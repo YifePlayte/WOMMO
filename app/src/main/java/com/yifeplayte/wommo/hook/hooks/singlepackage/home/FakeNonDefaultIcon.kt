@@ -14,6 +14,7 @@ import com.github.kyuubiran.ezxhelper.finders.MethodFinder.`-Static`.methodFinde
 import com.yifeplayte.wommo.hook.hooks.BaseHook
 
 
+@Suppress("unused")
 object FakeNonDefaultIcon : BaseHook() {
     override val key = "fake_non_default_icon"
     private val clazzFolderPreviewIconView by lazy { loadClassOrNull("com.miui.home.launcher.folder.FolderPreviewIconView") }

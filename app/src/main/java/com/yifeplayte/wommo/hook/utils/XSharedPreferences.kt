@@ -6,6 +6,7 @@ import de.robv.android.xposed.XSharedPreferences
 /**
  * XSharedPreferences 工具
  */
+@Suppress("unused")
 object XSharedPreferences {
     /**
      * XSharedPreferences name

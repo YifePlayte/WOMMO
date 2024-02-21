@@ -6,6 +6,7 @@ import com.github.kyuubiran.ezxhelper.ObjectHelper.Companion.objectHelper
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder.`-Static`.methodFinder
 import com.yifeplayte.wommo.hook.hooks.BaseHook
 
+@Suppress("unused")
 object WaveCharge : BaseHook() {
     override val key = "wave_charge"
     override fun hook() {

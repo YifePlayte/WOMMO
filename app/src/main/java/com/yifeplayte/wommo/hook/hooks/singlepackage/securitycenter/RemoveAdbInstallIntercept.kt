@@ -5,6 +5,7 @@ import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
 import com.yifeplayte.wommo.hook.hooks.BaseHook
 import com.yifeplayte.wommo.hook.utils.DexKit.dexKitBridge
 
+@Suppress("unused")
 object RemoveAdbInstallIntercept : BaseHook() {
     override val key = "remove_adb_install_intercept"
     override fun hook() {

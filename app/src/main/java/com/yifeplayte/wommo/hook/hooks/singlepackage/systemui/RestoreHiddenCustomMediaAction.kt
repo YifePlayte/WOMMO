@@ -7,6 +7,7 @@ import com.github.kyuubiran.ezxhelper.ObjectUtils.setObject
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder.`-Static`.methodFinder
 import com.yifeplayte.wommo.hook.hooks.BaseHook
 
+@Suppress("unused")
 object RestoreHiddenCustomMediaAction : BaseHook() {
     override val key = "restore_hidden_custom_media_action"
     private val notificationSettingsManager by lazy {

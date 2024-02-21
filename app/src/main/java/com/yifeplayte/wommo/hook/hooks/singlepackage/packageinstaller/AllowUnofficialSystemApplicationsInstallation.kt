@@ -6,6 +6,7 @@ import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHooks
 import com.yifeplayte.wommo.hook.hooks.BaseHook
 import com.yifeplayte.wommo.hook.utils.DexKit.dexKitBridge
 
+@Suppress("unused")
 object AllowUnofficialSystemApplicationsInstallation : BaseHook() {
     override val key = "allow_unofficial_system_applications_installation"
     override fun hook() {

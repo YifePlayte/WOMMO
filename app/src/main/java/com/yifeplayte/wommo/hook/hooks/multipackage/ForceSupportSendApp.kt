@@ -11,6 +11,7 @@ import com.github.kyuubiran.ezxhelper.finders.MethodFinder.`-Static`.methodFinde
 import com.yifeplayte.wommo.hook.hooks.BaseMultiHook
 import com.yifeplayte.wommo.hook.utils.DexKit.dexKitBridge
 
+@Suppress("unused")
 object ForceSupportSendApp : BaseMultiHook() {
     override val key = "force_support_send_app"
     override val hooks = mapOf(

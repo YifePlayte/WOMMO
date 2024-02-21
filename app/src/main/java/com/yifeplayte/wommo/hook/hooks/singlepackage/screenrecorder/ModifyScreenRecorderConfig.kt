@@ -6,6 +6,7 @@ import com.github.kyuubiran.ezxhelper.MemberExtensions.isFinal
 import com.yifeplayte.wommo.hook.hooks.BaseHook
 import com.yifeplayte.wommo.hook.utils.DexKit.dexKitBridge
 
+@Suppress("unused")
 object ModifyScreenRecorderConfig : BaseHook() {
     override val key = "modify_screen_recorder_config"
     private val intArrayBitRateOld = intArrayOf(200, 100, 50, 32, 24, 16, 8, 6, 4, 1)

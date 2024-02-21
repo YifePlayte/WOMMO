@@ -8,6 +8,7 @@ import java.io.InputStreamReader
 /**
  * 指令 工具
  */
+@Suppress("unused")
 object Terminal {
     /**
      * 执行单条指令

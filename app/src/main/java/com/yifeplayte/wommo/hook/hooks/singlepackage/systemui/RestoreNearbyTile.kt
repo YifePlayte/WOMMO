@@ -8,6 +8,7 @@ import com.yifeplayte.wommo.hook.hooks.BaseHook
 import com.yifeplayte.wommo.hook.utils.DexKit.dexKitBridge
 import com.yifeplayte.wommo.utils.Build.IS_INTERNATIONAL_BUILD
 
+@Suppress("unused")
 object RestoreNearbyTile : BaseHook() {
     override val key = "restore_near_by_tile"
     override val isEnabled get() = !IS_INTERNATIONAL_BUILD and super.isEnabled

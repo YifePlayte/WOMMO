@@ -17,6 +17,7 @@ import com.github.kyuubiran.ezxhelper.finders.MethodFinder.`-Static`.methodFinde
 import com.yifeplayte.wommo.R
 import com.yifeplayte.wommo.hook.hooks.BaseHook
 
+@Suppress("unused")
 @SuppressLint("DiscouragedApi")
 object AddAOSPAppInfoEntry : BaseHook() {
     override val key = "add_aosp_app_info_entry"

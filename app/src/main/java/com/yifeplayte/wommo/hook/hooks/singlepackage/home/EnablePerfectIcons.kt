@@ -7,6 +7,7 @@ import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder.`-Static`.methodFinder
 import com.yifeplayte.wommo.hook.hooks.BaseHook
 
+@Suppress("unused")
 object EnablePerfectIcons : BaseHook() {
     override val key = "enable_perfect_icons"
     override fun hook() {

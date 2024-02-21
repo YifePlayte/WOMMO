@@ -8,6 +8,7 @@ import com.github.kyuubiran.ezxhelper.ObjectHelper.Companion.objectHelper
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder.`-Static`.methodFinder
 import com.yifeplayte.wommo.hook.hooks.BaseHook
 
+@Suppress("unused")
 object QuickManageUnknownAppSources : BaseHook() {
     override val key = "quick_manage_unknown_app_sources"
     override fun hook() {

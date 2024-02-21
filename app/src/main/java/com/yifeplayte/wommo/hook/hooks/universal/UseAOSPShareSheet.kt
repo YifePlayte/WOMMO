@@ -5,6 +5,7 @@ import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder.`-Static`.methodFinder
 import com.yifeplayte.wommo.hook.hooks.BaseUniversalHook
 
+@Suppress("unused")
 object UseAOSPShareSheet : BaseUniversalHook() {
     override val key = "use_aosp_share_sheet"
     override fun hook() {

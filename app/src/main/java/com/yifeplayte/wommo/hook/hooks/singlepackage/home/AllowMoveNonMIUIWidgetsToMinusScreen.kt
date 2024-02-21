@@ -8,6 +8,7 @@ import com.github.kyuubiran.ezxhelper.finders.MethodFinder.`-Static`.methodFinde
 import com.yifeplayte.wommo.hook.hooks.BaseHook
 import de.robv.android.xposed.XposedHelpers.callMethod
 
+@Suppress("unused")
 object AllowMoveNonMIUIWidgetsToMinusScreen : BaseHook() {
     override val key = "allow_move_non_miui_widgets_to_minus_screen"
     override fun hook() {

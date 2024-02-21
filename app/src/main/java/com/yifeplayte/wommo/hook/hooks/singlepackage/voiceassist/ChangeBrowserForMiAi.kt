@@ -6,6 +6,7 @@ import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHooks
 import com.yifeplayte.wommo.hook.hooks.BaseHook
 import com.yifeplayte.wommo.hook.utils.DexKit.dexKitBridge
 
+@Suppress("unused")
 object ChangeBrowserForMiAi : BaseHook() {
     override val key = "change_browser_for_mi_ai"
     override fun hook() {

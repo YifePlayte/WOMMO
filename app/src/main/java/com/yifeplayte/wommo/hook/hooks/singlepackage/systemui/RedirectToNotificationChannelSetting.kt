@@ -19,6 +19,7 @@ import com.github.kyuubiran.ezxhelper.finders.MethodFinder.`-Static`.methodFinde
 import com.yifeplayte.wommo.hook.hooks.BaseHook
 import com.yifeplayte.wommo.utils.Build.IS_HYPER_OS
 
+@Suppress("unused")
 object RedirectToNotificationChannelSetting : BaseHook() {
     override val key: String = "redirect_to_notification_channel_setting"
     override fun hook() {

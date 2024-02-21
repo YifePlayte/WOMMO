@@ -7,6 +7,7 @@ import com.yifeplayte.wommo.hook.utils.DexKit.dexKitBridge
 import org.luckypray.dexkit.query.matchers.base.StringMatcher
 import java.lang.reflect.Method
 
+@Suppress("unused")
 object EnableBlurForHome : BaseHook() {
     override val key = "enable_blur_for_home"
     override fun hook() {

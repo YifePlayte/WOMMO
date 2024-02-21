@@ -13,6 +13,7 @@ import com.yifeplayte.wommo.hook.hooks.BaseMultiHook
 import de.robv.android.xposed.XposedHelpers.getAdditionalInstanceField
 import de.robv.android.xposed.XposedHelpers.setAdditionalInstanceField
 
+@Suppress("unused")
 object ShowNotificationImportance : BaseMultiHook() {
     override val key = "show_notification_importance"
     override val hooks = mapOf(

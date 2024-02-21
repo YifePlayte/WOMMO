@@ -1,56 +1,25 @@
 package com.yifeplayte.wommo.hook
 
 import com.github.kyuubiran.ezxhelper.EzXHelper
-import com.yifeplayte.wommo.hook.hooks.multipackage.ExposureRefreshForNonMIUIWidget
-import com.yifeplayte.wommo.hook.hooks.multipackage.ForceSupportSendApp
-import com.yifeplayte.wommo.hook.hooks.multipackage.ShowNotificationImportance
-import com.yifeplayte.wommo.hook.hooks.singlepackage.Android
-import com.yifeplayte.wommo.hook.hooks.singlepackage.Barrage
-import com.yifeplayte.wommo.hook.hooks.singlepackage.ContentExtension
-import com.yifeplayte.wommo.hook.hooks.singlepackage.DownloadProvider
-import com.yifeplayte.wommo.hook.hooks.singlepackage.Home
-import com.yifeplayte.wommo.hook.hooks.singlepackage.PackageInstaller
-import com.yifeplayte.wommo.hook.hooks.singlepackage.PowerKeeper
-import com.yifeplayte.wommo.hook.hooks.singlepackage.ScreenRecorder
-import com.yifeplayte.wommo.hook.hooks.singlepackage.SecurityCenter
-import com.yifeplayte.wommo.hook.hooks.singlepackage.Settings
-import com.yifeplayte.wommo.hook.hooks.singlepackage.SystemUI
-import com.yifeplayte.wommo.hook.hooks.singlepackage.VoiceAssist
-import com.yifeplayte.wommo.hook.hooks.subpackage.SystemUIPlugin
-import com.yifeplayte.wommo.hook.hooks.universal.RemoveMIUIStrokeFromAdaptiveIcon
-import com.yifeplayte.wommo.hook.hooks.universal.UseAOSPShareSheet
+import com.yifeplayte.wommo.hook.hooks.BaseMultiHook
+import com.yifeplayte.wommo.hook.hooks.BasePackage
+import com.yifeplayte.wommo.hook.hooks.BaseSubPackage
+import com.yifeplayte.wommo.hook.hooks.BaseUniversalHook
 import com.yifeplayte.wommo.hook.utils.DexKit
+import com.yifeplayte.wommo.utils.ClassScanner.scanObjectOf
 import de.robv.android.xposed.IXposedHookLoadPackage
 import de.robv.android.xposed.IXposedHookZygoteInit
 import de.robv.android.xposed.callbacks.XC_LoadPackage
 
 private const val TAG = "WOMMO"
-private val singlePackagesHooked = setOf(
-    Android,
-    Barrage,
-    ContentExtension,
-    DownloadProvider,
-    Home,
-    PackageInstaller,
-    PowerKeeper,
-    ScreenRecorder,
-    SecurityCenter,
-    Settings,
-    SystemUI,
-    VoiceAssist,
-)
-private val multiPackagesHooked = setOf(
-    ExposureRefreshForNonMIUIWidget,
-    ForceSupportSendApp,
-    ShowNotificationImportance,
-)
-private val subPackagesHooked = setOf(
-    SystemUIPlugin,
-)
-private val universalHooks = setOf(
-    RemoveMIUIStrokeFromAdaptiveIcon,
-    UseAOSPShareSheet,
-)
+private val singlePackagesHooked =
+    scanObjectOf<BasePackage>("com.yifeplayte.wommo.hook.hooks.singlepackage")
+private val multiPackagesHooked =
+    scanObjectOf<BaseMultiHook>("com.yifeplayte.wommo.hook.hooks.multipackage")
+private val subPackagesHooked =
+    scanObjectOf<BaseSubPackage>("com.yifeplayte.wommo.hook.hooks.subpackage")
+private val universalHooks =
+    scanObjectOf<BaseUniversalHook>("com.yifeplayte.wommo.hook.hooks.universal")
 val PACKAGE_NAME_HOOKED: Set<String>
     get() {
         val packageNameHooked = mutableSetOf<String>()

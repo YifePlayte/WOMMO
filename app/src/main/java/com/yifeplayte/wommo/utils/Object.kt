@@ -3,6 +3,7 @@ package com.yifeplayte.wommo.utils
 /**
  * Object 工具
  */
+@Suppress("unused")
 object Object {
     init {
         System.loadLibrary("classhelper")

@@ -7,6 +7,7 @@ import com.github.kyuubiran.ezxhelper.ObjectUtils.setObject
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder.`-Static`.methodFinder
 import com.yifeplayte.wommo.hook.hooks.BaseHook
 
+@Suppress("unused")
 object UnlockControlCenterStyle : BaseHook() {
     override val key = "unlock_control_center_style"
     override fun hook() {

@@ -5,6 +5,7 @@ import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder.`-Static`.methodFinder
 import com.yifeplayte.wommo.hook.hooks.BaseSubHook
 
+@Suppress("unused")
 object RestoreNearbyTile : BaseSubHook() {
     override val key = "restore_near_by_tile"
     override fun hook(subClassLoader: ClassLoader) {

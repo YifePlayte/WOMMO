@@ -7,6 +7,7 @@ import com.github.kyuubiran.ezxhelper.finders.MethodFinder.`-Static`.methodFinde
 import com.yifeplayte.wommo.hook.hooks.BaseHook
 import com.yifeplayte.wommo.utils.Build.IS_INTERNATIONAL_BUILD
 
+@Suppress("unused")
 object ShowGoogleSettingsEntry : BaseHook() {
     override val key = "show_google_settings_entry"
     override val isEnabled get() = !IS_INTERNATIONAL_BUILD and super.isEnabled

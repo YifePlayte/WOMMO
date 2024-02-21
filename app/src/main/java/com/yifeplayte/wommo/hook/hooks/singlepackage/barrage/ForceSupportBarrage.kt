@@ -8,6 +8,7 @@ import com.github.kyuubiran.ezxhelper.ObjectUtils.getObjectOrNullAs
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder.`-Static`.methodFinder
 import com.yifeplayte.wommo.hook.hooks.BaseHook
 
+@Suppress("unused")
 object ForceSupportBarrage : BaseHook() {
     override val key = "force_support_barrage"
     override fun hook() {

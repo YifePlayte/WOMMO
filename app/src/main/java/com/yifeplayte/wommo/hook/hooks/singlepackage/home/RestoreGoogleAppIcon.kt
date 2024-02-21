@@ -6,6 +6,7 @@ import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHooks
 import com.github.kyuubiran.ezxhelper.ObjectUtils.getObjectOrNullAs
 import com.yifeplayte.wommo.hook.hooks.BaseHook
 
+@Suppress("unused")
 object RestoreGoogleAppIcon : BaseHook() {
     override val key = "restore_google_app_icon"
     override fun hook() {

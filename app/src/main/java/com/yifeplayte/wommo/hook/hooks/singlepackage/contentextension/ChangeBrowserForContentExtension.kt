@@ -9,6 +9,7 @@ import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder.`-Static`.methodFinder
 import com.yifeplayte.wommo.hook.hooks.BaseHook
 
+@Suppress("unused")
 object ChangeBrowserForContentExtension : BaseHook() {
     override val key = "change_browser_for_content_extension"
     override fun hook() {

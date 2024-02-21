@@ -6,6 +6,7 @@ import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHooks
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder.`-Static`.methodFinder
 import com.yifeplayte.wommo.hook.hooks.BaseUniversalHook
 
+@Suppress("unused")
 object RemoveMIUIStrokeFromAdaptiveIcon : BaseUniversalHook() {
     override val key = "remove_miui_stroke_from_adaptive_icon"
     override fun hook() {

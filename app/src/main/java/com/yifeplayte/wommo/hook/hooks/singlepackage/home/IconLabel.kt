@@ -16,6 +16,7 @@ import com.yifeplayte.wommo.hook.hooks.BaseHook
 import com.yifeplayte.wommo.hook.utils.XSharedPreferences.getBoolean
 import com.yifeplayte.wommo.hook.utils.XSharedPreferences.getInt
 
+@Suppress("unused")
 object IconLabel : BaseHook() {
     override val key = "icon_label"
     override val isEnabled = true

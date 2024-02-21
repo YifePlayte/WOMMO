@@ -6,6 +6,7 @@ import com.github.kyuubiran.ezxhelper.finders.MethodFinder.`-Static`.methodFinde
 import com.yifeplayte.wommo.hook.hooks.BaseHook
 
 
+@Suppress("unused")
 object UnlockGrids : BaseHook() {
     override val key = "unlock_grids"
     override fun hook() {
