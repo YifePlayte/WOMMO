@@ -19,8 +19,9 @@ abstract class BaseSubPackage {
 
     abstract val packageName: String
     abstract val subPackageName: String
-    open val hooks: List<BaseSubHook> =
+    open val hooks: List<BaseSubHook> by lazy {
         scanObjectOf<BaseSubHook>(javaClass.packageName + "." + javaClass.simpleName.lowercase())
+    }
 
     fun init() {
         if (hostPackageName != packageName) return

@@ -12,14 +12,18 @@ import de.robv.android.xposed.IXposedHookZygoteInit
 import de.robv.android.xposed.callbacks.XC_LoadPackage
 
 private const val TAG = "WOMMO"
-private val singlePackagesHooked =
+private val singlePackagesHooked by lazy {
     scanObjectOf<BasePackage>("com.yifeplayte.wommo.hook.hooks.singlepackage")
-private val multiPackagesHooked =
+}
+private val multiPackagesHooked by lazy {
     scanObjectOf<BaseMultiHook>("com.yifeplayte.wommo.hook.hooks.multipackage")
-private val subPackagesHooked =
+}
+private val subPackagesHooked by lazy {
     scanObjectOf<BaseSubPackage>("com.yifeplayte.wommo.hook.hooks.subpackage")
-private val universalHooks =
+}
+private val universalHooks by lazy {
     scanObjectOf<BaseUniversalHook>("com.yifeplayte.wommo.hook.hooks.universal")
+}
 val PACKAGE_NAME_HOOKED: Set<String>
     get() {
         val packageNameHooked = mutableSetOf<String>()

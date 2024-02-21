@@ -8,8 +8,9 @@ import com.yifeplayte.wommo.utils.ClassScanner.scanObjectOf
 abstract class BasePackage {
     private var isInit: Boolean = false
     abstract val packageName: String
-    open val hooks: List<BaseHook> =
+    open val hooks: List<BaseHook> by lazy {
         scanObjectOf<BaseHook>(javaClass.packageName + "." + javaClass.simpleName.lowercase())
+    }
 
     fun init() {
         if (EzXHelper.hostPackageName != packageName) return
