@@ -19,7 +19,8 @@ object LoadPackageParam {
         if (packageName == "android") {
             Build.VERSION.SDK_INT
         } else {
-            val parser = loadClass("android.content.pm.PackageParser").getConstructor().newInstance()
+            val parser =
+                loadClass("android.content.pm.PackageParser").getConstructor().newInstance()
             val apkPath = File(appInfo.sourceDir)
             val pkg = parser.objectHelper().invokeMethodBestMatch("parsePackage", null, apkPath, 0)
             pkg?.objectHelper()?.getObjectOrNullAs<Int>("mVersionCode") ?: 0

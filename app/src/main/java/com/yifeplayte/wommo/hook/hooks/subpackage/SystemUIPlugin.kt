@@ -18,7 +18,7 @@ object SystemUIPlugin : BaseSubPackage() {
 
     private fun initForHyperOS() {
         hook =
-            loadClass("com.android.systemui.shared.plugins.PluginInstance\$PluginFactory").declaredConstructors.first()
+            loadClass("com.android.systemui.shared.plugins.PluginInstance\$PluginFactory").declaredConstructors.single()
                 .createHook {
                     before { param ->
                         val appInfo = param.args[2] as ApplicationInfo
@@ -38,7 +38,7 @@ object SystemUIPlugin : BaseSubPackage() {
                     ApplicationInfo::class.java,
                     ClassLoader::class.java
                 )
-                .first().createHook {
+                .single().createHook {
                     after { param ->
                         if ((param.args[0] as ApplicationInfo).packageName != subPackageName) return@after
                         safeSubClassLoader = param.result as? ClassLoader ?: return@after

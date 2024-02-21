@@ -13,7 +13,8 @@ object EnablePerfectIcons : BaseHook() {
     override fun hook() {
         runCatching {
             val clazzMiuiSettingsUtils = loadClass("com.miui.launcher.utils.MiuiSettingsUtils")
-            loadClass("com.miui.home.launcher.Application").methodFinder().filterByName("disablePerfectIcons").first()
+            loadClass("com.miui.home.launcher.Application").methodFinder()
+                .filterByName("disablePerfectIcons").single()
                 .createHook {
                     before {
                         val contentResolver = (it.thisObject as Application).contentResolver
@@ -29,7 +30,8 @@ object EnablePerfectIcons : BaseHook() {
                     }
                 }
         }
-        loadClass("miui.content.res.IconCustomizer").methodFinder().filterByName("isModIconEnabledForPackageName")
-            .first().createHook { returnConstant(true) }
+        loadClass("miui.content.res.IconCustomizer").methodFinder()
+            .filterByName("isModIconEnabledForPackageName")
+            .single().createHook { returnConstant(true) }
     }
 }

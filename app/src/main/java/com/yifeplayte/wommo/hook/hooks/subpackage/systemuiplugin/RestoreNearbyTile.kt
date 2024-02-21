@@ -9,8 +9,11 @@ import com.yifeplayte.wommo.hook.hooks.BaseSubHook
 object RestoreNearbyTile : BaseSubHook() {
     override val key = "restore_near_by_tile"
     override fun hook(subClassLoader: ClassLoader) {
-        loadClass("miui.systemui.controlcenter.qs.customize.TileQueryHelper\$Companion", subClassLoader).methodFinder()
-            .filterByName("filterNearby").first().createHook {
+        loadClass(
+            "miui.systemui.controlcenter.qs.customize.TileQueryHelper\$Companion",
+            subClassLoader
+        ).methodFinder()
+            .filterByName("filterNearby").single().createHook {
                 returnConstant(false)
             }
     }

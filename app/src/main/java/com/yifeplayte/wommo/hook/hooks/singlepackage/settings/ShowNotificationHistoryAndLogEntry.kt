@@ -49,11 +49,11 @@ object ShowNotificationHistoryAndLogEntry : BaseHook() {
         }
         runCatching {
             loadClass("com.android.settings.NotificationControlCenterSettings").methodFinder()
-                .filterByName("onCreate").first().createHook(hook)
+                .filterByName("onCreate").single().createHook(hook)
         }
         runCatching {
             loadClass("com.android.settings.NotificationStatusBarSettings").methodFinder()
-                .filterByName("onCreate").first().createHook(hook)
+                .filterByName("onCreate").single().createHook(hook)
         }
     }
 

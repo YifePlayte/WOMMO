@@ -13,7 +13,7 @@ object ForceSupportBarrage : BaseHook() {
     override val key = "force_support_barrage"
     override fun hook() {
         loadClass("com.xiaomi.barrage.service.NotificationMonitorService").methodFinder()
-            .filterByName("filterNotification").first().createHook {
+            .filterByName("filterNotification").single().createHook {
                 before { param ->
                     val statusBarNotification = param.args[0] as StatusBarNotification
                     val packageName = statusBarNotification.packageName

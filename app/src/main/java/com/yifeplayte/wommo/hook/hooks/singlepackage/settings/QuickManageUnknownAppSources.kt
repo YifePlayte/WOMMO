@@ -12,7 +12,8 @@ import com.yifeplayte.wommo.hook.hooks.BaseHook
 object QuickManageUnknownAppSources : BaseHook() {
     override val key = "quick_manage_unknown_app_sources"
     override fun hook() {
-        loadClass("com.android.settings.SettingsActivity").methodFinder().filterByName("redirectTabletActivity").first().createHook {
+        loadClass("com.android.settings.SettingsActivity").methodFinder()
+            .filterByName("redirectTabletActivity").single().createHook {
             before {
                 val activity = it.thisObject as Activity
                 val intent = activity.intent
@@ -20,7 +21,8 @@ object QuickManageUnknownAppSources : BaseHook() {
                 val data = intent.data
                 if (action != Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES || data == null || data.scheme != "package") return@before
                 activity.objectHelper().setObjectUntilSuperclass(
-                    "initialFragmentName", "com.android.settings.applications.appinfo.ExternalSourcesDetails"
+                    "initialFragmentName",
+                    "com.android.settings.applications.appinfo.ExternalSourcesDetails"
                 )
             }
         }

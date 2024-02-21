@@ -12,8 +12,8 @@ import de.robv.android.xposed.XposedHelpers.callMethod
 object AllowMoveNonMIUIWidgetsToMinusScreen : BaseHook() {
     override val key = "allow_move_non_miui_widgets_to_minus_screen"
     override fun hook() {
-        loadClass("com.miui.home.launcher.widget.MIUIWidgetHelper").methodFinder().filterByName("canDragToPa")
-            .filterByParamCount(2).first().createHook {
+        loadClass("com.miui.home.launcher.widget.MIUIWidgetHelper").methodFinder()
+            .filterByName("canDragToPa").filterByParamCount(2).single().createHook {
                 before { param ->
                     runCatching {
                         val dragInfo = invokeMethodBestMatch(param.args[1], "getDragInfo")!!

@@ -13,40 +13,46 @@ object ModifyBarrageLength : BaseHook() {
     private val barrageLength by lazy { getInt("barrage_length", 36) }
     override fun hook() {
         val clazzString = loadClass("java.lang.String")
-        clazzString.methodFinder().filterByName("subSequence").filterByParamCount(2).first().createHook {
-            before { param ->
-                if (Thread.currentThread().stackTrace.any { it.className == "com.xiaomi.barrage.utils.BarrageWindowUtils" }) {
-                    param.args[1] = barrageLength
+        clazzString.methodFinder().filterByName("subSequence").filterByParamCount(2).single()
+            .createHook {
+                before { param ->
+                    if (Thread.currentThread().stackTrace.any { it.className == "com.xiaomi.barrage.utils.BarrageWindowUtils" }) {
+                        param.args[1] = barrageLength
+                    }
                 }
-            }
-            after {
-                if (it.throwable != null) {
-                    it.throwable = null
-                    it.result = it.thisObject
-                }
-            }
-        }
-        clazzString.methodFinder().filterByName("length").filterByParamCount(0).first().createHook {
-            after { param ->
-                val stacktrace = Thread.currentThread().stackTrace
-                if (stacktrace.any { it.className in setOf("java.lang.String", "android.text.SpannableStringBuilder") }) return@after
-                if (stacktrace.any {
-                        it.className == "com.xiaomi.barrage.utils.BarrageWindowUtils" && it.methodName in setOf(
-                            "addBarrageNotification", "sendBarrage"
-                        )
-                    }) {
-                    val realResult = (param.result as Int)
-                    param.result = if (barrageLength < 36) {
-                        if (realResult > barrageLength) {
-                            maxOf(37, realResult)
-                        } else realResult
-                    } else {
-                        if (realResult <= barrageLength) {
-                            minOf(35, realResult)
-                        } else realResult
+                after {
+                    if (it.throwable != null) {
+                        it.throwable = null
+                        it.result = it.thisObject
                     }
                 }
             }
-        }
+        clazzString.methodFinder().filterByName("length").filterByParamCount(0).single()
+            .createHook {
+                after { param ->
+                    val stacktrace = Thread.currentThread().stackTrace
+                    if (stacktrace.any {
+                            it.className in setOf(
+                                "java.lang.String", "android.text.SpannableStringBuilder"
+                            )
+                        }) return@after
+                    if (stacktrace.any {
+                            it.className == "com.xiaomi.barrage.utils.BarrageWindowUtils" && it.methodName in setOf(
+                                "addBarrageNotification", "sendBarrage"
+                            )
+                        }) {
+                        val realResult = (param.result as Int)
+                        param.result = if (barrageLength < 36) {
+                            if (realResult > barrageLength) {
+                                maxOf(37, realResult)
+                            } else realResult
+                        } else {
+                            if (realResult <= barrageLength) {
+                                minOf(35, realResult)
+                            } else realResult
+                        }
+                    }
+                }
+            }
     }
 }

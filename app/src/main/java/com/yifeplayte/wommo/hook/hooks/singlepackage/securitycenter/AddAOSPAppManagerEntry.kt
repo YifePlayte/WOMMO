@@ -27,7 +27,7 @@ object AddAOSPAppManagerEntry : BaseHook() {
 
     override fun hook() {
         val clazzAppManagerMainActivity = loadClass("com.miui.appmanager.AppManagerMainActivity")
-        clazzAppManagerMainActivity.methodFinder().filterByName("onCreateOptionsMenu").first()
+        clazzAppManagerMainActivity.methodFinder().filterByName("onCreateOptionsMenu").single()
             .createHook {
                 after {
                     initAppContext(it.thisObject as Activity, true)

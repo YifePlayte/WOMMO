@@ -48,7 +48,7 @@ object AddOpenByDefaultEntry : BaseHook() {
     override fun hook() {
         val clazzApplicationsDetailsActivity =
             loadClass("com.miui.appmanager.ApplicationsDetailsActivity")
-        clazzApplicationsDetailsActivity.methodFinder().filterByName("initView").first()
+        clazzApplicationsDetailsActivity.methodFinder().filterByName("initView").single()
             .createHook {
                 after { param ->
                     val activity = param.thisObject as Activity
@@ -60,7 +60,7 @@ object AddOpenByDefaultEntry : BaseHook() {
                         val linearLayout = viewAmDetailDefaultTitle.parent as LinearLayout
                         cleanOpenByDefaultView =
                             (loadClass("com.miui.appmanager.widget.AppDetailBannerItemView").constructorFinder()
-                                .filterByParamCount(2).first()
+                                .filterByParamCount(2).single()
                                 .newInstance(activity, null) as LinearLayout).apply {
                                 gravity = Gravity.CENTER_VERTICAL
                                 orientation = LinearLayout.HORIZONTAL
@@ -97,19 +97,20 @@ object AddOpenByDefaultEntry : BaseHook() {
                     )
                 }
             }
-        clazzApplicationsDetailsActivity.methodFinder().filterByName("onClick").first().createHook {
-            before { param ->
-                val activity = param.thisObject as Activity
-                initAppContext(activity, true)
-                val clickedView = param.args[0]
-                val cleanOpenByDefaultView =
-                    getAdditionalInstanceField(activity, "cleanOpenByDefaultView")
-                if (clickedView == cleanOpenByDefaultView) {
-                    startActionAppOpenByDefaultSettings(activity)
-                    param.result = null
+        clazzApplicationsDetailsActivity.methodFinder().filterByName("onClick").single()
+            .createHook {
+                before { param ->
+                    val activity = param.thisObject as Activity
+                    initAppContext(activity, true)
+                    val clickedView = param.args[0]
+                    val cleanOpenByDefaultView =
+                        getAdditionalInstanceField(activity, "cleanOpenByDefaultView")
+                    if (clickedView == cleanOpenByDefaultView) {
+                        startActionAppOpenByDefaultSettings(activity)
+                        param.result = null
+                    }
                 }
             }
-        }
     }
 
     private fun startActionAppOpenByDefaultSettings(activity: Activity) {

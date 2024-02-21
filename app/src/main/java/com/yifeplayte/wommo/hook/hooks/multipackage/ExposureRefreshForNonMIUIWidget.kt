@@ -28,7 +28,7 @@ object ExposureRefreshForNonMIUIWidget : BaseMultiHook() {
     private fun personalAssistant() {
         val clazzAppWidgetItemInfo =
             loadClass("com.miui.personalassistant.widget.iteminfo.AppWidgetItemInfo")
-        clazzAppWidgetItemInfo.methodFinder().filterByName("parseWidgetMetaData").first()
+        clazzAppWidgetItemInfo.methodFinder().filterByName("parseWidgetMetaData").single()
             .createHook {
                 after {
                     val receiverInfo = appContext.packageManager.getReceiverInfo(
@@ -46,7 +46,7 @@ object ExposureRefreshForNonMIUIWidget : BaseMultiHook() {
                     }
                 }
             }
-        clazzAppWidgetItemInfo.methodFinder().filterByName("obtainMiuiWidgetUpdateIntent").first()
+        clazzAppWidgetItemInfo.methodFinder().filterByName("obtainMiuiWidgetUpdateIntent").single()
             .createHook {
                 after { param ->
                     if (!(getAdditionalInstanceField(
@@ -76,7 +76,7 @@ object ExposureRefreshForNonMIUIWidget : BaseMultiHook() {
                 }
             }
         loadClassOrNull("com.android.server.appwidget.AppWidgetServiceImplStubImpl")?.methodFinder()
-            ?.filterByName("isForMiui")?.first()?.createHook {
+            ?.filterByName("isForMiui")?.single()?.createHook {
                 returnConstant(false)
             }
     }

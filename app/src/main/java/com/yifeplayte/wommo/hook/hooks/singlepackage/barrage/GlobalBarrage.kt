@@ -11,13 +11,14 @@ import com.yifeplayte.wommo.hook.hooks.BaseHook
 object GlobalBarrage : BaseHook() {
     override val key = "global_barrage"
     override fun hook() {
-        loadClass("android.provider.Settings\$Secure").methodFinder().filterByName("getInt").toList().createHooks {
-            after { param ->
-                if ((param.args[1] as String) == "gb_boosting" && param.result != 1) {
-                    Settings.Secure.putInt(param.args[0] as ContentResolver?, "gb_boosting", 1)
-                    param.result = 1
+        loadClass("android.provider.Settings\$Secure").methodFinder().filterByName("getInt")
+            .toList().createHooks {
+                after { param ->
+                    if ((param.args[1] as String) == "gb_boosting" && param.result != 1) {
+                        Settings.Secure.putInt(param.args[0] as ContentResolver?, "gb_boosting", 1)
+                        param.result = 1
+                    }
                 }
             }
-        }
     }
 }

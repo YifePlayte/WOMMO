@@ -37,7 +37,7 @@ object ForceSupportSendApp : BaseMultiHook() {
                     it.result.objectHelper().setObject("isHideIcon", false)
                 }
             }
-        clazzMiCloudUtils.methodFinder().filterByName("isSupportSubScreen").first().createHook {
+        clazzMiCloudUtils.methodFinder().filterByName("isSupportSubScreen").single().createHook {
             returnConstant(true)
         }
     }.isSuccess
@@ -45,13 +45,13 @@ object ForceSupportSendApp : BaseMultiHook() {
     private fun mirrorNew() {
         val clazzRelayApplication =
             loadClass("com.xiaomi.mirror.message.proto.RelayApp\$RelayApplication")
-        clazzRelayApplication.methodFinder().filterByName("getIsHideIcon").first().createHook {
+        clazzRelayApplication.methodFinder().filterByName("getIsHideIcon").single().createHook {
             returnConstant(false)
         }
-        clazzRelayApplication.methodFinder().filterByName("getSupportHandOff").first().createHook {
+        clazzRelayApplication.methodFinder().filterByName("getSupportHandOff").single().createHook {
             returnConstant(true)
         }
-        clazzRelayApplication.methodFinder().filterByName("getSupportSubScreen").first()
+        clazzRelayApplication.methodFinder().filterByName("getSupportSubScreen").single()
             .createHook {
                 returnConstant(true)
             }

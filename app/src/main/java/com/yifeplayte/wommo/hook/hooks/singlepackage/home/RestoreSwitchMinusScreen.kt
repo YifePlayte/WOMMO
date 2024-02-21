@@ -21,21 +21,29 @@ object RestoreSwitchMinusScreen : BaseHook() {
         val clazzMiuiBuild = loadClass("miui.os.Build")
         val clazzLauncher = loadClass("com.miui.home.launcher.Launcher")
         val clazzMiuiHomeSettings = loadClass("com.miui.home.settings.MiuiHomeSettings")
-        loadClass("com.miui.home.launcher.DeviceConfig").methodFinder().filterByName("isUseGoogleMinusScreen").first()
+        loadClass("com.miui.home.launcher.DeviceConfig").methodFinder()
+            .filterByName("isUseGoogleMinusScreen").single()
             .createHook {
                 before {
                     setStaticObject(
-                        loadClass("com.miui.home.launcher.LauncherAssistantCompat"), "CAN_SWITCH_MINUS_SCREEN", true
+                        loadClass("com.miui.home.launcher.LauncherAssistantCompat"),
+                        "CAN_SWITCH_MINUS_SCREEN",
+                        true
                     )
                 }
             }
-        loadClass("com.miui.home.launcher.LauncherAssistantCompat").methodFinder().filterByName("newInstance")
-            .filterByAssignableParamTypes(clazzLauncher).first().createHook {
+        loadClass("com.miui.home.launcher.LauncherAssistantCompat").methodFinder()
+            .filterByName("newInstance")
+            .filterByAssignableParamTypes(clazzLauncher).single().createHook {
                 before {
                     val isPersonalAssistantGoogle = (invokeStaticMethodBestMatch(
                         clazzUtilities, "getCurrentPersonalAssistant"
                     )!! as String) == "personal_assistant_google"
-                    setStaticObject(clazzMiuiBuild, "IS_INTERNATIONAL_BUILD", isPersonalAssistantGoogle)
+                    setStaticObject(
+                        clazzMiuiBuild,
+                        "IS_INTERNATIONAL_BUILD",
+                        isPersonalAssistantGoogle
+                    )
                 }
                 after {
                     setStaticObject(clazzMiuiBuild, "IS_INTERNATIONAL_BUILD", false)
@@ -50,20 +58,28 @@ object RestoreSwitchMinusScreen : BaseHook() {
             }
         }
         clazzMiuiHomeSettings.methodFinder().filterByName("onCreatePreferences")
-            .filterByAssignableParamTypes(Bundle::class.java, String::class.java).first().createHook {
+            .filterByAssignableParamTypes(Bundle::class.java, String::class.java).single()
+            .createHook {
                 after { param ->
-                    val mSwitchPersonalAssistant = getObjectOrNull(param.thisObject, "mSwitchPersonalAssistant")!!
+                    val mSwitchPersonalAssistant =
+                        getObjectOrNull(param.thisObject, "mSwitchPersonalAssistant")!!
                     mSwitchPersonalAssistant.objectHelper {
                         invokeMethodBestMatch(
-                            "setIntent", null, Intent("com.miui.home.action.LAUNCHER_PERSONAL_ASSISTANT_SETTING")
+                            "setIntent",
+                            null,
+                            Intent("com.miui.home.action.LAUNCHER_PERSONAL_ASSISTANT_SETTING")
                         )
-                        invokeMethodBestMatch("setOnPreferenceChangeListener", null, param.thisObject)
+                        invokeMethodBestMatch(
+                            "setOnPreferenceChangeListener",
+                            null,
+                            param.thisObject
+                        )
                     }
                     invokeMethodBestMatch(param.thisObject, "getPreferenceScreen")!!.objectHelper()
                         .invokeMethodBestMatch("addPreference", null, mSwitchPersonalAssistant)
                 }
             }
-        clazzMiuiHomeSettings.methodFinder().filterByName("onResume").first().createHook {
+        clazzMiuiHomeSettings.methodFinder().filterByName("onResume").single().createHook {
             after { param ->
                 getObjectOrNull(param.thisObject, "mSwitchPersonalAssistant")!!.objectHelper()
                     .invokeMethodBestMatch("setVisible", null, true)

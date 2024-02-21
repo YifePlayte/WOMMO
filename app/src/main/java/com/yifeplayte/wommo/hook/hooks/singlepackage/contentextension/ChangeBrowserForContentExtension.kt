@@ -14,7 +14,7 @@ object ChangeBrowserForContentExtension : BaseHook() {
     override val key = "change_browser_for_content_extension"
     override fun hook() {
         val clazzAppsUtils = loadClass("com.miui.contentextension.utils.AppsUtils")
-        clazzAppsUtils.methodFinder().filterByName("openGlobalSearch").first().createHook {
+        clazzAppsUtils.methodFinder().filterByName("openGlobalSearch").single().createHook {
             replace { param ->
                 Intent(Intent.ACTION_WEB_SEARCH).apply {
                     putExtra(SearchManager.QUERY, param.args[1].toString())
@@ -24,7 +24,7 @@ object ChangeBrowserForContentExtension : BaseHook() {
                 }
             }
         }
-        clazzAppsUtils.methodFinder().filterByName("getIntentWithBrowser").first().createHook {
+        clazzAppsUtils.methodFinder().filterByName("getIntentWithBrowser").single().createHook {
             before {
                 it.result = Intent(Intent.ACTION_VIEW, Uri.parse(it.args[0].toString()))
             }

@@ -23,7 +23,7 @@ object ShowNotificationImportance : BaseMultiHook() {
 
     private fun settings() {
         loadClass("com.android.settings.notification.ChannelNotificationSettings").methodFinder()
-            .filterByName("removeDefaultPrefs").first().createHook {
+            .filterByName("removeDefaultPrefs").single().createHook {
                 before {
                     val importance =
                         invokeMethodBestMatch(it.thisObject, "findPreference", null, "importance")
@@ -47,7 +47,7 @@ object ShowNotificationImportance : BaseMultiHook() {
             }
         loadClass("androidx.preference.Preference").methodFinder()
             .filterByName("callChangeListener")
-            .filterByParamTypes(Any::class.java).first().createHook {
+            .filterByParamTypes(Any::class.java).single().createHook {
                 after {
                     val channelNotificationSettings =
                         getAdditionalInstanceField(it.thisObject, "channelNotificationSettings")
@@ -78,7 +78,7 @@ object ShowNotificationImportance : BaseMultiHook() {
 
     private fun systemUi() {
         loadClass("com.android.systemui.statusbar.phone.NotificationIconAreaController").methodFinder()
-            .filterByName("updateStatusBarIcons").first().createHook {
+            .filterByName("updateStatusBarIcons").single().createHook {
                 before { param ->
                     val mNotificationEntries = getObjectOrNullAs<List<Any>>(
                         param.thisObject,
@@ -87,8 +87,10 @@ object ShowNotificationImportance : BaseMultiHook() {
                     if (mNotificationEntries.isNotEmpty()) {
                         val list = ArrayList<Any>()
                         mNotificationEntries.forEach {
-                            val representativeEntry = invokeMethodBestMatch(it, "getRepresentativeEntry")!!
-                            val importance = invokeMethodBestMatch(representativeEntry, "getImportance") as Int
+                            val representativeEntry =
+                                invokeMethodBestMatch(it, "getRepresentativeEntry")!!
+                            val importance =
+                                invokeMethodBestMatch(representativeEntry, "getImportance") as Int
                             if (importance > 1) list.add(it)
                         }
                         if (list.size != mNotificationEntries.size) {

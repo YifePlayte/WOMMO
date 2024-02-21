@@ -28,7 +28,7 @@ object IconLabel : BaseHook() {
         val clazzLauncher = loadClass("com.miui.home.launcher.Launcher")
         val clazzShortcutInfo = loadClass("com.miui.home.launcher.ShortcutInfo")
         loadClass("com.miui.home.launcher.ItemIcon").methodFinder().filterByName("onFinishInflate")
-            .first().createHook {
+            .single().createHook {
                 after {
                     val mTitle = getObjectOrNullUntilSuperclass(it.thisObject, "mTitle")
                     if (mTitle is TextView) {
@@ -41,7 +41,7 @@ object IconLabel : BaseHook() {
                 }
             }
         loadClass("com.miui.home.launcher.maml.MaMlWidgetView").methodFinder()
-            .filterByName("onFinishInflate").first().createHook {
+            .filterByName("onFinishInflate").single().createHook {
                 after {
                     val mTitle =
                         getObjectOrNullUntilSuperclassAs<TextView>(it.thisObject, "mTitleTextView")
@@ -49,7 +49,7 @@ object IconLabel : BaseHook() {
                 }
             }
         loadClass("com.miui.home.launcher.LauncherMtzGadgetView").methodFinder()
-            .filterByName("onFinishInflate").first().createHook {
+            .filterByName("onFinishInflate").single().createHook {
                 after {
                     val mTitle =
                         getObjectOrNullUntilSuperclassAs<TextView>(it.thisObject, "mTitleTextView")
@@ -57,7 +57,7 @@ object IconLabel : BaseHook() {
                 }
             }
         loadClass("com.miui.home.launcher.LauncherWidgetView").methodFinder()
-            .filterByName("onFinishInflate").first().createHook {
+            .filterByName("onFinishInflate").single().createHook {
                 after {
                     val mTitle =
                         getObjectOrNullUntilSuperclassAs<TextView>(it.thisObject, "mTitleTextView")
@@ -67,7 +67,7 @@ object IconLabel : BaseHook() {
         loadClass("com.miui.home.launcher.ShortcutIcon").methodFinder().filterByName("fromXml")
             .filterByAssignableParamTypes(
                 Int::class.java, clazzLauncher, ViewGroup::class.java, clazzShortcutInfo
-            ).first().createHook {
+            ).single().createHook {
                 after {
                     val buddyIconView = invokeMethodBestMatch(
                         it.args[3], "getBuddyIconView", null, it.args[2]
@@ -83,7 +83,7 @@ object IconLabel : BaseHook() {
                 }
             }
         loadClass("com.miui.home.launcher.common.Utilities").methodFinder()
-            .filterByName("adaptTitleStyleToWallpaper").first().createHook {
+            .filterByName("adaptTitleStyleToWallpaper").single().createHook {
                 after {
                     val mTitle = it.args[1] as TextView
                     val idIconTitle =

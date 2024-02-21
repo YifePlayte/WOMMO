@@ -134,7 +134,7 @@ object LockscreenChargingInfo : BaseHook() {
         }
         loadFirstClass(
             "com.miui.charge.ChargeUtils", "com.android.keyguard.charge.ChargeUtils"
-        ).methodFinder().filterByName("getChargingHintText").filterByParamCount(3).first()
+        ).methodFinder().filterByName("getChargingHintText").filterByParamCount(3).single()
             .createHook {
                 after { param ->
                     param.result = param.result?.let { "$it\n${getChargingInfo()}" }

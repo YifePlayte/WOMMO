@@ -10,7 +10,7 @@ object EnableBatteryMonitorService : BaseHook() {
     override val key = "enable_battery_monitor_service"
     override fun hook() {
         loadClass("com.miui.powerkeeper.utils.Utils").methodFinder()
-            .filterByName("isDevelopmentOrDebugVersion").first().createHook {
+            .filterByName("isDevelopmentOrDebugVersion").single().createHook {
                 returnConstant(true)
             }
     }

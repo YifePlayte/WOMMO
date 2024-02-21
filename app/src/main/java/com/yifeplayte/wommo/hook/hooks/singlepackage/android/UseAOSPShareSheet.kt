@@ -10,7 +10,7 @@ object UseAOSPShareSheet : BaseHook() {
     override val key = "use_aosp_share_sheet"
     override fun hook() {
         loadClass("com.android.internal.app.ResolverActivityStubImpl").methodFinder()
-            .filterByName("useAospShareSheet").first().createHook {
+            .filterByName("useAospShareSheet").single().createHook {
                 returnConstant(true)
             }
     }

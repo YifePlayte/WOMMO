@@ -34,7 +34,7 @@ object AddAOSPAppInfoEntry : BaseHook() {
     override fun hook() {
         val clazzApplicationsDetailsActivity =
             loadClass("com.miui.appmanager.ApplicationsDetailsActivity")
-        clazzApplicationsDetailsActivity.methodFinder().filterByName("onCreateOptionsMenu").first()
+        clazzApplicationsDetailsActivity.methodFinder().filterByName("onCreateOptionsMenu").single()
             .createHook {
                 after {
                     val activity = it.thisObject as Activity

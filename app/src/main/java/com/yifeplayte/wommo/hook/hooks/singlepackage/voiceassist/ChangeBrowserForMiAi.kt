@@ -11,7 +11,7 @@ object ChangeBrowserForMiAi : BaseHook() {
     override val key = "change_browser_for_mi_ai"
     override fun hook() {
         dexKitBridge.findMethod {
-            matcher{
+            matcher {
                 usingStrings = listOf("addBackForUri intent is null")
                 returnType = "android.content.Intent"
             }

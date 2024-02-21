@@ -12,8 +12,14 @@ object RestoreGoogleAppIcon : BaseHook() {
     override fun hook() {
         loadClass("com.miui.home.launcher.AppFilter").declaredConstructors.createHooks {
             after { param ->
-                getObjectOrNullAs<HashSet<ComponentName>>(param.thisObject, "mSkippedItems")!!.removeIf {
-                    it.packageName in setOf("com.google.android.googlequicksearchbox", "com.google.android.gms")
+                getObjectOrNullAs<HashSet<ComponentName>>(
+                    param.thisObject,
+                    "mSkippedItems"
+                )!!.removeIf {
+                    it.packageName in setOf(
+                        "com.google.android.googlequicksearchbox",
+                        "com.google.android.gms"
+                    )
                 }
             }
         }

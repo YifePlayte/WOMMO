@@ -21,7 +21,7 @@ object RestoreHiddenCustomMediaAction : BaseHook() {
 
     override fun hook() {
         loadClass("com.android.systemui.media.controls.pipeline.MediaDataManager").methodFinder()
-            .filterByName("createActionsFromState").first().createHook {
+            .filterByName("createActionsFromState").single().createHook {
                 before {
                     setObject(
                         notificationSettingsManager ?: return@before,

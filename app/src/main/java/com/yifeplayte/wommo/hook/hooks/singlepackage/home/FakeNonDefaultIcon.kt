@@ -21,7 +21,7 @@ object FakeNonDefaultIcon : BaseHook() {
     private val clazzPathDataIconUtil by lazy { loadClass("com.miui.home.launcher.PathDataIconUtil") }
     override fun hook() {
         loadClass("com.miui.home.launcher.DeviceConfig").methodFinder()
-            .filterByName("isDefaultIcon").first().createHook {
+            .filterByName("isDefaultIcon").single().createHook {
                 before { param ->
                     param.result =
                         Thread.currentThread().stackTrace.any { it.methodName == "isBlurSupported" }
@@ -29,7 +29,7 @@ object FakeNonDefaultIcon : BaseHook() {
             }
 
         loadClass("com.miui.home.recents.views.FloatingIconView").methodFinder()
-            .filterByName("updateClipPath").first().createHook {
+            .filterByName("updateClipPath").single().createHook {
                 before { param ->
                     val layoutParams = param.args[0] as FrameLayout.LayoutParams
                     val scaleFactor = param.args[1] as Float

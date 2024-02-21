@@ -10,17 +10,20 @@ import com.yifeplayte.wommo.hook.hooks.BaseHook
 object WaveCharge : BaseHook() {
     override val key = "wave_charge"
     override fun hook() {
-        loadClass("com.android.keyguard.charge.ChargeUtils").methodFinder().filterByName("supportWaveChargeAnimation")
-            .first().createHook {
+        loadClass("com.android.keyguard.charge.ChargeUtils").methodFinder()
+            .filterByName("supportWaveChargeAnimation")
+            .single().createHook {
                 after { param ->
                     val clazzTrue = setOf(
                         "com.android.keyguard.charge.ChargeUtils",
                         "com.android.keyguard.charge.container.MiuiChargeContainerView"
                     )
-                    param.result = Thread.currentThread().stackTrace.any { it.className in clazzTrue }
+                    param.result =
+                        Thread.currentThread().stackTrace.any { it.className in clazzTrue }
                 }
             }
-        loadClass("com.android.keyguard.charge.wave.WaveView").methodFinder().filterByName("updateWaveHeight").first()
+        loadClass("com.android.keyguard.charge.wave.WaveView").methodFinder()
+            .filterByName("updateWaveHeight").single()
             .createHook {
                 after {
                     it.thisObject.objectHelper().setObject("mWaveXOffset", 0)

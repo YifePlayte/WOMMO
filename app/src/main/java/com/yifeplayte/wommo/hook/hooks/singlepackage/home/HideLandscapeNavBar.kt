@@ -9,8 +9,9 @@ import com.yifeplayte.wommo.hook.hooks.BaseHook
 object HideLandscapeNavBar : BaseHook() {
     override val key = "hide_landscape_nav_bar"
     override fun hook() {
-        loadClass("com.miui.home.recents.views.RecentsContainer").methodFinder().filterByName("hideFakeNavBarForHidingGestureLine")
-            .first().createHook {
+        loadClass("com.miui.home.recents.views.RecentsContainer").methodFinder()
+            .filterByName("hideFakeNavBarForHidingGestureLine")
+            .single().createHook {
                 before {
                     it.args[0] = true
                 }

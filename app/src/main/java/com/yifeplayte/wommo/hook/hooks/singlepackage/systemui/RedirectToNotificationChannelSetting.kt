@@ -31,7 +31,7 @@ object RedirectToNotificationChannelSetting : BaseHook() {
             val clazzModalController =
                 loadClass("com.android.systemui.statusbar.notification.modal.ModalController")
             val clazzCommandQueue = loadClass("com.android.systemui.statusbar.CommandQueue")
-            clazzMiuiNotificationMenuRow.methodFinder().filterByName("createMenuViews").first()
+            clazzMiuiNotificationMenuRow.methodFinder().filterByName("createMenuViews").single()
                 .createHook {
                     after { param ->
                         val mSbn =
@@ -59,7 +59,7 @@ object RedirectToNotificationChannelSetting : BaseHook() {
                     }
                 }
         }
-        clazzMiuiNotificationMenuRow.methodFinder().filterByName("onClickInfoItem").firstOrNull()
+        clazzMiuiNotificationMenuRow.methodFinder().filterByName("onClickInfoItem").singleOrNull()
             ?.createHook {
                 before { param ->
                     param.thisObject.objectHelper {
@@ -72,7 +72,7 @@ object RedirectToNotificationChannelSetting : BaseHook() {
                 }
             }
         loadClass("com.android.systemui.statusbar.notification.NotificationSettingsHelper").methodFinder()
-            .filterByName("startAppNotificationSettings").firstOrNull()?.createHook {
+            .filterByName("startAppNotificationSettings").singleOrNull()?.createHook {
                 before { param ->
                     startChannelNotificationSettings(statusBarNotification!!)
                     param.result = null

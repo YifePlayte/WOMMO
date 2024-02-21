@@ -10,11 +10,12 @@ object RemoveXlDownload : BaseHook() {
     override val key = "remove_xl_download"
     override fun hook() {
         val clazzXLConfig = loadClass("com.android.providers.downloads.config.XLConfig")
-        clazzXLConfig.methodFinder().filter { name in setOf("setDebug", "setSoDebug") }.toList().createHooks {
-            returnConstant(null)
-        }
+        clazzXLConfig.methodFinder().filter { name in setOf("setDebug", "setSoDebug") }.toList()
+            .createHooks {
+                returnConstant(null)
+            }
         // val targetPath = File(Environment.getExternalStorageDirectory(), ".xlDownload").absoluteFile
-        // File::class.java.methodFinder().filterByName("mkdirs").first().createHook {
+        // File::class.java.methodFinder().filterByName("mkdirs").single().createHook {
         //     before {
         //         if ((it.thisObject as File).absoluteFile.equals(targetPath)) {
         //             it.throwable = FileNotFoundException("blocked")

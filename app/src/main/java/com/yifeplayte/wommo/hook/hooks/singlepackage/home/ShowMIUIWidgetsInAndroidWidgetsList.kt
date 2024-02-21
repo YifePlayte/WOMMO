@@ -9,7 +9,8 @@ import com.yifeplayte.wommo.hook.hooks.BaseHook
 object ShowMIUIWidgetsInAndroidWidgetsList : BaseHook() {
     override val key = "show_miui_widgets_in_android_widgets_list"
     override fun hook() {
-        loadClass("com.miui.home.launcher.MIUIWidgetUtil").methodFinder().filterByName("isMIUIWidgetSupport").first().createHook {
+        loadClass("com.miui.home.launcher.MIUIWidgetUtil").methodFinder()
+            .filterByName("isMIUIWidgetSupport").single().createHook {
             after { param ->
                 if (Thread.currentThread().stackTrace.any {
                         it.className in setOf(
