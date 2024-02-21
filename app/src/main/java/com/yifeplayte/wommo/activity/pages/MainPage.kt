@@ -26,6 +26,11 @@ class MainPage : BasePage() {
                 tipsId = R.string.force_dark_mode_for_all_apps_tips
             ), SwitchV("force_dark_mode_for_all_apps", false)
         )
+        TextSummaryWithSwitch(
+            TextSummaryV(
+                textId = R.string.use_aosp_share_sheet,
+            ), SwitchV("use_aosp_share_sheet", false)
+        )
         Line()
         TitleText(textId = R.string.system_ui)
         if (!IS_INTERNATIONAL_BUILD) TextSummaryWithSwitch(
@@ -286,12 +291,6 @@ class MainPage : BasePage() {
                 textId = R.string.remove_miui_stroke_from_adaptive_icon,
                 tipsId = R.string.remove_miui_stroke_from_adaptive_icon_tips,
             ), SwitchV("remove_miui_stroke_from_adaptive_icon", false)
-        )
-        TextSummaryWithSwitch(
-            TextSummaryV(
-                textId = R.string.use_aosp_share_sheet,
-                tipsId = R.string.use_aosp_share_sheet_tips,
-            ), SwitchV("use_aosp_share_sheet", false)
         )
         Line()
         TitleText(textId = R.string.reboot)
