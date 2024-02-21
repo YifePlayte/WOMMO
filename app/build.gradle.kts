@@ -86,6 +86,6 @@ android {
 dependencies {
     compileOnly("de.robv.android.xposed:api:82")
     implementation("com.github.kyuubiran:EzXHelper:2.0.8")
-    implementation("org.luckypray:dexkit:2.0.0-rc7")
+    implementation("org.luckypray:dexkit:2.0.0")
     implementation(project(":blockmiui"))
 }

@@ -61,7 +61,7 @@ object AddAOSPAppInfoEntry : BaseHook() {
                         putExtra(":settings:show_fragment_args", bundle)
                     }
                     menuItem.setIcon(idDrawableIconSettings)
-                    menuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
+                    menuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
                 }
             }
     }

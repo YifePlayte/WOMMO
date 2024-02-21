@@ -59,14 +59,14 @@ object ForceSupportSendApp : BaseMultiHook() {
                 usingStrings = listOf("support_all_app_sub_screen")
                 returnType = "boolean"
             }
-        }.first().getMethodInstance(safeClassLoader).createHook {
+        }.single().getMethodInstance(safeClassLoader).createHook {
             returnConstant(true)
         }
         val clazzRelayAppMessage = dexKitBridge.findClass {
             matcher {
                 usingStrings = listOf("RelayAppMessage{type=", ", isRelay=")
             }
-        }.first().getInstance(safeClassLoader)
+        }.single().getInstance(safeClassLoader)
         clazzRelayAppMessage.let { clazz ->
             val fieldNameIsHideIcon =
                 clazz.fieldFinder().filterByType(Boolean::class.javaPrimitiveType!!).toList()

@@ -38,7 +38,7 @@ object AddAOSPAppManagerEntry : BaseHook() {
                         "com.android.settings.applications.ManageApplications"
                     )
                     menuItem.setIcon(idDrawableIconSettings)
-                    menuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
+                    menuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
                 }
             }
     }

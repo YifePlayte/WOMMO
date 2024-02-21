@@ -13,7 +13,7 @@ object RemoveAdbInstallIntercept : BaseHook() {
                 usingStrings = listOf("permcenter_install_intercept_enabled")
                 returnType = "boolean"
             }
-        }.first().getMethodInstance(safeClassLoader).createHook {
+        }.single().getMethodInstance(safeClassLoader).createHook {
             returnConstant(false)
         }
     }

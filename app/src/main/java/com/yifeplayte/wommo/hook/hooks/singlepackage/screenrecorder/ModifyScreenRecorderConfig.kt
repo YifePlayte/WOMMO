@@ -20,7 +20,7 @@ object ModifyScreenRecorderConfig : BaseHook() {
                 usingStrings = listOf("Error when set frame value, maxValue = ")
                 paramTypes = listOf("int", "int")
             }
-        }.first().getMethodInstance(safeClassLoader).createHook {
+        }.single().getMethodInstance(safeClassLoader).createHook {
             before { param ->
                 param.args[0] = 3600
                 param.args[1] = 1
@@ -43,7 +43,7 @@ object ModifyScreenRecorderConfig : BaseHook() {
                 paramCount = 2
                 paramTypes = listOf("int", "int")
             }
-        }.firstOrNull()?.getMethodInstance(safeClassLoader)?.createHook {
+        }.singleOrNull()?.getMethodInstance(safeClassLoader)?.createHook {
             before { param ->
                 param.args[0] = 3600
                 param.args[1] = 1

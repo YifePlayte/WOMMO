@@ -13,7 +13,7 @@ object RemoveReportInApplicationInfo : BaseHook() {
                 usingStrings = listOf("com.xiaomi.market")
                 declaredClass = "com.miui.appmanager.ApplicationsDetailsActivity"
             }
-        }.firstOrNull()?.getMethodInstance(safeClassLoader)?.createHook {
+        }.singleOrNull()?.getMethodInstance(safeClassLoader)?.createHook {
             returnConstant(false)
         }
     }
