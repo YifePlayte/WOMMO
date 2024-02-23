@@ -42,7 +42,6 @@ class MainHook : IXposedHookLoadPackage, IXposedHookZygoteInit {
             if (lpparam.packageName != "android") DexKit.initDexKit(lpparam)
             EzXHelper.initHandleLoadPackage(lpparam)
             EzXHelper.setLogTag(TAG)
-            EzXHelper.setToastTag(TAG)
         }
 
         // single package
@@ -62,7 +61,6 @@ class MainHook : IXposedHookLoadPackage, IXposedHookZygoteInit {
         // init EzXHelper
         EzXHelper.initZygote(startupParam)
         EzXHelper.setLogTag(TAG)
-        EzXHelper.setToastTag(TAG)
 
         // universal hook
         universalHooks.forEach { it.init() }

@@ -215,6 +215,11 @@ class MainPage : BasePage() {
                 textId = R.string.show_notification_history_and_log_entry
             ), SwitchV("show_notification_history_and_log_entry", false)
         )
+        TextSummaryWithSwitch(
+            TextSummaryV(
+                textId = R.string.show_wifi_password
+            ), SwitchV("show_wifi_password", false)
+        )
         if (!IS_INTERNATIONAL_BUILD) TextSummaryWithSwitch(
             TextSummaryV(
                 textId = R.string.show_google_settings_entry
