@@ -6,7 +6,10 @@ import com.github.kyuubiran.ezxhelper.Log
 import com.github.kyuubiran.ezxhelper.LogExtensions.logexIfThrow
 import com.yifeplayte.wommo.utils.ClassScanner.scanObjectOf
 
-abstract class BaseSubPackage {
+abstract class BaseSubPackage(
+    val packageName: String,
+    val subPackageName: String
+) {
     private var isInit: Boolean = false
     private lateinit var subClassLoader: ClassLoader
     var safeSubClassLoader
@@ -16,9 +19,6 @@ abstract class BaseSubPackage {
             subClassLoader = value
             initHook()
         }
-
-    abstract val packageName: String
-    abstract val subPackageName: String
     open val hooks: List<BaseSubHook> by lazy {
         scanObjectOf<BaseSubHook>(javaClass.packageName + "." + javaClass.simpleName.lowercase())
     }

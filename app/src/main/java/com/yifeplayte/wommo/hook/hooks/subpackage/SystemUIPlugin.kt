@@ -10,9 +10,7 @@ import com.yifeplayte.wommo.utils.Build.IS_HYPER_OS
 import de.robv.android.xposed.XC_MethodHook.Unhook
 
 @Suppress("unused")
-object SystemUIPlugin : BaseSubPackage() {
-    override val packageName = "com.android.systemui"
-    override val subPackageName = "miui.systemui.plugin"
+object SystemUIPlugin : BaseSubPackage("com.android.systemui", "miui.systemui.plugin") {
     var hook: Unhook? = null
     override fun initClassLoader() = if (IS_HYPER_OS) initForHyperOS() else initForMIUI()
 

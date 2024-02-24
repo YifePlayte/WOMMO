@@ -5,9 +5,8 @@ import com.github.kyuubiran.ezxhelper.Log
 import com.github.kyuubiran.ezxhelper.LogExtensions.logexIfThrow
 import com.yifeplayte.wommo.utils.ClassScanner.scanObjectOf
 
-abstract class BasePackage {
+abstract class BasePackage(val packageName: String) {
     private var isInit: Boolean = false
-    abstract val packageName: String
     open val hooks: List<BaseHook> by lazy {
         scanObjectOf<BaseHook>(javaClass.packageName + "." + javaClass.simpleName.lowercase())
     }
