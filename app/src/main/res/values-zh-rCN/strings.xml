@@ -45,6 +45,7 @@
     <string name="others">其他</string>
     <string name="package_installer">应用包管理组件</string>
     <string name="power_keeper">电量和性能</string>
+    <string name="prevent_disabling_dev_mode">防止禁用开发者模式</string>
     <string name="quick_manage_overlay_permission">快速管理悬浮窗权限</string>
     <string name="quick_manage_unknown_app_sources">快速管理未知来源安装权限</string>
     <string name="reboot">重启</string>
@@ -70,6 +71,7 @@
     <string name="show_notification_history_and_log_entry">在通知与控制中心中显示通知历史记录与日志入口</string>
     <string name="show_notification_importance">显示通知重要程度</string>
     <string name="show_notification_importance_tips">系统界面，设置</string>
+    <string name="show_wifi_password">查看已保存的Wi-Fi密码</string>
     <string name="skip_count_down">跳过倒计时</string>
     <string name="system_ui">系统界面</string>
     <string name="unlock_control_center_style">解锁控制中心样式</string>
@@ -79,5 +81,4 @@
     <string name="warning">警告</string>
     <string name="wave_charge">启用 Alpha 充电动画</string>
     <string name="widget_transition_animation">为所有小部件添加启动动画</string>
-    <string name="show_wifi_password">查看已保存的Wi-Fi密码</string>
 </resources>

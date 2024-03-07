@@ -47,6 +47,7 @@
     <string name="others">Others</string>
     <string name="package_installer">Package Installer</string>
     <string name="power_keeper">Battery and performance</string>
+    <string name="prevent_disabling_dev_mode">Prevent disabling developer mode</string>
     <string name="quick_manage_overlay_permission">Quick manage overlay permission</string>
     <string name="quick_manage_unknown_app_sources">Quick manage unknown app sources</string>
     <string name="reboot">Reboot</string>
@@ -72,6 +73,7 @@
     <string name="show_notification_history_and_log_entry">Show entry for Notification history &amp; log in Notification &amp; Control center</string>
     <string name="show_notification_importance">Show notification importance</string>
     <string name="show_notification_importance_tips">System UI, Settings</string>
+    <string name="show_wifi_password">Show password of saved Wi-Fi network</string>
     <string name="skip_count_down">Skip count down</string>
     <string name="system_ui">System UI</string>
     <string name="unlock_control_center_style">Unlock control center style</string>
@@ -82,5 +84,4 @@
     <string name="wave_charge">Enable wave charge animation</string>
     <string name="widget_transition_animation">Enable transition animation for all widgets</string>
     <string name="xposed_desc" translatable="false">Works on my machine ONLY</string>
-    <string name="show_wifi_password">Show password of saved Wi-Fi network</string>
 </resources>

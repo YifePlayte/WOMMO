@@ -162,6 +162,11 @@ class MainPage : BasePage() {
                 textId = R.string.remove_adb_install_intercept
             ), SwitchV("remove_adb_install_intercept", false)
         )
+        TextSummaryWithSwitch(
+            TextSummaryV(
+                textId = R.string.prevent_disabling_dev_mode
+            ), SwitchV("prevent_disabling_dev_mode", false)
+        )
         Line()
         TitleText(textId = R.string.screen_recorder)
         TextSummaryWithSwitch(
