@@ -4,7 +4,6 @@ import com.github.kyuubiran.ezxhelper.ClassUtils.loadClass
 import com.github.kyuubiran.ezxhelper.EzXHelper.safeClassLoader
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHooks
-import com.github.kyuubiran.ezxhelper.MemberExtensions.isNotAbstract
 import com.github.kyuubiran.ezxhelper.ObjectHelper.Companion.objectHelper
 import com.github.kyuubiran.ezxhelper.ObjectUtils.setObject
 import com.github.kyuubiran.ezxhelper.finders.FieldFinder.`-Static`.fieldFinder
@@ -46,17 +45,16 @@ object ForceSupportSendApp : BaseMultiHook() {
     private fun mirrorNew() {
         val clazzRelayApplication =
             loadClass("com.xiaomi.mirror.message.proto.RelayApp\$RelayApplication")
-        clazzRelayApplication.methodFinder().filterByName("getIsHideIcon").filter { isNotAbstract }
+        clazzRelayApplication.methodFinder().filterByName("getIsHideIcon").filterNonAbstract()
             .single().createHook {
-            returnConstant(false)
-        }
-        clazzRelayApplication.methodFinder().filterByName("getSupportHandOff")
-            .filter { isNotAbstract }.single().createHook {
-            returnConstant(true)
-        }
-        clazzRelayApplication.methodFinder().filterByName("getSupportSubScreen")
-            .filter { isNotAbstract }.single()
-            .createHook {
+                returnConstant(false)
+            }
+        clazzRelayApplication.methodFinder().filterByName("getSupportHandOff").filterNonAbstract()
+            .single().createHook {
+                returnConstant(true)
+            }
+        clazzRelayApplication.methodFinder().filterByName("getSupportSubScreen").filterNonAbstract()
+            .single().createHook {
                 returnConstant(true)
             }
         dexKitBridge.findMethod {
