@@ -71,7 +71,7 @@
     <string name="show_notification_history_and_log_entry">在通知与控制中心中显示通知历史记录与日志入口</string>
     <string name="show_notification_importance">显示通知重要程度</string>
     <string name="show_notification_importance_tips">系统界面，设置</string>
-    <string name="show_wifi_password">查看已保存的Wi-Fi密码</string>
+    <string name="show_wifi_password">查看已保存的 Wi-Fi 密码</string>
     <string name="skip_count_down">跳过倒计时</string>
     <string name="system_ui">系统界面</string>
     <string name="unlock_control_center_style">解锁控制中心样式</string>
