@@ -68,6 +68,11 @@ class MainPage : BasePage() {
                 textId = R.string.restore_hidden_custom_media_action
             ), SwitchV("restore_hidden_custom_media_action", false)
         )
+        TextSummaryWithSwitch(
+            TextSummaryV(
+                textId = R.string.use_aosp_clipboard_overlay
+            ), SwitchV("use_aosp_clipboard_overlay", false)
+        )
         Line()
         TitleText(textId = R.string.miui_home)
         TextSummaryWithSwitch(
