@@ -31,6 +31,11 @@ class MainPage : BasePage() {
                 textId = R.string.use_aosp_share_sheet,
             ), SwitchV("use_aosp_share_sheet", false)
         )
+        TextSummaryWithSwitch(
+            TextSummaryV(
+                textId = R.string.use_aosp_screenshot,
+            ), SwitchV("use_aosp_screenshot", false)
+        )
         Line()
         TitleText(textId = R.string.system_ui)
         if (!IS_INTERNATIONAL_BUILD) TextSummaryWithSwitch(
