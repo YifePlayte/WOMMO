@@ -6,7 +6,7 @@ import cn.fkj233.ui.activity.MIUIActivity
 import cn.fkj233.ui.dialog.MIUIDialog
 import com.yifeplayte.wommo.R
 import com.yifeplayte.wommo.activity.pages.MainPage
-import com.yifeplayte.wommo.hook.utils.XSharedPreferences.prefFileName
+import com.yifeplayte.wommo.hook.utils.XSharedPreferences.PREFERENCES_FILE_NAME
 import kotlin.system.exitProcess
 
 class MainActivity : MIUIActivity() {
@@ -19,7 +19,7 @@ class MainActivity : MIUIActivity() {
     private fun checkLSPosed() {
         try {
             @Suppress("DEPRECATION")
-            setSP(getSharedPreferences(prefFileName, MODE_WORLD_READABLE))
+            setSP(getSharedPreferences(PREFERENCES_FILE_NAME, MODE_WORLD_READABLE))
         } catch (exception: SecurityException) {
             isLoad = false
             MIUIDialog(this) {

@@ -11,7 +11,8 @@ object XSharedPreferences {
     /**
      * XSharedPreferences name
      */
-    const val prefFileName = "config"
+    const val PREFERENCES_FILE_NAME = "config"
+    private val prefs = XSharedPreferences(BuildConfig.APPLICATION_ID, PREFERENCES_FILE_NAME)
 
     /**
      * 获取对应的 Boolean 属性值
@@ -19,10 +20,7 @@ object XSharedPreferences {
      * @param defValue 默认值
      */
     fun getBoolean(key: String, defValue: Boolean): Boolean {
-        val prefs = XSharedPreferences(BuildConfig.APPLICATION_ID, prefFileName)
-        if (prefs.hasFileChanged()) {
-            prefs.reload()
-        }
+        prefs.reload()
         return prefs.getBoolean(key, defValue)
     }
 
@@ -32,10 +30,7 @@ object XSharedPreferences {
      * @param defValue 默认值
      */
     fun getInt(key: String, defValue: Int): Int {
-        val prefs = XSharedPreferences(BuildConfig.APPLICATION_ID, prefFileName)
-        if (prefs.hasFileChanged()) {
-            prefs.reload()
-        }
+        prefs.reload()
         return prefs.getInt(key, defValue)
     }
 
@@ -45,10 +40,7 @@ object XSharedPreferences {
      * @param defValue 默认值
      */
     fun getString(key: String, defValue: String): String {
-        val prefs = XSharedPreferences(BuildConfig.APPLICATION_ID, prefFileName)
-        if (prefs.hasFileChanged()) {
-            prefs.reload()
-        }
+        prefs.reload()
         return prefs.getString(key, defValue) ?: defValue
     }
 
@@ -58,11 +50,7 @@ object XSharedPreferences {
      * @param defValue 默认值
      */
     fun getStringSet(key: String, defValue: MutableSet<String>): MutableSet<String> {
-        val prefs = XSharedPreferences(BuildConfig.APPLICATION_ID, prefFileName)
-        if (prefs.hasFileChanged()) {
-            prefs.reload()
-        }
+        prefs.reload()
         return prefs.getStringSet(key, defValue) ?: defValue
     }
-
 }
