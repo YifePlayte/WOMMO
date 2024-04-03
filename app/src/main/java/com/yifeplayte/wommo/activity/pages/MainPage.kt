@@ -78,6 +78,11 @@ class MainPage : BasePage() {
                 textId = R.string.use_aosp_clipboard_overlay
             ), SwitchV("use_aosp_clipboard_overlay", false)
         )
+        TextSummaryWithSwitch(
+            TextSummaryV(
+                textId = R.string.hide_mobile_signal_icon
+            ), SwitchV("hide_mobile_signal_icon", false)
+        )
         Line()
         TitleText(textId = R.string.miui_home)
         TextSummaryWithSwitch(

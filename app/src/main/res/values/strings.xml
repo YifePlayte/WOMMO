@@ -35,6 +35,7 @@
     <string name="force_support_send_app_tips">Cast, MIUI+ Beta</string>
     <string name="global_barrage">Global bullet screen notification</string>
     <string name="hide_landscape_nav_bar">Hide the navigation bar when in landscape mode</string>
+    <string name="hide_mobile_signal_icon">Hide mobile signal icon</string>
     <string name="icon_label_marquee">Icon label marquee</string>
     <string name="icon_label_size">Icon label font size</string>
     <string name="lockscreen_charging_info">Display charging power on lock screen</string>
