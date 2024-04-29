@@ -198,6 +198,13 @@ object ModifyBarrageLength : BaseHook() {
                             )!!
                         )
                         setObjectUntilSuperclass("bubbleStylePosition", bubbleStylePosition)
+                        runCatching { setObjectUntilSuperclass("barrageDrawable", iconDrawable) }
+                        runCatching { setObjectUntilSuperclass("barrageMsg", text) }
+                        runCatching {
+                            setObjectUntilSuperclass(
+                                "contentIntent", statusBarNotification.notification.contentIntent
+                            )
+                        }
                     }
 
                     invokeMethodBestMatch(mBarrageShowManager, "addDanmu", null, danmu)
