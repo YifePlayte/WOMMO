@@ -28,11 +28,11 @@ object ForceSupportBarrage : BaseHook() {
     }
 
     object NotificationCache {
-        private const val maxSize = 20
+        private const val MAX_SIZE = 100
         private val cache = LinkedHashSet<String>()
         fun check(string: String): Boolean {
             val result = cache.add(string)
-            if (cache.size > maxSize) cache.remove(cache.first())
+            if (cache.size > MAX_SIZE) cache.remove(cache.first())
             return result
         }
     }

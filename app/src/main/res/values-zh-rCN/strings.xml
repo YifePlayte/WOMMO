@@ -10,7 +10,7 @@
     <string name="app_link_open_always">允许应用打开支持的链接</string>
     <string name="app_link_open_never">不允许应用打开链接</string>
     <string name="barrage">弹幕通知</string>
-    <string name="barrage_length">弹幕长度</string>
+    <string name="barrage_length">最大弹幕长度</string>
     <string name="cancel">取消</string>
     <string name="change_bitrate_and_frame_rate_range">修改码率与帧率范围</string>
     <string name="change_browser_for_content_extension">修改传送门使用的浏览器</string>

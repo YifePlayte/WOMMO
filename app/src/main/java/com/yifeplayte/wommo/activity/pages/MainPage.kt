@@ -216,7 +216,7 @@ class MainPage : BasePage() {
         TextSummaryWithSeekBar(
             TextSummaryV(
                 textId = R.string.barrage_length
-            ), SeekBarWithTextV("barrage_length", 20, 120, 36)
+            ), SeekBarWithTextV("barrage_length", 20, 200, 36)
         )
         Line()
         TitleText(textId = R.string.settings)
