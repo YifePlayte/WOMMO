@@ -213,6 +213,11 @@ class MainPage : BasePage() {
                 textId = R.string.global_barrage
             ), SwitchV("global_barrage", false)
         )
+        TextSummaryWithSwitch(
+            TextSummaryV(
+                textId = R.string.barrage_not_touchable
+            ), SwitchV("barrage_not_touchable", false)
+        )
         TextSummaryWithSeekBar(
             TextSummaryV(
                 textId = R.string.barrage_length

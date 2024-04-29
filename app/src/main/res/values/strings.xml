@@ -13,6 +13,7 @@
     <string name="app_name" translatable="false">WOMMO</string>
     <string name="barrage">Bullet Screen Notification</string>
     <string name="barrage_length">Max bullet screen notification length</string>
+    <string name="barrage_not_touchable">Bullet screen notification not clickable</string>
     <string name="cancel">Cancel</string>
     <string name="change_bitrate_and_frame_rate_range">Change bitrate and frame rate range</string>
     <string name="change_browser_for_content_extension">Change browser for Taplus</string>
