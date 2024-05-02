@@ -13,6 +13,8 @@ import com.github.kyuubiran.ezxhelper.ObjectUtils.getObjectOrNullAs
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder.`-Static`.methodFinder
 import com.yifeplayte.wommo.hook.hooks.BaseMultiHook
 import com.yifeplayte.wommo.hook.utils.DexKit.dexKitBridge
+import io.github.ranlee1.jpinyin.PinyinFormat.WITHOUT_TONE
+import io.github.ranlee1.jpinyin.PinyinHelper.convertToPinyinString
 
 @Suppress("unused")
 object ForceSupportBarrage : BaseMultiHook() {
@@ -35,12 +37,14 @@ object ForceSupportBarrage : BaseMultiHook() {
         }.single().getMethodInstance(safeClassLoader).createHook {
             after { param ->
                 val barragePackageList = appContext.packageManager.getInstalledApplications(0)
-                    .filter { (it.flags and ApplicationInfo.FLAG_SYSTEM) != 1 }
-                    .map { it.packageName }.filter {
+                    .filter { (it.flags and ApplicationInfo.FLAG_SYSTEM) != 1 }.filter {
                         methodAreNotificationsEnabled.invoke(
-                            clazzNotificationFilterHelper, appContext, it
+                            clazzNotificationFilterHelper, appContext, it.packageName
                         ) == true
-                    }
+                    }.associateWith {
+                        val label = it.loadLabel(appContext.packageManager).toString()
+                        convertToPinyinString(label, "", WITHOUT_TONE).lowercase()
+                    }.entries.sortedBy { it.value }.map { it.key.packageName }
                 @Suppress("UNCHECKED_CAST") val supportedList = param.result as MutableList<String>
                 for (s in barragePackageList) {
                     if (!supportedList.contains(s)) supportedList.add(s)
