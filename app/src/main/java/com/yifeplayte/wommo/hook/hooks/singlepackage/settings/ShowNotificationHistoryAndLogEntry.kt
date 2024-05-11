@@ -13,6 +13,7 @@ import com.github.kyuubiran.ezxhelper.ObjectHelper.Companion.objectHelper
 import com.github.kyuubiran.ezxhelper.ObjectUtils.invokeMethodBestMatch
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder.`-Static`.methodFinder
 import com.yifeplayte.wommo.hook.hooks.BaseHook
+import de.robv.android.xposed.callbacks.XCallback.PRIORITY_DEFAULT
 
 @Suppress("unused")
 object ShowNotificationHistoryAndLogEntry : BaseHook() {
@@ -49,11 +50,11 @@ object ShowNotificationHistoryAndLogEntry : BaseHook() {
         }
         runCatching {
             loadClass("com.android.settings.NotificationControlCenterSettings").methodFinder()
-                .filterByName("onCreate").single().createHook(hook)
+                .filterByName("onCreate").single().createHook(PRIORITY_DEFAULT, hook)
         }
         runCatching {
             loadClass("com.android.settings.NotificationStatusBarSettings").methodFinder()
-                .filterByName("onCreate").single().createHook(hook)
+                .filterByName("onCreate").single().createHook(PRIORITY_DEFAULT, hook)
         }
     }
 

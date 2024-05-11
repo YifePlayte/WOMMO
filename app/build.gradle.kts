@@ -63,12 +63,12 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_11.toString()
+        jvmTarget = JavaVersion.VERSION_17.toString()
     }
 
     externalNativeBuild {
@@ -85,8 +85,8 @@ android {
 
 dependencies {
     compileOnly("de.robv.android.xposed:api:82")
-    implementation("com.github.kyuubiran:EzXHelper:2.1.1")
+    implementation("com.github.kyuubiran:EzXHelper:2.1.2")
     implementation("io.github.ranlee1:jpinyin:1.0.1")
-    implementation("org.luckypray:dexkit:2.0.0")
+    implementation("org.luckypray:dexkit:2.0.1")
     implementation(project(":blockmiui"))
 }
