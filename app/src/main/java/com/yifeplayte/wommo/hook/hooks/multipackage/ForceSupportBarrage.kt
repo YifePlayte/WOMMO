@@ -6,15 +6,16 @@ import android.content.Context
 import android.content.pm.ApplicationInfo
 import android.service.notification.StatusBarNotification
 import com.github.kyuubiran.ezxhelper.ClassUtils.loadClass
+import com.github.kyuubiran.ezxhelper.ClassUtils.setStaticObject
 import com.github.kyuubiran.ezxhelper.EzXHelper.appContext
 import com.github.kyuubiran.ezxhelper.EzXHelper.safeClassLoader
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
-import com.github.kyuubiran.ezxhelper.ObjectUtils.getObjectOrNullAs
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder.`-Static`.methodFinder
 import com.yifeplayte.wommo.hook.hooks.BaseMultiHook
 import com.yifeplayte.wommo.hook.utils.DexKit.dexKitBridge
 import io.github.ranlee1.jpinyin.PinyinFormat.WITHOUT_TONE
 import io.github.ranlee1.jpinyin.PinyinHelper.convertToPinyinString
+import java.io.Serial
 
 @Suppress("unused")
 object ForceSupportBarrage : BaseMultiHook() {
@@ -54,17 +55,23 @@ object ForceSupportBarrage : BaseMultiHook() {
     }
 
     private fun hookForBarrage() {
-        loadClass("com.xiaomi.barrage.service.NotificationMonitorService").methodFinder()
-            .filterByName("filterNotification").single().createHook {
+        val clazzNotificationMonitorService =
+            loadClass("com.xiaomi.barrage.service.NotificationMonitorService")
+        setStaticObject(
+            clazzNotificationMonitorService,
+            "mBarragePackageList",
+            object : ArrayList<String?>() {
+                @Serial
+                private val serialVersionUID: Long = 1643198520517506969L
+                override fun contains(element: String?): Boolean {
+                    return true
+                }
+            })
+        clazzNotificationMonitorService.methodFinder().filterByName("filterNotification").single()
+            .createHook {
                 before { param ->
                     val statusBarNotification = param.args[0] as StatusBarNotification
-                    val packageName = statusBarNotification.packageName
-                    getObjectOrNullAs<ArrayList<String>>(
-                        param.thisObject, "mBarragePackageList"
-                    )!!.apply { if (!contains(packageName)) add(packageName) }
-                    if (statusBarNotification.shouldBeFiltered()) {
-                        param.result = true
-                    }
+                    if (statusBarNotification.shouldBeFiltered()) param.result = true
                 }
             }
     }
