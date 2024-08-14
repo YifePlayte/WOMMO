@@ -27,6 +27,7 @@
     <string name="exposure_refresh_for_non_miui_widget">Exposure refresh for non-MIUI-widgets</string>
     <string name="exposure_refresh_for_non_miui_widget_tips">System Framework, App Vault</string>
     <string name="fake_non_default_icon">Fake non-default icon</string>
+    <string name="fake_non_disabled_icon">Fake non-disabled icon</string>
     <string name="finished">Finished</string>
     <string name="force_dark_mode_for_all_apps">Force dark mode for all apps</string>
     <string name="force_dark_mode_for_all_apps_tips">You can configure this in system settings</string>

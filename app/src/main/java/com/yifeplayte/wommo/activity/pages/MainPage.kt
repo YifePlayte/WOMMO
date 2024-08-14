@@ -117,6 +117,11 @@ class MainPage : BasePage() {
         )
         TextSummaryWithSwitch(
             TextSummaryV(
+                textId = R.string.fake_non_disabled_icon
+            ), SwitchV("fake_non_disabled_icon", false)
+        )
+        TextSummaryWithSwitch(
+            TextSummaryV(
                 textId = R.string.enable_blur_for_home
             ), SwitchV("enable_blur_for_home", false)
         )

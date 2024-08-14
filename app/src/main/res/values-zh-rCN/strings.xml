@@ -25,6 +25,7 @@
     <string name="exposure_refresh_for_non_miui_widget">为非 MIUI 小部件提供曝光刷新</string>
     <string name="exposure_refresh_for_non_miui_widget_tips">系统框架，智能助理（负一屏）</string>
     <string name="fake_non_default_icon">伪装为非默认图标</string>
+    <string name="fake_non_disabled_icon">伪装为非不可用图标</string>
     <string name="finished">运行完成</string>
     <string name="force_dark_mode_for_all_apps">允许所有应用使用强制深色模式</string>
     <string name="force_dark_mode_for_all_apps_tips">可以在系统设置里管理应用的强制深色设置</string>
