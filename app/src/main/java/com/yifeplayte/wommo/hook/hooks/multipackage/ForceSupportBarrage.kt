@@ -10,6 +10,7 @@ import com.github.kyuubiran.ezxhelper.ClassUtils.setStaticObject
 import com.github.kyuubiran.ezxhelper.EzXHelper.appContext
 import com.github.kyuubiran.ezxhelper.EzXHelper.safeClassLoader
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
+import com.github.kyuubiran.ezxhelper.Log
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder.`-Static`.methodFinder
 import com.yifeplayte.wommo.hook.hooks.BaseMultiHook
 import com.yifeplayte.wommo.hook.utils.DexKit.dexKitBridge
@@ -51,6 +52,13 @@ object ForceSupportBarrage : BaseMultiHook() {
                     if (!supportedList.contains(s)) supportedList.add(s)
                 }
             }
+        }
+        dexKitBridge.findMethod{
+            matcher {
+                usingStrings = listOf("isApplicationFloatNotificationEnable fail ")
+            }
+        }.single().getMethodInstance(safeClassLoader).createHook {
+            returnConstant(true)
         }
     }
 
