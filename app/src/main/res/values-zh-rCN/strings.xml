@@ -17,6 +17,7 @@
     <string name="change_browser_for_content_extension">修改传送门使用的浏览器</string>
     <string name="change_browser_for_mi_ai">修改小爱同学使用的浏览器</string>
     <string name="content_extension">传送门</string>
+    <string name="disable_safe_media_volume">禁用高媒体音量安全警告</string>
     <string name="done">确定</string>
     <string name="download_provider">下载管理程序</string>
     <string name="enable_battery_monitor_service">启用电池监控服务</string>

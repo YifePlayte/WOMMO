@@ -36,6 +36,11 @@ class MainPage : BasePage() {
                 textId = R.string.use_aosp_screenshot,
             ), SwitchV("use_aosp_screenshot", false)
         )
+        TextSummaryWithSwitch(
+            TextSummaryV(
+                textId = R.string.disable_safe_media_volume,
+            ), SwitchV("disable_safe_media_volume", false)
+        )
         Line()
         TitleText(textId = R.string.system_ui)
         if (!IS_INTERNATIONAL_BUILD) TextSummaryWithSwitch(
