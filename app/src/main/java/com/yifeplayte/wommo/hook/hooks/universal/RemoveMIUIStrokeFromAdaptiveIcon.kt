@@ -11,30 +11,18 @@ object RemoveMIUIStrokeFromAdaptiveIcon : BaseUniversalHook() {
     override val key = "remove_miui_stroke_from_adaptive_icon"
     override fun hook() {
         runCatching {
-            loadClass("android.app.Activity").methodFinder().filterByName("onCreate").single()
-                .createHook {
-                    before {
-                        val clazzAdaptiveIconDrawableInjector =
-                            loadClass("android.graphics.drawable.AdaptiveIconDrawableInjector")
-                        clazzAdaptiveIconDrawableInjector.methodFinder()
-                            .filterByName("drawMiuiStroke").toList()
-                            .createHooks {
-                                returnConstant(null)
-                            }
-                    }
+            val clazzAdaptiveIconDrawableInjector =
+                loadClass("android.graphics.drawable.AdaptiveIconDrawableInjector")
+            clazzAdaptiveIconDrawableInjector.methodFinder()
+                .filterByName("drawMiuiStroke").filterNonAbstract().toList()
+                .createHooks {
+                    returnConstant(null)
+                }
+            clazzAdaptiveIconDrawableInjector.methodFinder()
+                .filterByName("drawMiuiFullStroke").filterNonAbstract().toList()
+                .createHooks {
+                    returnConstant(null)
                 }
         }
-
-        loadClass("android.app.Activity").methodFinder().filterByName("onCreate").single()
-            .createHook {
-                before {
-                    val clazzAdaptiveIconDrawableInjector =
-                        loadClass("android.graphics.drawable.AdaptiveIconDrawableInjector")
-                    clazzAdaptiveIconDrawableInjector.methodFinder().filterByName("drawMiuiStroke")
-                        .toList().createHooks {
-                        returnConstant(null)
-                    }
-                }
-            }
     }
 }
