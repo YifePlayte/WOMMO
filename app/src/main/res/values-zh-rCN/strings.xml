@@ -28,6 +28,7 @@
     <string name="fake_non_default_icon">伪装为非默认图标</string>
     <string name="fake_non_disabled_icon">伪装为非不可用图标</string>
     <string name="finished">运行完成</string>
+    <string name="force_applied_light_wallpaper">强制桌面识别浅色壁纸</string>
     <string name="force_dark_mode_for_all_apps">允许所有应用使用强制深色模式</string>
     <string name="force_dark_mode_for_all_apps_tips">可以在系统设置里管理应用的强制深色设置</string>
     <string name="force_enable_native_playback_capture">强制启用原生录音支持</string>

@@ -155,6 +155,11 @@ class MainPage : BasePage() {
                 textId = R.string.unlock_grids
             ), SwitchV("unlock_grids", false)
         )
+        TextSummaryWithSwitch(
+            TextSummaryV(
+                textId = R.string.force_applied_light_wallpaper
+            ), SwitchV("force_applied_light_wallpaper", false)
+        )
         Line()
         TitleText(textId = R.string.security_center)
         TextSummaryWithSwitch(
