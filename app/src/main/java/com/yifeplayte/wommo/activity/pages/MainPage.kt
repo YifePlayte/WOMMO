@@ -12,6 +12,7 @@ import cn.fkj233.ui.activity.view.TextSummaryV
 import cn.fkj233.ui.dialog.MIUIDialog
 import com.yifeplayte.wommo.R
 import com.yifeplayte.wommo.hook.PACKAGE_NAME_HOOKED
+import com.yifeplayte.wommo.utils.Build.HYPER_OS_VERSION
 import com.yifeplayte.wommo.utils.Build.IS_INTERNATIONAL_BUILD
 import com.yifeplayte.wommo.utils.Terminal
 
@@ -26,11 +27,13 @@ class MainPage : BasePage() {
                 tipsId = R.string.force_dark_mode_for_all_apps_tips
             ), SwitchV("force_dark_mode_for_all_apps", false)
         )
-        TextSummaryWithSwitch(
-            TextSummaryV(
-                textId = R.string.use_aosp_share_sheet,
-            ), SwitchV("use_aosp_share_sheet", false)
-        )
+        if (HYPER_OS_VERSION < 2) {
+            TextSummaryWithSwitch(
+                TextSummaryV(
+                    textId = R.string.use_aosp_share_sheet,
+                ), SwitchV("use_aosp_share_sheet", false)
+            )
+        }
         TextSummaryWithSwitch(
             TextSummaryV(
                 textId = R.string.use_aosp_screenshot,
@@ -311,6 +314,15 @@ class MainPage : BasePage() {
                 Terminal.exec("am start -n com.miui.powerkeeper/.ui.powertools.module.batterylife.BatteryStatusActivity")
             }, bindingEnableBatteryMonitorService.getRecv(1)
         )
+        Line()
+        TitleText(textId = R.string.intent_resolver)
+        if (HYPER_OS_VERSION >= 2) {
+            TextSummaryWithSwitch(
+                TextSummaryV(
+                    textId = R.string.use_aosp_share_sheet,
+                ), SwitchV("use_aosp_share_sheet", false)
+            )
+        }
         Line()
         TitleText(textId = R.string.others)
         TextSummaryWithSwitch(

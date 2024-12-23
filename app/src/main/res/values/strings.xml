@@ -92,4 +92,5 @@
     <string name="wave_charge">Enable wave charge animation</string>
     <string name="widget_transition_animation">Enable transition animation for all widgets</string>
     <string name="xposed_desc" translatable="false">Works on my machine ONLY</string>
+    <string name="intent_resolver">IntentResolver</string>
 </resources>
