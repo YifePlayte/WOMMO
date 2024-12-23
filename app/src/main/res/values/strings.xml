@@ -86,7 +86,8 @@
     <string name="unlock_grids">Unlock launcher icon grids</string>
     <string name="use_aosp_clipboard_overlay">Use AOSP clipboard overlay</string>
     <string name="use_aosp_screenshot">Use AOSP screenshot</string>
-    <string name="use_aosp_share_sheet">Use AOSP "Open with" page</string>
+    <string name="use_aosp_open_with_page">Use AOSP "Open with" page</string>
+    <string name="use_aosp_share_sheet">Use AOSP Share Sheet</string>
     <string name="voice_assist">Mi Ai</string>
     <string name="warning">Warning</string>
     <string name="wave_charge">Enable wave charge animation</string>

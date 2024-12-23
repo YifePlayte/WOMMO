@@ -84,7 +84,8 @@
     <string name="unlock_grids">解锁桌面图标布局限制</string>
     <string name="use_aosp_clipboard_overlay">使用原生复制悬浮窗</string>
     <string name="use_aosp_screenshot">使用原生截屏</string>
-    <string name="use_aosp_share_sheet">使用原生打开方式界面</string>
+    <string name="use_aosp_open_with_page">使用原生打开方式界面</string>
+    <string name="use_aosp_share_sheet">使用原生分享界面</string>
     <string name="voice_assist">小爱同学</string>
     <string name="warning">警告</string>
     <string name="wave_charge">启用 Alpha 充电动画</string>

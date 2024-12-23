@@ -30,7 +30,7 @@ class MainPage : BasePage() {
         if (HYPER_OS_VERSION < 2) {
             TextSummaryWithSwitch(
                 TextSummaryV(
-                    textId = R.string.use_aosp_share_sheet,
+                    textId = R.string.use_aosp_open_with_page,
                 ), SwitchV("use_aosp_share_sheet", false)
             )
         }
