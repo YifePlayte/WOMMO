@@ -15,7 +15,7 @@ android {
     defaultConfig {
         applicationId = "com.yifeplayte.wommo"
         minSdk = 33
-        targetSdk = 35
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0.0"
 
