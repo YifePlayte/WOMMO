@@ -88,6 +88,11 @@ class MainPage : BasePage() {
                 textId = R.string.hide_mobile_signal_icon
             ), SwitchV("hide_mobile_signal_icon", false)
         )
+        TextSummaryWithSwitch(
+            TextSummaryV(
+                textId = R.string.disable_gesture_recorder
+            ), SwitchV("disable_gesture_recorder", false)
+        )
         Line()
         TitleText(textId = R.string.miui_home)
         TextSummaryWithSwitch(

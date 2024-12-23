@@ -19,6 +19,7 @@
     <string name="change_browser_for_content_extension">Change browser for Taplus</string>
     <string name="change_browser_for_mi_ai">Change browser for Mi Ai</string>
     <string name="content_extension">Taplus</string>
+    <string name="disable_gesture_recorder">Disable gesture recorder</string>
     <string name="disable_safe_media_volume">Disable safe media volume warnings</string>
     <string name="done">OK</string>
     <string name="download_provider">Downloads</string>
