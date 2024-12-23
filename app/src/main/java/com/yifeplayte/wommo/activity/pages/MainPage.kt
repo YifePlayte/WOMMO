@@ -143,12 +143,7 @@ class MainPage : BasePage() {
         TextSummaryWithSeekBar(
             TextSummaryV(
                 textId = R.string.icon_label_size
-            ), SeekBarWithTextV("icon_label_size", 0, 30, 12)
-        )
-        TextSummaryWithSwitch(
-            TextSummaryV(
-                textId = R.string.icon_label_marquee
-            ), SwitchV("icon_label_marquee", false)
+            ), SeekBarWithTextV("icon_label_size", 0, 100, 37)
         )
         TextSummaryWithSwitch(
             TextSummaryV(
