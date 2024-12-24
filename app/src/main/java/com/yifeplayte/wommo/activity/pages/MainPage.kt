@@ -320,6 +320,7 @@ class MainPage : BasePage() {
             TextSummaryWithSwitch(
                 TextSummaryV(
                     textId = R.string.use_aosp_share_sheet,
+                    tipsId = R.string.use_aosp_share_sheet_tips,
                 ), SwitchV("use_aosp_share_sheet", false)
             )
         }
