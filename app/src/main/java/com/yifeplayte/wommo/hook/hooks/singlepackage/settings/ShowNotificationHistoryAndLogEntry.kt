@@ -26,8 +26,8 @@ object ShowNotificationHistoryAndLogEntry : BaseHook() {
                 val preferenceManager = invokeMethodBestMatch(thisObject, "getPreferenceManager")!!
                 val context = invokeMethodBestMatch(preferenceManager, "getContext") as Context
                 invokeMethodBestMatch(
-                    thisObject, "findPreference", null, "notification_settings"
-                )?.objectHelper {
+                    thisObject, "findPreference", null, "notification_managing"
+                )?.objectHelper()?.invokeMethodBestMatch("getParent")?.objectHelper {
                     invokeMethodBestMatch(
                         "addPreference", null, generatePreferenceScreen(
                             context,
@@ -63,7 +63,7 @@ object ShowNotificationHistoryAndLogEntry : BaseHook() {
         context: Context, resources: Resources, className: String, titleIdName: String
     ): Any {
         val preferenceScreenForNotificationHistory =
-            loadClass("androidx.preference.PreferenceScreen").getDeclaredConstructor(
+            loadClass("androidx.preference.Preference").getDeclaredConstructor(
                 Context::class.java, AttributeSet::class.java
             ).newInstance(context, null)
         invokeMethodBestMatch(
