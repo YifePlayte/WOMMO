@@ -9,8 +9,13 @@ import com.yifeplayte.wommo.hook.hooks.BaseHook
 object ForceAppliedLightWallpaper : BaseHook() {
     override val key = "force_applied_light_wallpaper"
     override fun hook() {
-        loadClass("com.miui.home.launcher.WallpaperUtils").methodFinder()
+        val clazzWallpaperUtils = loadClass("com.miui.home.launcher.WallpaperUtils")
+        clazzWallpaperUtils.methodFinder()
             .filterByName("hasAppliedLightWallpaper").filterNonAbstract().single().createHook {
+                returnConstant(true)
+            }
+        clazzWallpaperUtils.methodFinder()
+            .filterByName("hasLightBgForStatusBar").filterNonAbstract().single().createHook {
                 returnConstant(true)
             }
     }
