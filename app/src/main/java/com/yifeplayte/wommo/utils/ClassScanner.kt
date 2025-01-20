@@ -24,7 +24,7 @@ object ClassScanner {
                 runCatching {
                     val entryClass = Class.forName(entry, true, classLoader)
                     if (entryClass.name.contains("$") || !T::class.java.isAssignableFrom(entryClass)) null
-                    else entryClass.fields.singleOrNull { it.name == "INSTANCE" }?.get(null) as T?
+                    else entryClass.getField("INSTANCE").get(null) as T?
                 }.getOrNull()
             } ?: emptyList()
         }?.distinct() ?: emptyList()

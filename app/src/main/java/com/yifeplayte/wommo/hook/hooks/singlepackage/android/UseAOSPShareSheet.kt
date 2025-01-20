@@ -11,7 +11,7 @@ import com.yifeplayte.wommo.utils.Build.HYPER_OS_VERSION
 @Suppress("unused")
 object UseAOSPShareSheet : BaseHook() {
     override val key = "use_aosp_share_sheet"
-    override val isEnabled = (HYPER_OS_VERSION < 2) and super.isEnabled
+    override val isEnabled = (HYPER_OS_VERSION < 2) && super.isEnabled
     override fun hook() {
         loadClass("com.android.internal.app.ResolverActivityStubImpl").methodFinder()
             .filterByName("useAospShareSheet").single().createHook {

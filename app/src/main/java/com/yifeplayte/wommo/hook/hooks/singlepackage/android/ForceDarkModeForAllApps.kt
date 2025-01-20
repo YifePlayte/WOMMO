@@ -12,7 +12,7 @@ import com.yifeplayte.wommo.utils.Build.IS_INTERNATIONAL_BUILD
 @Suppress("unused")
 object ForceDarkModeForAllApps : BaseHook() {
     override val key = "force_dark_mode_for_all_apps"
-    override val isEnabled get() = !IS_INTERNATIONAL_BUILD and super.isEnabled
+    override val isEnabled get() = !IS_INTERNATIONAL_BUILD && super.isEnabled
     private val clazzBuild by lazy { loadClass("miui.os.Build") }
     override fun hook() {
         val clazzForceDarkAppListManager = loadClass("com.android.server.ForceDarkAppListManager")

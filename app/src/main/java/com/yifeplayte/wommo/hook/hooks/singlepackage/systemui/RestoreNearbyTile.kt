@@ -11,7 +11,7 @@ import com.yifeplayte.wommo.utils.Build.IS_INTERNATIONAL_BUILD
 @Suppress("unused")
 object RestoreNearbyTile : BaseHook() {
     override val key = "restore_near_by_tile"
-    override val isEnabled get() = !IS_INTERNATIONAL_BUILD and super.isEnabled
+    override val isEnabled get() = !IS_INTERNATIONAL_BUILD && super.isEnabled
     override fun hook() {
         val clazzMiuiConfigs = loadClass("com.miui.utils.configs.MiuiConfigs")
 
