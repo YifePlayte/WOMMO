@@ -87,6 +87,7 @@ dependencies {
     compileOnly("de.robv.android.xposed:api:82")
     implementation("com.github.kyuubiran:EzXHelper:2.2.0")
     implementation("io.github.ranlee1:jpinyin:1.0.1")
+    implementation("org.lsposed.hiddenapibypass:hiddenapibypass:4.3")
     implementation("org.luckypray:dexkit:2.0.1")
     implementation(project(":blockmiui"))
 }
