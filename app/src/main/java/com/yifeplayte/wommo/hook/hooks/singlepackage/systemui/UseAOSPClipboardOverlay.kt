@@ -23,12 +23,12 @@ object UseAOSPClipboardOverlay : BaseHook() {
                     val mClipboardManager =
                         getObjectOrNullAs<ClipboardManager>(it.thisObject, "mClipboardManager")!!
                     val primaryClipSource =
-                        invokeMethodBestMatch(mClipboardManager, "getPrimaryClipSource") as String
+                        invokeMethodBestMatch(mClipboardManager, "getPrimaryClipSource") as String?
                     val oldList =
                         getObjectOrNullAs<List<String>>(it.thisObject, "sCtsTestPkgList")!!
                     val newList = mutableListOf<String>().apply {
                         addAll(oldList)
-                        if (!contains(primaryClipSource)) add(primaryClipSource)
+                        if (!contains(primaryClipSource)) primaryClipSource?.let { add(it) }
                     }
                     setObject(it.thisObject, "sCtsTestPkgList", newList)
                 }
