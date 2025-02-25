@@ -38,6 +38,7 @@
     <string name="force_support_send_app_tips">投屏，MIUI+ Beta版</string>
     <string name="global_barrage">全局弹幕通知</string>
     <string name="hide_landscape_nav_bar">隐藏横屏时的小白条</string>
+    <string name="hide_bluetooth_icon">隐藏蓝牙图标</string>
     <string name="hide_mobile_signal_icon">隐藏手机信号图标</string>
     <string name="icon_label_marquee">图标标题滚动</string>
     <string name="icon_label_size">图标标题大小</string>

@@ -93,6 +93,11 @@ class MainPage : BasePage() {
         )
         TextSummaryWithSwitch(
             TextSummaryV(
+                textId = R.string.hide_bluetooth_icon
+            ), SwitchV("hide_bluetooth_icon", false)
+        )
+        TextSummaryWithSwitch(
+            TextSummaryV(
                 textId = R.string.disable_gesture_recorder
             ), SwitchV("disable_gesture_recorder", false)
         )
