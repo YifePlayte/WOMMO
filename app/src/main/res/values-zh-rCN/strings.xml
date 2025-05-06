@@ -37,11 +37,12 @@
     <string name="force_support_send_app">强制所有应用支持流转</string>
     <string name="force_support_send_app_tips">投屏，MIUI+ Beta版</string>
     <string name="global_barrage">全局弹幕通知</string>
-    <string name="hide_landscape_nav_bar">隐藏横屏时的小白条</string>
     <string name="hide_bluetooth_icon">隐藏蓝牙图标</string>
+    <string name="hide_landscape_nav_bar">隐藏横屏时的小白条</string>
     <string name="hide_mobile_signal_icon">隐藏手机信号图标</string>
     <string name="icon_label_marquee">图标标题滚动</string>
     <string name="icon_label_size">图标标题大小</string>
+    <string name="intent_resolver">IntentResolver</string>
     <string name="lockscreen_charging_info">锁屏显示充电功率</string>
     <string name="lockscreen_charging_info_not_supported">暂不支持此设备</string>
     <string name="miui_home">系统桌面</string>
@@ -60,6 +61,7 @@
     <string name="reboot_tips">确定重启系统？</string>
     <string name="redirect_to_notification_channel_setting">重定向通知设置到频道设置</string>
     <string name="remove_adb_install_intercept">移除adb安装拦截弹窗</string>
+    <string name="remove_game_toast">移除游戏模式 Toast</string>
     <string name="remove_miui_stroke_from_adaptive_icon">移除自适应图标边界线</string>
     <string name="remove_miui_stroke_from_adaptive_icon_tips">所有已勾选的作用域</string>
     <string name="remove_report_in_application_info">移除应用信息举报按钮</string>
@@ -84,13 +86,12 @@
     <string name="unlock_control_center_style">解锁控制中心样式</string>
     <string name="unlock_grids">解锁桌面图标布局限制</string>
     <string name="use_aosp_clipboard_overlay">使用原生复制悬浮窗</string>
-    <string name="use_aosp_screenshot">使用原生截屏</string>
     <string name="use_aosp_open_with_page">使用原生打开方式界面</string>
+    <string name="use_aosp_screenshot">使用原生截屏</string>
     <string name="use_aosp_share_sheet">使用原生分享界面</string>
     <string name="use_aosp_share_sheet_tips">打开小米互传的时候会恢复小米界面\n使用 LSPosed 1.9.2-it (7284) 或更新版本即可同时使用原生打开方式界面</string>
     <string name="voice_assist">小爱同学</string>
     <string name="warning">警告</string>
     <string name="wave_charge">启用 Alpha 充电动画</string>
     <string name="widget_transition_animation">为所有小部件添加启动动画</string>
-    <string name="intent_resolver">IntentResolver</string>
 </resources>

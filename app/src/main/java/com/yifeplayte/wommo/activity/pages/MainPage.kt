@@ -205,6 +205,11 @@ class MainPage : BasePage() {
                 textId = R.string.prevent_disabling_dev_mode
             ), SwitchV("prevent_disabling_dev_mode", false)
         )
+        TextSummaryWithSwitch(
+            TextSummaryV(
+                textId = R.string.remove_game_toast
+            ), SwitchV("remove_game_toast", false)
+        )
         Line()
         TitleText(textId = R.string.screen_recorder)
         TextSummaryWithSwitch(

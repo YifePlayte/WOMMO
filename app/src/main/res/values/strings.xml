@@ -39,11 +39,12 @@
     <string name="force_support_send_app">Force all apps support Handoff</string>
     <string name="force_support_send_app_tips">Cast, MIUI+ Beta</string>
     <string name="global_barrage">Global bullet screen notification</string>
-    <string name="hide_landscape_nav_bar">Hide the navigation bar when in landscape mode</string>
     <string name="hide_bluetooth_icon">Hide Bluetooth icon</string>
+    <string name="hide_landscape_nav_bar">Hide the navigation bar when in landscape mode</string>
     <string name="hide_mobile_signal_icon">Hide mobile signal icon</string>
     <string name="icon_label_marquee">Icon label marquee</string>
     <string name="icon_label_size">Icon label font size</string>
+    <string name="intent_resolver">IntentResolver</string>
     <string name="lockscreen_charging_info">Display charging power on lock screen</string>
     <string name="lockscreen_charging_info_not_supported">Device currently unsupported</string>
     <string name="miui_home">Launcher</string>
@@ -62,6 +63,7 @@
     <string name="reboot_tips">Are you sure to reboot?</string>
     <string name="redirect_to_notification_channel_setting">Redirect notification setting to channel setting</string>
     <string name="remove_adb_install_intercept">Remove adb install intercept</string>
+    <string name="remove_game_toast">Remove game mode toast</string>
     <string name="remove_miui_stroke_from_adaptive_icon">Remove MIUI stroke from adaptive icon</string>
     <string name="remove_miui_stroke_from_adaptive_icon_tips">All apps enabled in scope</string>
     <string name="remove_report_in_application_info">Remove report button in application info page</string>
@@ -86,8 +88,8 @@
     <string name="unlock_control_center_style">Unlock control center style</string>
     <string name="unlock_grids">Unlock launcher icon grids</string>
     <string name="use_aosp_clipboard_overlay">Use AOSP clipboard overlay</string>
-    <string name="use_aosp_screenshot">Use AOSP screenshot</string>
     <string name="use_aosp_open_with_page">Use AOSP "Open with" page</string>
+    <string name="use_aosp_screenshot">Use AOSP screenshot</string>
     <string name="use_aosp_share_sheet">Use AOSP Share Sheet</string>
     <string name="use_aosp_share_sheet_tips">Won\'t work if MiShare is enabled\nWith LSPosed 1.9.2-it (7284) or newer version, AOSP "Open with" page will also be enabled</string>
     <string name="voice_assist">Mi Ai</string>
@@ -95,5 +97,4 @@
     <string name="wave_charge">Enable wave charge animation</string>
     <string name="widget_transition_animation">Enable transition animation for all widgets</string>
     <string name="xposed_desc" translatable="false">Works on my machine ONLY</string>
-    <string name="intent_resolver">IntentResolver</string>
 </resources>
