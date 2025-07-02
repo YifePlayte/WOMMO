@@ -15,14 +15,14 @@ import com.github.kyuubiran.ezxhelper.ObjectUtils.invokeMethodBestMatch
 import com.github.kyuubiran.ezxhelper.ObjectUtils.setObject
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder.`-Static`.methodFinder
 import com.yifeplayte.wommo.hook.hooks.BaseHook
-import com.yifeplayte.wommo.hook.utils.XSharedPreferences.getInt
+import com.yifeplayte.wommo.hook.utils.XSharedPreferences.getFloat
 import java.util.Random
 
 @Suppress("unused")
 object ModifyBarrageLength : BaseHook() {
     override val key = "modify_barrage_length"
     override val isEnabled get() = barrageLength != 36
-    private val barrageLength by lazy { getInt("barrage_length", 36) }
+    private val barrageLength by lazy { getFloat("barrage_length", 36f).toInt() }
     private const val TAG = "MiBarrage"
 
     @SuppressLint("DiscouragedApi")

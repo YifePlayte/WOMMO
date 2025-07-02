@@ -1,40 +1,26 @@
 package com.yifeplayte.wommo.activity
 
-import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Bundle
-import cn.fkj233.ui.activity.MIUIActivity
-import cn.fkj233.ui.dialog.MIUIDialog
-import com.yifeplayte.wommo.R
-import com.yifeplayte.wommo.activity.pages.MainPage
-import com.yifeplayte.wommo.hook.utils.XSharedPreferences.PREFERENCES_FILE_NAME
-import kotlin.system.exitProcess
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
+import com.yifeplayte.wommo.activity.pages.Main
 
-class MainActivity : MIUIActivity() {
+class MainActivity : ComponentActivity() {
+    companion object {
+        lateinit var appContext: Context private set
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
-        checkLSPosed()
         super.onCreate(savedInstanceState)
-    }
 
-    @SuppressLint("WorldReadableFiles")
-    private fun checkLSPosed() {
-        try {
-            @Suppress("DEPRECATION")
-            setSP(getSharedPreferences(PREFERENCES_FILE_NAME, MODE_WORLD_READABLE))
-        } catch (exception: SecurityException) {
-            isLoad = false
-            MIUIDialog(this) {
-                setTitle(R.string.warning)
-                setMessage(R.string.not_support)
-                setCancelable(false)
-                setRButton(R.string.done) {
-                    exitProcess(0)
-                }
-            }.show()
+        appContext = this
+        enableEdgeToEdge()
+        window.isNavigationBarContrastEnforced = false  // Xiaomi moment, this code must be here
+
+        setContent {
+            Main()
         }
-    }
-
-    init {
-        activity = this
-        registerPage(MainPage::class.java)
     }
 }

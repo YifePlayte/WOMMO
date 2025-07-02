@@ -35,6 +35,16 @@ object XSharedPreferences {
     }
 
     /**
+     * 获取对应的 Float 属性值
+     * @param key 属性名称
+     * @param defValue 默认值
+     */
+    fun getFloat(key: String, defValue: Float): Float {
+        prefs.reload()
+        return prefs.getFloat(key, defValue)
+    }
+
+    /**
      * 获取对应的 String 属性值
      * @param key 属性名称
      * @param defValue 默认值

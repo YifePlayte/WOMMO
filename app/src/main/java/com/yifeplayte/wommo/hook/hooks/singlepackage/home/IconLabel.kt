@@ -5,13 +5,13 @@ import com.github.kyuubiran.ezxhelper.ClassUtils.loadClass
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder.`-Static`.methodFinder
 import com.yifeplayte.wommo.hook.hooks.BaseHook
-import com.yifeplayte.wommo.hook.utils.XSharedPreferences.getInt
+import com.yifeplayte.wommo.hook.utils.XSharedPreferences.getFloat
 
 @Suppress("unused")
 object IconLabel : BaseHook() {
     override val key = "icon_label"
     override val isEnabled = true
-    private val labelSize by lazy { getInt("icon_label_size", 37).toFloat() }
+    private val labelSize by lazy { getFloat("icon_label_size", 37f) }
 
     @SuppressLint("DiscouragedApi")
     override fun hook() {

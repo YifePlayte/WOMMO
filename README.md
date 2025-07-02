@@ -24,6 +24,8 @@
 - 恢复被隐藏的自定义媒体按钮
 - 使用原生复制悬浮窗
 - 隐藏手机信号图标
+- 隐藏蓝牙图标
+- 禁用手势记录
 
 #### 系统桌面
 
@@ -33,12 +35,13 @@
 - 在安卓小部件中显示 MIUI 小部件
 - 为所有小部件添加启动动画
 - 伪装为非默认图标
+- 伪装为非不可用图标
 - 启用模糊
 - 启用完美图标
 - 隐藏横屏时的小白条
 - 图标标题大小
-- 图标标题滚动
 - 解锁桌面图标布局限制
+- 强制桌面识别浅色壁纸
 
 #### 手机管家/平板管家
 
@@ -49,6 +52,7 @@
 - 跳过倒计时
 - 移除adb安装拦截弹窗
 - 防止禁用开发者模式
+- 移除游戏模式 Toast
 
 #### 屏幕录制
 
@@ -90,6 +94,10 @@
 
 - 启用电池监控服务
 
+#### IntentResolver
+
+- 使用原生分享界面
+
 #### 其他
 
 - 强制所有应用支持流转（投屏，MIUI+ Beta 版）
@@ -103,7 +111,7 @@
 
 ##### GNU Lesser General Public License v2.1
 
-[577fkj/blockmiui](https://github.com/Block-Network/blockmiui)
+~~[577fkj/blockmiui](https://github.com/Block-Network/blockmiui)~~
 
 ##### GNU Lesser General Public License v3.0
 
@@ -112,6 +120,8 @@
 ##### Apache License 2.0
 
 [KyuubiRan/EzXHelper](https://github.com/KyuubiRan/EzXHelper)
+
+[miuix-kotlin-multiplatform/miuix](https://github.com/miuix-kotlin-multiplatform/miuix)
 
 ##### GNU General Public License v3.0
 

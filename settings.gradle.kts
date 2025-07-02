@@ -16,5 +16,4 @@ dependencyResolutionManagement {
 }
 
 include(":app")
-include(":blockmiui")
 rootProject.name = "WOMMO"

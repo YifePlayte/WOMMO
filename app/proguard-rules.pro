@@ -1,1 +1,1 @@
--keep class com.yifeplayte.wommo.hook.MainHook { <init>(); }-keep class * extends com.yifeplayte.wommo.hook.hooks.* {    <init>();    com.yifeplayte.wommo.hook.hooks.** INSTANCE;}-keepattributes RuntimeVisibleAnnotations
+-keep class com.yifeplayte.wommo.hook.MainHook { <init>(); }-keep class * extends com.yifeplayte.wommo.hook.hooks.* {    <init>();    com.yifeplayte.wommo.hook.hooks.** INSTANCE;}-keepattributes RuntimeVisibleAnnotations-dontwarn androidx.window.extensions.area.ExtensionWindowAreaPresentation-dontobfuscate
