@@ -16,8 +16,14 @@
     <string name="change_bitrate_and_frame_rate_range">修改码率与帧率范围</string>
     <string name="change_browser_for_content_extension">修改传送门使用的浏览器</string>
     <string name="change_browser_for_mi_ai">修改小爱同学使用的浏览器</string>
+    <string name="contacts">通讯录与拨号</string>
     <string name="content_extension">传送门</string>
+    <string name="default_value">默认</string>
+    <string name="disable_business_hall_offline_info_manager">禁用营业厅套餐查询下线信息</string>
+    <string name="disable_business_hall_offline_info_manager_tips">屏蔽“套餐查询服务调整”</string>
     <string name="disable_gesture_recorder">禁用手势记录</string>
+    <string name="disable_network_assistant_offline_info_manager">禁用网络助手套餐查询下线信息</string>
+    <string name="disable_network_assistant_offline_info_manager_tips">屏蔽“套餐查询服务调整”</string>
     <string name="disable_safe_media_volume">禁用高媒体音量安全警告</string>
     <string name="done">确定</string>
     <string name="download_provider">下载管理程序</string>
@@ -94,5 +100,4 @@
     <string name="warning">警告</string>
     <string name="wave_charge">启用 Alpha 充电动画</string>
     <string name="widget_transition_animation">为所有小部件添加启动动画</string>
-    <string name="default_value">默认</string>
 </resources>

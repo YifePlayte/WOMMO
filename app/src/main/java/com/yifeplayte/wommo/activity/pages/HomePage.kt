@@ -319,6 +319,31 @@ fun HomePage(
                         key = "remove_game_toast",
                         titleId = R.string.remove_game_toast,
                     )
+                    SPSwitch(
+                        key = "disable_network_assistant_offline_info_manager",
+                        titleId = R.string.disable_network_assistant_offline_info_manager,
+                        summaryId = R.string.disable_network_assistant_offline_info_manager_tips,
+                    )
+                }
+            }
+            item {
+                SmallTitle(
+                    text = stringResource(R.string.contacts),
+                    modifier = Modifier.padding(top = 6.dp)
+                )
+            }
+            item {
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 12.dp)
+                        .padding(bottom = 12.dp)
+                ) {
+                    SPSwitch(
+                        key = "disable_business_hall_offline_info_manager",
+                        titleId = R.string.disable_business_hall_offline_info_manager,
+                        summaryId = R.string.disable_business_hall_offline_info_manager_tips,
+                    )
                 }
             }
             item {
