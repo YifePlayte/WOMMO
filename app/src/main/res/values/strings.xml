@@ -32,6 +32,7 @@
     <string name="enable_battery_monitor_service">Enable battery monitor service</string>
     <string name="enable_blur_for_home">Enable blur</string>
     <string name="enable_perfect_icons">Enable perfect icons</string>
+    <string name="enable_wake_up_advanced_animation">Enable advanced wake-up animation</string>
     <string name="exposure_refresh_for_non_miui_widget">Exposure refresh for non-MIUI-widgets</string>
     <string name="exposure_refresh_for_non_miui_widget_tips">System Framework, App Vault</string>
     <string name="fake_non_default_icon">Fake non-default icon</string>

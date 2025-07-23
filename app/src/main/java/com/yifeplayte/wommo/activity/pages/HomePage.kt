@@ -493,6 +493,10 @@ fun HomePage(
                         key = "change_browser_for_mi_ai",
                         titleId = R.string.change_browser_for_mi_ai,
                     )
+                    SPSwitch(
+                        key = "enable_wake_up_advanced_animation",
+                        titleId = R.string.enable_wake_up_advanced_animation,
+                    )
                 }
             }
             item {

@@ -30,6 +30,7 @@
     <string name="enable_battery_monitor_service">启用电池监控服务</string>
     <string name="enable_blur_for_home">启用模糊</string>
     <string name="enable_perfect_icons">启用完美图标</string>
+    <string name="enable_wake_up_advanced_animation">启用唤醒高级动画</string>
     <string name="exposure_refresh_for_non_miui_widget">为非 MIUI 小部件提供曝光刷新</string>
     <string name="exposure_refresh_for_non_miui_widget_tips">系统框架，智能助理（负一屏）</string>
     <string name="fake_non_default_icon">伪装为非默认图标</string>
