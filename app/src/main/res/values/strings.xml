@@ -84,6 +84,7 @@
     <string name="screen_recorder">Screen Recorder</string>
     <string name="security_center">Security Center</string>
     <string name="settings">Settings</string>
+    <string name="show_bluetooth_handsfree_battery_icon">Show bluetooth handsfree battery icon</string>
     <string name="show_google_settings_entry">Show entry for Google settings</string>
     <string name="show_miui_widgets_in_android_widgets_list">Show MIUI widgets in Android widgets list</string>
     <string name="show_notification_history_and_log_entry">Show entry for Notification history &amp; log in Notification &amp; Control center</string>

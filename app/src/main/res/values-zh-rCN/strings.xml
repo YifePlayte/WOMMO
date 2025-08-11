@@ -82,6 +82,7 @@
     <string name="screen_recorder">屏幕录制</string>
     <string name="security_center">手机管家/平板管家</string>
     <string name="settings">设置</string>
+    <string name="show_bluetooth_handsfree_battery_icon">显示蓝牙耳机电量图标</string>
     <string name="show_google_settings_entry">显示 Google 设置</string>
     <string name="show_miui_widgets_in_android_widgets_list">在安卓小部件中显示 MIUI 小部件</string>
     <string name="show_notification_history_and_log_entry">在通知与控制中心中显示通知历史记录与日志入口</string>

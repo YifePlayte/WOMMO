@@ -198,6 +198,10 @@ fun HomePage(
                         titleId = R.string.hide_bluetooth_icon,
                     )
                     SPSwitch(
+                        key = "show_bluetooth_handsfree_battery_icon",
+                        titleId = R.string.show_bluetooth_handsfree_battery_icon,
+                    )
+                    SPSwitch(
                         key = "disable_gesture_recorder",
                         titleId = R.string.disable_gesture_recorder,
                     )
