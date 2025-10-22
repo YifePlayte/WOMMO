@@ -43,6 +43,7 @@
     <string name="force_dark_mode_for_all_apps_tips">You can configure this in system settings</string>
     <string name="force_enable_native_playback_capture">Force enable native playback capture</string>
     <string name="force_support_barrage">Allow all apps to use bullet screen notifications</string>
+    <string name="force_support_car_sickness">Force support motion sickness relief</string>
     <string name="force_support_send_app">Force all apps support Handoff</string>
     <string name="force_support_send_app_tips">Cast, MIUI+ Beta</string>
     <string name="global_barrage">Global bullet screen notification</string>

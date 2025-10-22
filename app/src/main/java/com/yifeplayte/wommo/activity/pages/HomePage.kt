@@ -328,6 +328,10 @@ fun HomePage(
                         titleId = R.string.disable_network_assistant_offline_info_manager,
                         summaryId = R.string.disable_network_assistant_offline_info_manager_tips,
                     )
+                    SPSwitch(
+                        key = "force_support_car_sickness",
+                        titleId = R.string.force_support_car_sickness,
+                    )
                 }
             }
             item {
