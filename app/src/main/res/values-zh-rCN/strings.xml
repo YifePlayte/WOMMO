@@ -33,6 +33,7 @@
     <string name="enable_wake_up_advanced_animation">启用唤醒高级动画</string>
     <string name="exposure_refresh_for_non_miui_widget">为非 MIUI 小部件提供曝光刷新</string>
     <string name="exposure_refresh_for_non_miui_widget_tips">系统框架，智能助理（负一屏）</string>
+    <string name="fake_hotspot_disabled_for_quick_share">对快速分享伪装 WLAN 热点未开启</string>
     <string name="fake_non_default_icon">伪装为非默认图标</string>
     <string name="fake_non_disabled_icon">伪装为非不可用图标</string>
     <string name="finished">运行完成</string>
@@ -45,6 +46,7 @@
     <string name="force_support_send_app">强制所有应用支持流转</string>
     <string name="force_support_send_app_tips">投屏，MIUI+ Beta版</string>
     <string name="global_barrage">全局弹幕通知</string>
+    <string name="google_play_services">Google Play 服务</string>
     <string name="hide_bluetooth_icon">隐藏蓝牙图标</string>
     <string name="hide_landscape_nav_bar">隐藏横屏时的小白条</string>
     <string name="hide_mobile_signal_icon">隐藏手机信号图标</string>

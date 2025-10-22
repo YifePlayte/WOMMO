@@ -583,6 +583,25 @@ fun HomePage(
             }
             item {
                 SmallTitle(
+                    text = stringResource(R.string.google_play_services),
+                    modifier = Modifier.padding(top = 6.dp)
+                )
+            }
+            item {
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 12.dp)
+                        .padding(bottom = 12.dp)
+                ) {
+                    SPSwitch(
+                        key = "fake_hotspot_disabled_for_quick_share",
+                        titleId = R.string.fake_hotspot_disabled_for_quick_share,
+                    )
+                }
+            }
+            item {
+                SmallTitle(
                     text = stringResource(R.string.others),
                     modifier = Modifier.padding(top = 6.dp)
                 )

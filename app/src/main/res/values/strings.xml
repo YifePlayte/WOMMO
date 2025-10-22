@@ -35,6 +35,7 @@
     <string name="enable_wake_up_advanced_animation">Enable advanced wake-up animation</string>
     <string name="exposure_refresh_for_non_miui_widget">Exposure refresh for non-MIUI-widgets</string>
     <string name="exposure_refresh_for_non_miui_widget_tips">System Framework, App Vault</string>
+    <string name="fake_hotspot_disabled_for_quick_share">Fake WLAN Hotspot disabled for Quick Share</string>
     <string name="fake_non_default_icon">Fake non-default icon</string>
     <string name="fake_non_disabled_icon">Fake non-disabled icon</string>
     <string name="finished">Finished</string>
@@ -47,6 +48,7 @@
     <string name="force_support_send_app">Force all apps support Handoff</string>
     <string name="force_support_send_app_tips">Cast, MIUI+ Beta</string>
     <string name="global_barrage">Global bullet screen notification</string>
+    <string name="google_play_services">Google Play services</string>
     <string name="hide_bluetooth_icon">Hide Bluetooth icon</string>
     <string name="hide_landscape_nav_bar">Hide the navigation bar when in landscape mode</string>
     <string name="hide_mobile_signal_icon">Hide mobile signal icon</string>
