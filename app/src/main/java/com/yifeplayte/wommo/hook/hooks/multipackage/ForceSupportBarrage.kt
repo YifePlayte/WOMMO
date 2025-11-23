@@ -10,7 +10,6 @@ import com.github.kyuubiran.ezxhelper.ClassUtils.setStaticObject
 import com.github.kyuubiran.ezxhelper.EzXHelper.appContext
 import com.github.kyuubiran.ezxhelper.EzXHelper.safeClassLoader
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
-import com.github.kyuubiran.ezxhelper.Log
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder.`-Static`.methodFinder
 import com.yifeplayte.wommo.hook.hooks.BaseMultiHook
 import com.yifeplayte.wommo.hook.utils.DexKit.dexKitBridge
@@ -32,28 +31,31 @@ object ForceSupportBarrage : BaseMultiHook() {
         val methodAreNotificationsEnabled = clazzNotificationFilterHelper.getDeclaredMethod(
             "areNotificationsEnabled", Context::class.java, String::class.java
         ).apply { isAccessible = true }
-        dexKitBridge.findMethod {
+        dexKitBridge.findClass {
             matcher {
-                usingStrings = listOf("getInstance().assets.open(_SUPPORT_APPS_FILE_NAME)")
+                usingStrings = listOf("game_box_barrage_v3_support_apps.json")
             }
-        }.single().getMethodInstance(safeClassLoader).createHook {
-            after { param ->
-                val barragePackageList = appContext.packageManager.getInstalledApplications(0)
-                    .filter { (it.flags and ApplicationInfo.FLAG_SYSTEM) != 1 }.filter {
-                        methodAreNotificationsEnabled.invoke(
-                            clazzNotificationFilterHelper, appContext, it.packageName
-                        ) == true
-                    }.associateWith {
-                        val label = it.loadLabel(appContext.packageManager).toString()
-                        convertToPinyinString(label, "", WITHOUT_TONE).lowercase()
-                    }.entries.sortedBy { it.value }.map { it.key.packageName }
-                @Suppress("UNCHECKED_CAST") val supportedList = param.result as MutableList<String>
-                for (s in barragePackageList) {
-                    if (!supportedList.contains(s)) supportedList.add(s)
+        }.single().getInstance(safeClassLoader).methodFinder()
+            .filterByReturnType(java.util.List::class.java)
+            .filterByParamCount(1)
+            .single().createHook {
+                after { param ->
+                    val barragePackageList = appContext.packageManager.getInstalledApplications(0)
+                        .filter { (it.flags and ApplicationInfo.FLAG_SYSTEM) != 1 }.filter {
+                            methodAreNotificationsEnabled.invoke(
+                                clazzNotificationFilterHelper, appContext, it.packageName
+                            ) == true
+                        }.associateWith {
+                            val label = it.loadLabel(appContext.packageManager).toString()
+                            convertToPinyinString(label, "", WITHOUT_TONE).lowercase()
+                        }.entries.sortedBy { it.value }.map { it.key.packageName }
+                    @Suppress("UNCHECKED_CAST") val supportedList = param.result as MutableList<String>
+                    for (s in barragePackageList) {
+                        if (!supportedList.contains(s)) supportedList.add(s)
+                    }
                 }
             }
-        }
-        dexKitBridge.findMethod{
+        dexKitBridge.findMethod {
             matcher {
                 usingStrings = listOf("isApplicationFloatNotificationEnable fail ")
             }
