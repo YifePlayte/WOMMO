@@ -17,5 +17,13 @@ object RemoveReportInApplicationInfo : BaseHook() {
         }.singleOrNull()?.getMethodInstance(safeClassLoader)?.createHook {
             returnConstant(false)
         }
+        dexKitBridge.findMethod {
+            matcher {
+                usingStrings = listOf("com.xiaomi.market")
+                declaredClass = "com.miui.appmanager.fragment.ApplicationsDetailsFragment"
+            }
+        }.singleOrNull()?.getMethodInstance(safeClassLoader)?.createHook {
+            returnConstant(false)
+        }
     }
 }
