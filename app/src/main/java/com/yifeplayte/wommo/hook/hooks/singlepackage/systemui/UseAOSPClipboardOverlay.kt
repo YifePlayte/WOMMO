@@ -19,18 +19,19 @@ object UseAOSPClipboardOverlay : BaseHook() {
                 it.name == "sCtsTestPkgList"
             }) clazzClipboardListener.methodFinder().filterByName("onPrimaryClipChanged")
             .filterNonAbstract().single().createHook {
-                before {
+                before { param ->
                     val mClipboardManager =
-                        getObjectOrNullAs<ClipboardManager>(it.thisObject, "mClipboardManager")!!
+                        runCatching { getObjectOrNullAs<ClipboardManager>(param.thisObject, "mClipboardManager")!! }
+                            .getOrElse { getObjectOrNullAs<ClipboardManager>(param.thisObject, "mClipboardManagerForUser")!! }
                     val primaryClipSource =
                         invokeMethodBestMatch(mClipboardManager, "getPrimaryClipSource") as String?
                     val oldList =
-                        getObjectOrNullAs<List<String>>(it.thisObject, "sCtsTestPkgList")!!
+                        getObjectOrNullAs<List<String>>(param.thisObject, "sCtsTestPkgList")!!
                     val newList = mutableListOf<String>().apply {
                         addAll(oldList)
                         if (!contains(primaryClipSource)) primaryClipSource?.let { add(it) }
                     }
-                    setObject(it.thisObject, "sCtsTestPkgList", newList)
+                    setObject(param.thisObject, "sCtsTestPkgList", newList)
                 }
             }
         else clazzClipboardListener.methodFinder().filterByName("start").filterNonAbstract()

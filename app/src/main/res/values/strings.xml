@@ -52,6 +52,7 @@
     <string name="hide_bluetooth_icon">Hide Bluetooth icon</string>
     <string name="hide_landscape_nav_bar">Hide the navigation bar when in landscape mode</string>
     <string name="hide_mobile_signal_icon">Hide mobile signal icon</string>
+    <string name="hide_navigation_bar">Hide navigation bar</string>
     <string name="icon_label_marquee">Icon label marquee</string>
     <string name="icon_label_size">Icon label font size</string>
     <string name="intent_resolver">IntentResolver</string>

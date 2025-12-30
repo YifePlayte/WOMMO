@@ -205,6 +205,10 @@ fun HomePage(
                         key = "disable_gesture_recorder",
                         titleId = R.string.disable_gesture_recorder,
                     )
+                    SPSwitch(
+                        key = "hide_navigation_bar",
+                        titleId = R.string.hide_navigation_bar,
+                    )
                 }
             }
             item {
