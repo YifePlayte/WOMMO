@@ -1,7 +1,7 @@
 package com.yifeplayte.wommo.hook.hooks.singlepackage.home
 
 import android.annotation.SuppressLint
-import com.github.kyuubiran.ezxhelper.ClassUtils.loadClass
+import com.github.kyuubiran.ezxhelper.ClassUtils.loadFirstClass
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder.`-Static`.methodFinder
 import com.yifeplayte.wommo.hook.hooks.BaseHook
@@ -15,7 +15,10 @@ object IconLabel : BaseHook() {
 
     @SuppressLint("DiscouragedApi")
     override fun hook() {
-        loadClass("com.miui.home.launcher.DeviceConfig").methodFinder()
+        loadFirstClass(
+            "com.miui.home.common.device.DeviceConfigs",
+            "com.miui.home.launcher.DeviceConfig",
+        ).methodFinder()
             .filterByName("getIconTitleTextSize").single().createHook {
                 before {
                     it.result = labelSize
