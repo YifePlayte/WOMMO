@@ -4,6 +4,7 @@ import com.github.kyuubiran.ezxhelper.ClassUtils.loadClass
 import com.github.kyuubiran.ezxhelper.EzXHelper.safeClassLoader
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHooks
+import com.github.kyuubiran.ezxhelper.Log
 import com.github.kyuubiran.ezxhelper.ObjectHelper.Companion.objectHelper
 import com.github.kyuubiran.ezxhelper.ObjectUtils.setObject
 import com.github.kyuubiran.ezxhelper.finders.FieldFinder.`-Static`.fieldFinder
@@ -16,13 +17,18 @@ object ForceSupportSendApp : BaseMultiHook() {
     override val key = "force_support_send_app"
     override val hooks = mapOf(
         "com.milink.service" to { milink() },
-        "com.xiaomi.mirror" to { if (!mirror()) mirrorNew() },
+        // "com.xiaomi.mirror" to { if (!mirror()) mirrorNew() },
     )
 
     private fun milink() {
         val clazzMiuiSynergySdk = loadClass("com.xiaomi.mirror.synergy.MiuiSynergySdk")
         clazzMiuiSynergySdk.methodFinder().filterByName("isSupportSendApp").toList().createHooks {
-            after {
+            before {
+                it.result = true
+            }
+        }
+        clazzMiuiSynergySdk.methodFinder().filterByName("isSupportSendAppToPhone").toList().createHooks {
+            before {
                 it.result = true
             }
         }
