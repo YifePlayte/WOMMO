@@ -2,7 +2,7 @@ package com.yifeplayte.wommo.hook.hooks.singlepackage.contentextension
 
 import android.app.SearchManager
 import android.content.Intent
-import android.net.Uri
+import androidx.core.net.toUri
 import com.github.kyuubiran.ezxhelper.ClassUtils.loadClass
 import com.github.kyuubiran.ezxhelper.EzXHelper.appContext
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
@@ -26,7 +26,7 @@ object ChangeBrowserForContentExtension : BaseHook() {
         }
         clazzAppsUtils.methodFinder().filterByName("getIntentWithBrowser").single().createHook {
             before {
-                it.result = Intent(Intent.ACTION_VIEW, Uri.parse(it.args[0].toString()))
+                it.result = Intent(Intent.ACTION_VIEW, it.args[0].toString().toUri())
             }
         }
     }

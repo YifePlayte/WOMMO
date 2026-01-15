@@ -587,6 +587,25 @@ fun HomePage(
             }
             item {
                 SmallTitle(
+                    text = stringResource(R.string.ai_engine),
+                    modifier = Modifier.padding(top = 6.dp)
+                )
+            }
+            item {
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 12.dp)
+                        .padding(bottom = 12.dp)
+                ) {
+                    SPSwitch(
+                        key = "change_browser_for_ai_engine",
+                        titleId = R.string.change_browser_for_ai_engine,
+                    )
+                }
+            }
+            item {
+                SmallTitle(
                     text = stringResource(R.string.google_play_services),
                     modifier = Modifier.padding(top = 6.dp)
                 )

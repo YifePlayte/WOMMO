@@ -3,6 +3,7 @@
     <string name="add_aosp_app_info_entry">Add entry for \"AOSP App Info\" to App Info page</string>
     <string name="add_aosp_app_manager_entry">Add entry for \"AOSP App Manager\" to App Manager page</string>
     <string name="add_open_by_default_entry">Add entry for \"Open by default\" to App Info page</string>
+    <string name="ai_engine">Xiaomi HyperAI Engine</string>
     <string name="allow_move_non_miui_widgets_to_minus_screen">Allow to move non-MIUI-widgets to App vault</string>
     <string name="allow_unofficial_system_applications_installation">Allow the installation of system applications from unofficial channels</string>
     <string name="android">System Framework</string>
@@ -16,6 +17,7 @@
     <string name="barrage_not_touchable">Bullet screen notification not clickable</string>
     <string name="cancel">Cancel</string>
     <string name="change_bitrate_and_frame_rate_range">Change bitrate and frame rate range</string>
+    <string name="change_browser_for_ai_engine">Change browser for Clipboard Shortcut</string>
     <string name="change_browser_for_content_extension">Change browser for Taplus</string>
     <string name="change_browser_for_mi_ai">Change browser for Mi Ai</string>
     <string name="contacts">Contacts and dialer</string>
