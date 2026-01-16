@@ -24,10 +24,10 @@
     <string name="content_extension">Taplus</string>
     <string name="default_value">Default</string>
     <string name="disable_business_hall_offline_info_manager">Disable business hall offline info manager</string>
-    <string name="disable_business_hall_offline_info_manager_tips">Block "Data plan and balance inquiry service adjustment"</string>
+    <string name="disable_business_hall_offline_info_manager_tips">Block Data plan and balance inquiry service adjustment</string>
     <string name="disable_gesture_recorder">Disable gesture recorder</string>
     <string name="disable_network_assistant_offline_info_manager">Disable network assistant offline info manager</string>
-    <string name="disable_network_assistant_offline_info_manager_tips">Block "Data plan and balance inquiry service adjustment"</string>
+    <string name="disable_network_assistant_offline_info_manager_tips">Block Data plan and balance inquiry service adjustment</string>
     <string name="disable_safe_media_volume">Disable safe media volume warnings</string>
     <string name="done">OK</string>
     <string name="download_provider">Downloads</string>
@@ -102,10 +102,10 @@
     <string name="unlock_control_center_style">Unlock control center style</string>
     <string name="unlock_grids">Unlock launcher icon grids</string>
     <string name="use_aosp_clipboard_overlay">Use AOSP clipboard overlay</string>
-    <string name="use_aosp_open_with_page">Use AOSP "Open with" page</string>
+    <string name="use_aosp_open_with_page">Use AOSP Open with page</string>
     <string name="use_aosp_screenshot">Use AOSP screenshot</string>
     <string name="use_aosp_share_sheet">Use AOSP Share Sheet</string>
-    <string name="use_aosp_share_sheet_tips">Won\'t work if MiShare is enabled\nWith LSPosed 1.9.2-it (7284) or newer version, AOSP "Open with" page will also be enabled</string>
+    <string name="use_aosp_share_sheet_tips">Won\'t work if MiShare is enabled\nWith LSPosed 1.9.2-it (7284) or newer version, AOSP Open with page will also be enabled</string>
     <string name="voice_assist">Mi Ai</string>
     <string name="warning">Warning</string>
     <string name="wave_charge">Enable wave charge animation</string>
