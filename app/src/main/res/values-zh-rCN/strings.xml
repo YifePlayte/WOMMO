@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="add_aosp_app_info_entry">向应用详情页添加“原生应用信息”入口</string>
     <string name="add_aosp_app_manager_entry">向应用管理页添加“原生应用管理”入口</string>
