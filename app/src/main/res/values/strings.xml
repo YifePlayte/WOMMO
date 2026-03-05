@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <string name="add_aosp_app_info_entry">Add entry for \"AOSP App Info\" to App Info page</string>
     <string name="add_aosp_app_manager_entry">Add entry for \"AOSP App Manager\" to App Manager page</string>
     <string name="add_open_by_default_entry">Add entry for \"Open by default\" to App Info page</string>
