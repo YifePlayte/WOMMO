@@ -42,6 +42,8 @@
     <string name="fake_non_disabled_icon">Fake non-disabled icon</string>
     <string name="finished">Finished</string>
     <string name="force_applied_light_wallpaper">Force applied light wallpaper</string>
+    <string name="force_auth_success_for_xmsf">Force authentication success</string>
+    <string name="force_auth_success_for_xmsf_tips">Known usage: HyperIsland whitelist bypass</string>
     <string name="force_dark_mode_for_all_apps">Force dark mode for all apps</string>
     <string name="force_dark_mode_for_all_apps_tips">You can configure this in system settings</string>
     <string name="force_enable_native_playback_capture">Force enable native playback capture</string>
@@ -111,4 +113,5 @@
     <string name="wave_charge">Enable wave charge animation</string>
     <string name="widget_transition_animation">Enable transition animation for all widgets</string>
     <string name="xposed_desc" translatable="false">Works on my machine ONLY</string>
+    <string name="xmsf">Xiaomi service framework</string>
 </resources>

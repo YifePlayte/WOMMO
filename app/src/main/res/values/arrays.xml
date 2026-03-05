@@ -20,5 +20,6 @@
         <item>com.xiaomi.aicr</item>
         <item>com.xiaomi.barrage</item>
         <item>com.xiaomi.mirror</item>
+        <item>com.xiaomi.xmsf</item>
     </string-array>
 </resources>

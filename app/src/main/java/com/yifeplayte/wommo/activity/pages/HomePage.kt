@@ -606,6 +606,26 @@ fun HomePage(
             }
             item {
                 SmallTitle(
+                    text = stringResource(R.string.xmsf),
+                    modifier = Modifier.padding(top = 6.dp)
+                )
+            }
+            item {
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 12.dp)
+                        .padding(bottom = 12.dp)
+                ) {
+                    SPSwitch(
+                        key = "force_auth_success_for_xmsf",
+                        titleId = R.string.force_auth_success_for_xmsf,
+                        summaryId = R.string.force_auth_success_for_xmsf_tips,
+                    )
+                }
+            }
+            item {
+                SmallTitle(
                     text = stringResource(R.string.google_play_services),
                     modifier = Modifier.padding(top = 6.dp)
                 )
