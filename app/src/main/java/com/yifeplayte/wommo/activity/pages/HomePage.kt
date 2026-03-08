@@ -626,6 +626,25 @@ fun HomePage(
             }
             item {
                 SmallTitle(
+                    text = stringResource(R.string.get_apps),
+                    modifier = Modifier.padding(top = 6.dp)
+                )
+            }
+            item {
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 12.dp)
+                        .padding(bottom = 12.dp)
+                ) {
+                    SPSwitch(
+                        key = "disable_market_customize_icon",
+                        titleId = R.string.disable_market_customize_icon,
+                    )
+                }
+            }
+            item {
+                SmallTitle(
                     text = stringResource(R.string.google_play_services),
                     modifier = Modifier.padding(top = 6.dp)
                 )

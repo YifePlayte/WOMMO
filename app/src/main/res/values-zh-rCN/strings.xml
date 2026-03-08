@@ -25,6 +25,7 @@
     <string name="disable_business_hall_offline_info_manager">禁用营业厅套餐查询下线信息</string>
     <string name="disable_business_hall_offline_info_manager_tips">屏蔽“套餐查询服务调整”</string>
     <string name="disable_gesture_recorder">禁用手势记录</string>
+    <string name="disable_market_customize_icon">禁用营销图标</string>
     <string name="disable_network_assistant_offline_info_manager">禁用网络助手套餐查询下线信息</string>
     <string name="disable_network_assistant_offline_info_manager_tips">屏蔽“套餐查询服务调整”</string>
     <string name="disable_safe_media_volume">禁用高媒体音量安全警告</string>
@@ -50,6 +51,7 @@
     <string name="force_support_car_sickness">强制支持晕车缓解</string>
     <string name="force_support_send_app">强制所有应用支持流转</string>
     <string name="force_support_send_app_tips">投屏，MIUI+ Beta版</string>
+    <string name="get_apps">应用商店</string>
     <string name="global_barrage">全局弹幕通知</string>
     <string name="google_play_services">Google Play 服务</string>
     <string name="hide_bluetooth_icon">隐藏蓝牙图标</string>

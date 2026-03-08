@@ -26,6 +26,7 @@
     <string name="disable_business_hall_offline_info_manager">Disable business hall offline info manager</string>
     <string name="disable_business_hall_offline_info_manager_tips">Block \"Data plan and balance inquiry service adjustment\"</string>
     <string name="disable_gesture_recorder">Disable gesture recorder</string>
+    <string name="disable_market_customize_icon">Disable marketing icons</string>
     <string name="disable_network_assistant_offline_info_manager">Disable network assistant offline info manager</string>
     <string name="disable_network_assistant_offline_info_manager_tips">Block \"Data plan and balance inquiry service adjustment\"</string>
     <string name="disable_safe_media_volume">Disable safe media volume warnings</string>
@@ -51,6 +52,7 @@
     <string name="force_support_car_sickness">Force support motion sickness relief</string>
     <string name="force_support_send_app">Force all apps support Handoff</string>
     <string name="force_support_send_app_tips">Cast, MIUI+ Beta</string>
+    <string name="get_apps">GetApps</string>
     <string name="global_barrage">Global bullet screen notification</string>
     <string name="google_play_services">Google Play services</string>
     <string name="hide_bluetooth_icon">Hide Bluetooth icon</string>
@@ -112,6 +114,6 @@
     <string name="warning">Warning</string>
     <string name="wave_charge">Enable wave charge animation</string>
     <string name="widget_transition_animation">Enable transition animation for all widgets</string>
-    <string name="xposed_desc" translatable="false">Works on my machine ONLY</string>
     <string name="xmsf">Xiaomi service framework</string>
+    <string name="xposed_desc" translatable="false">Works on my machine ONLY</string>
 </resources>
