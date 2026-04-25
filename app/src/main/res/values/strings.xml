@@ -32,6 +32,7 @@
     <string name="disable_safe_media_volume">Disable safe media volume warnings</string>
     <string name="done">OK</string>
     <string name="download_provider">Downloads</string>
+    <string name="empty_to_default">Clear the input to restore the default value</string>
     <string name="enable_battery_monitor_service">Enable battery monitor service</string>
     <string name="enable_blur_for_home">Enable blur</string>
     <string name="enable_perfect_icons">Enable perfect icons</string>

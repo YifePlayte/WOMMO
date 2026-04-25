@@ -10,7 +10,7 @@ import androidx.compose.ui.res.stringResource
 import com.yifeplayte.wommo.utils.SharedPreferences.get
 import com.yifeplayte.wommo.utils.SharedPreferences.mSP
 import com.yifeplayte.wommo.utils.SharedPreferences.put
-import top.yukonga.miuix.kmp.extra.SuperSwitch
+import top.yukonga.miuix.kmp.preference.SwitchPreference
 
 @Composable
 fun SPSwitch(
@@ -26,7 +26,7 @@ fun SPSwitch(
 ) {
     val mTitle = title ?: titleId?.let { stringResource(it) } ?: ""
     val mSummary = summary ?: summaryId?.let { stringResource(it) }
-    SuperSwitch(
+    SwitchPreference(
         title = mTitle,
         summary = mSummary,
         checked = switchState.value,

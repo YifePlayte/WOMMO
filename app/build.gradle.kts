@@ -9,13 +9,12 @@ plugins {
 }
 
 android {
-    compileSdk = 36
+    compileSdk = 37
     namespace = "com.yifeplayte.wommo"
 
     defaultConfig {
         applicationId = "com.yifeplayte.wommo"
         minSdk = 33
-        targetSdk = 36
         versionCode = 1
         versionName = "1.0.0"
 
@@ -84,17 +83,19 @@ android {
 
 dependencies {
     compileOnly("de.robv.android.xposed:api:82")
-    debugImplementation("androidx.compose.ui:ui-tooling-preview-android:1.8.3")
-    debugImplementation("androidx.compose.ui:ui-tooling:1.8.3")
-    implementation("androidx.activity:activity-compose:1.10.1")
-    implementation("androidx.activity:activity-ktx:1.10.1")
-    implementation("androidx.compose.foundation:foundation-android:1.8.3")
-    implementation("androidx.compose.runtime:runtime-android:1.8.3")
-    implementation("androidx.navigation:navigation-compose:2.9.2")
+    debugImplementation("androidx.compose.ui:ui-tooling-preview-android:1.11.0")
+    debugImplementation("androidx.compose.ui:ui-tooling:1.11.0")
+    implementation("androidx.activity:activity-compose:1.13.0")
+    implementation("androidx.activity:activity-ktx:1.13.0")
+    implementation("androidx.compose.foundation:foundation-android:1.11.0")
+    implementation("androidx.compose.runtime:runtime-android:1.11.0")
+    implementation("androidx.navigation:navigation-compose:2.9.8")
     implementation("com.github.kyuubiran:EzXHelper:2.2.1")
-    implementation("dev.chrisbanes.haze:haze-android:1.6.9")
+    implementation("com.github.topjohnwu.libsu:core:6.0.0")
     implementation("io.github.ranlee1:jpinyin:1.0.1")
     implementation("org.lsposed.hiddenapibypass:hiddenapibypass:6.1")
-    implementation("org.luckypray:dexkit:2.0.6")
-    implementation("top.yukonga.miuix.kmp:miuix-android:0.4.7")
+    implementation("org.luckypray:dexkit:2.2.0")
+    implementation("top.yukonga.miuix.kmp:miuix-blur-android:0.9.0")
+    implementation("top.yukonga.miuix.kmp:miuix-preference-android:0.9.0")
+    implementation("top.yukonga.miuix.kmp:miuix-ui-android:0.9.0")
 }

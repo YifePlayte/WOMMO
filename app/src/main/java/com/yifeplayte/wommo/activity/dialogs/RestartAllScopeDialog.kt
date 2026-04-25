@@ -16,23 +16,25 @@ import com.yifeplayte.wommo.hook.PACKAGE_NAME_HOOKED
 import com.yifeplayte.wommo.utils.Terminal
 import top.yukonga.miuix.kmp.basic.ButtonDefaults
 import top.yukonga.miuix.kmp.basic.TextButton
-import top.yukonga.miuix.kmp.extra.SuperDialog
+import top.yukonga.miuix.kmp.overlay.OverlayDialog
+import top.yukonga.miuix.kmp.theme.LocalDismissState
 
 @Composable
 fun RestartAllScopeDialog(showDialog: MutableState<Boolean>) {
-    SuperDialog(
+    OverlayDialog(
         title = stringResource(R.string.warning),
         summary = stringResource(R.string.restart_all_scope_tips),
-        show = showDialog,
+        show = showDialog.value,
         onDismissRequest = { showDialog.value = false },
     ) {
+        val dismissState = LocalDismissState.current
         Row(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             TextButton(
                 modifier = Modifier.weight(1f),
                 text = stringResource(R.string.cancel),
-                onClick = { showDialog.value = false }
+                onClick = { dismissState?.invoke() }
             )
             Spacer(Modifier.width(20.dp))
             TextButton(
@@ -46,7 +48,7 @@ fun RestartAllScopeDialog(showDialog: MutableState<Boolean>) {
                     Toast.makeText(
                         appContext, appContext.getString(R.string.finished), Toast.LENGTH_SHORT
                     ).show()
-                    showDialog.value = false
+                    dismissState?.invoke()
                 }
             )
         }

@@ -13,23 +13,26 @@ import com.yifeplayte.wommo.R
 import com.yifeplayte.wommo.utils.Terminal
 import top.yukonga.miuix.kmp.basic.ButtonDefaults
 import top.yukonga.miuix.kmp.basic.TextButton
-import top.yukonga.miuix.kmp.extra.SuperDialog
+import top.yukonga.miuix.kmp.overlay.OverlayDialog
+import top.yukonga.miuix.kmp.theme.LocalDismissState
 
 @Composable
 fun RebootDialog(showDialog: MutableState<Boolean>) {
-    SuperDialog(
+    OverlayDialog(
         title = stringResource(R.string.warning),
         summary = stringResource(R.string.reboot_tips),
-        show = showDialog,
+        show = showDialog.value,
         onDismissRequest = { showDialog.value = false },
+        onDismissFinished = { showDialog.value = false },
     ) {
+        val dismissState = LocalDismissState.current
         Row(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             TextButton(
                 modifier = Modifier.weight(1f),
                 text = stringResource(R.string.cancel),
-                onClick = { showDialog.value = false }
+                onClick = { dismissState?.invoke() }
             )
             Spacer(Modifier.width(20.dp))
             TextButton(
@@ -38,7 +41,7 @@ fun RebootDialog(showDialog: MutableState<Boolean>) {
                 colors = ButtonDefaults.textButtonColorsPrimary(),
                 onClick = {
                     Terminal.exec("/system/bin/sync;/system/bin/svc power reboot || reboot")
-                    showDialog.value = false
+                    dismissState?.invoke()
                 }
             )
         }

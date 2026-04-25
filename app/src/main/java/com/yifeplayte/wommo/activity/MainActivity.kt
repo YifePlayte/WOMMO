@@ -16,10 +16,10 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         appContext = this
-        enableEdgeToEdge()
-        window.isNavigationBarContrastEnforced = false  // Xiaomi moment, this code must be here
 
         setContent {
+            enableEdgeToEdge()
+            window.isNavigationBarContrastEnforced = false  // Xiaomi moment, this code must be here
             Main()
         }
     }
