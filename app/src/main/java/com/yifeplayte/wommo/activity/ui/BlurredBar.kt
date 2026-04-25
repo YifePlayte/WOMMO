@@ -21,7 +21,6 @@ fun BlurredBar(
             Modifier.textureBlur(
                 backdrop = backdrop,
                 shape = RectangleShape,
-                blurRadius = 25f,
                 colors = BlurColors(
                     blendColors = listOf(
                         BlendColorEntry(color = MiuixTheme.colorScheme.surface.copy(0.8f)),

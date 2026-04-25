@@ -5,7 +5,6 @@ import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.runtime.mutableStateOf
@@ -26,13 +25,11 @@ fun LazyListScope.powerKeeper() {
     item {
         SmallTitle(
             text = stringResource(R.string.power_keeper),
-            modifier = Modifier.padding(top = 6.dp)
         )
     }
     item {
         Card(
             modifier = Modifier
-                .fillMaxWidth()
                 .padding(horizontal = 12.dp)
                 .padding(bottom = 12.dp)
         ) {

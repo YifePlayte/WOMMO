@@ -1,6 +1,5 @@
 package com.yifeplayte.wommo.activity.sections
 
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.ui.Modifier
@@ -15,13 +14,11 @@ fun LazyListScope.screenRecorder() {
     item {
         SmallTitle(
             text = stringResource(R.string.screen_recorder),
-            modifier = Modifier.padding(top = 6.dp)
         )
     }
     item {
         Card(
             modifier = Modifier
-                .fillMaxWidth()
                 .padding(horizontal = 12.dp)
                 .padding(bottom = 12.dp)
         ) {

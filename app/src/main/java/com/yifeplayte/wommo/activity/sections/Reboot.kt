@@ -1,6 +1,5 @@
 package com.yifeplayte.wommo.activity.sections
 
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.runtime.mutableStateOf
@@ -21,7 +20,6 @@ fun LazyListScope.reboot() {
     item {
         SmallTitle(
             text = stringResource(R.string.reboot),
-            modifier = Modifier.padding(top = 6.dp)
         )
     }
     item {
@@ -29,7 +27,6 @@ fun LazyListScope.reboot() {
         val showRestartAllScopeDialog = remember { mutableStateOf(false) }
         Card(
             modifier = Modifier
-                .fillMaxWidth()
                 .padding(horizontal = 12.dp)
                 .padding(bottom = 12.dp)
         ) {
