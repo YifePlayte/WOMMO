@@ -10,6 +10,7 @@ import com.github.kyuubiran.ezxhelper.finders.FieldFinder.`-Static`.fieldFinder
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder.`-Static`.methodFinder
 import com.yifeplayte.wommo.hook.hooks.BaseMultiHook
 import com.yifeplayte.wommo.hook.utils.DexKit.dexKitBridge
+import org.luckypray.dexkit.query.enums.StringMatchType
 
 @Suppress("unused")
 object ForceSupportSendApp : BaseMultiHook() {
@@ -67,7 +68,10 @@ object ForceSupportSendApp : BaseMultiHook() {
         }
         val clazzRelayAppMessage = dexKitBridge.findClass {
             matcher {
-                usingStrings = listOf("RelayAppMessage{type=", ", isRelay=")
+                usingStrings(
+                    listOf("RelayAppMessage{type=\'", ", isRelay="),
+                    StringMatchType.Equals
+                )
             }
         }.single().getInstance(safeClassLoader)
         clazzRelayAppMessage.let { clazz ->
@@ -77,6 +81,15 @@ object ForceSupportSendApp : BaseMultiHook() {
             clazz.methodFinder().filterByReturnType(clazz).toList().createHooks {
                 after {
                     setObject(it.result, fieldNameIsHideIcon, false)
+                }
+            }
+        }
+        runCatching {
+            loadClass("com.xiaomi.mirror.message.RelayAppMessage").let { clazz ->
+                clazz.methodFinder().filterByReturnType(clazz).toList().createHooks {
+                    after {
+                        setObject(it.result, "isHideIcon", false)
+                    }
                 }
             }
         }
