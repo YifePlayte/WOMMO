@@ -21,6 +21,8 @@
     <string name="change_browser_for_mi_ai">修改小爱同学使用的浏览器</string>
     <string name="contacts">通讯录与拨号</string>
     <string name="content_extension">传送门</string>
+    <string name="copy_direct_action_open">打开%1$s</string>
+    <string name="copy_direct_action_open_content">查看%1$s</string>
     <string name="default_value">默认</string>
     <string name="disable_business_hall_offline_info_manager">禁用营业厅套餐查询下线信息</string>
     <string name="disable_business_hall_offline_info_manager_tips">屏蔽“套餐查询服务调整”</string>

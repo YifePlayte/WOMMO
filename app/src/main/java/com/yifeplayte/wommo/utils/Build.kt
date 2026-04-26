@@ -48,4 +48,13 @@ object Build {
             clazzSystemProperties, "getInt", null, "ro.mi.os.version.code", -1
         ) as Int
     }
+
+    /**
+     * 是否支持超级岛
+     */
+    val IS_SUPPORT_ISLAND by lazy {
+        invokeStaticMethodBestMatch(
+            clazzSystemProperties, "getBoolean", null, "persist.sys.feature.island", false
+        ) as Boolean
+    }
 }

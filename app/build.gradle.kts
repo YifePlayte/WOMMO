@@ -93,6 +93,7 @@ dependencies {
     implementation("com.github.kyuubiran:EzXHelper:2.2.1")
     implementation("com.github.topjohnwu.libsu:core:6.0.0")
     implementation("io.github.ranlee1:jpinyin:1.0.1")
+    implementation("me.zhanghai.android.appiconloader:appiconloader:1.5.0")
     implementation("org.lsposed.hiddenapibypass:hiddenapibypass:6.1")
     implementation("org.luckypray:dexkit:2.2.0")
     implementation("top.yukonga.miuix.kmp:miuix-blur-android:0.9.0")
