@@ -38,12 +38,12 @@ object UseAOSPShareSheet : BaseHook() {
     override fun hook() {
         Log.i("UseAOSPShareSheet hooking")
         HiddenApiBypass.addHiddenApiExemptions(
-            "Lcom/android/internal/R\$id;",
+            $$"Lcom/android/internal/R$id;",
             "Landroid/os/UserManager;",
             "Landroid/content/pm/UserInfo;",
             "Lcom/android/internal/logging/MetricsLogger;"
         )
-        val clazzInternalResId = loadClass("com.android.internal.R\$id")
+        val clazzInternalResId = loadClass($$"com.android.internal.R$id")
         val clazzMetricsLogger = loadClass("com.android.internal.logging.MetricsLogger")
         val idButtonAlways = getStaticObjectOrNullAs<Int>(clazzInternalResId, "button_always")
 
@@ -125,7 +125,7 @@ object UseAOSPShareSheet : BaseHook() {
 
                             val hasManagedProfile = run hasManagedProfile@{
                                 val userManager =
-                                    activity.getSystemService(Context.USER_SERVICE) as UserManager?
+                                    activity.getSystemService(Context.USER_SERVICE) as? UserManager?
                                         ?: return@hasManagedProfile false
 
                                 val userId = runCatching {

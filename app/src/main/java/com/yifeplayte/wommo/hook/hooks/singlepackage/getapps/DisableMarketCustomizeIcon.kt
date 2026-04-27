@@ -10,7 +10,7 @@ import com.yifeplayte.wommo.hook.hooks.BaseHook
 object DisableMarketCustomizeIcon : BaseHook() {
     override val key = "disable_market_customize_icon"
     override fun hook() {
-        loadClass("com.xiaomi.market.customize_icon.CustomizeIconDataEditor\$Companion").methodFinder()
+        loadClass($$"com.xiaomi.market.customize_icon.CustomizeIconDataEditor$Companion").methodFinder()
             .filterByName("isSystemSupportCustomizeIcon").filterNonAbstract().single().createBeforeHook {
                 it.result = false
             }

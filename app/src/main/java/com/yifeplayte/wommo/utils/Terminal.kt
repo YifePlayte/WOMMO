@@ -6,7 +6,6 @@ import com.yifeplayte.wommo.BuildConfig
 /**
  * 指令 工具
  */
-@Suppress("unused")
 object Terminal {
     init {
         Shell.enableVerboseLogging = BuildConfig.DEBUG

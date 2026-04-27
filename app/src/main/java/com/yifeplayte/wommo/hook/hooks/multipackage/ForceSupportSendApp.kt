@@ -45,7 +45,7 @@ object ForceSupportSendApp : BaseMultiHook() {
 
     private fun mirrorNew() {
         val clazzRelayApplication =
-            loadClass("com.xiaomi.mirror.message.proto.RelayApp\$RelayApplication")
+            loadClass($$"com.xiaomi.mirror.message.proto.RelayApp$RelayApplication")
         clazzRelayApplication.methodFinder().filterByName("getIsHideIcon").filterNonAbstract()
             .single().createHook {
                 returnConstant(false)

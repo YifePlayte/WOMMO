@@ -7,6 +7,7 @@ import android.content.pm.verify.domain.DomainVerificationManager
 import android.view.Gravity
 import android.view.View
 import android.widget.LinearLayout
+import androidx.core.net.toUri
 import com.github.kyuubiran.ezxhelper.ClassUtils.loadClass
 import com.github.kyuubiran.ezxhelper.EzXHelper.appContext
 import com.github.kyuubiran.ezxhelper.EzXHelper.hostPackageName
@@ -118,7 +119,7 @@ object AddOpenByDefaultEntry : BaseHook() {
         val intent = Intent().apply {
             action = android.provider.Settings.ACTION_APP_OPEN_BY_DEFAULT_SETTINGS
             addCategory(Intent.CATEGORY_DEFAULT)
-            data = android.net.Uri.parse("package:${pkgName}")
+            data = "package:${pkgName}".toUri()
             addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
             addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
         }

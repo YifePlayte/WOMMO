@@ -88,7 +88,7 @@ object ChangeBrowserForAIEngine : BaseHook() {
                 val appIconLoader = AppIconLoader(dp2px(context, 50f), false, context)
                 val icon = appIconLoader.loadIcon(resolveInfo.activityInfo.applicationInfo)
                 val label = resolveInfo.loadLabel(pm).toString()
-                val packageName = resolveInfo.activityInfo.packageName
+                resolveInfo.activityInfo.packageName
 
                 val title = context.getString(R.string.copy_direct_action_open, label)
                 val text = context.getString(R.string.copy_direct_action_open_content, copyText)

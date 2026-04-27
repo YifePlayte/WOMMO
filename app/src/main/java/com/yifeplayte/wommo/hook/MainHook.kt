@@ -33,7 +33,6 @@ val PACKAGE_NAME_HOOKED: Set<String>
         return packageNameHooked
     }
 
-@Suppress("unused")
 class MainHook : IXposedHookLoadPackage, IXposedHookZygoteInit {
     override fun handleLoadPackage(lpparam: XC_LoadPackage.LoadPackageParam) {
 

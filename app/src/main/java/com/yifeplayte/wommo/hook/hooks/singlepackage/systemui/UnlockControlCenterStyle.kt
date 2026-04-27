@@ -17,7 +17,7 @@ object UnlockControlCenterStyle : BaseHook() {
             }
         }
         loadClass("com.miui.systemui.SettingsObserver").methodFinder()
-            .filterByName("setValue\$default").single()
+            .filterByName($$"setValue$default").single()
             .createHook {
                 before {
                     if (it.args[1] == "force_use_control_panel") {

@@ -15,7 +15,7 @@ import java.lang.reflect.Method
 object BarrageNotTouchable : BaseHook() {
     override val key = "barrage_not_touchable"
     override fun hook() {
-        loadClass("com.xiaomi.barrage.utils.BarrageWindowUtils\$ComputeInternalInsetsHandler").methodFinder()
+        loadClass($$"com.xiaomi.barrage.utils.BarrageWindowUtils$ComputeInternalInsetsHandler").methodFinder()
             .filterByName("invoke").filterNonAbstract().single().createHook {
                 before { param ->
                     val method = param.args[1] as Method

@@ -16,7 +16,7 @@ object SystemUIPlugin : BaseSubPackage("com.android.systemui", "miui.systemui.pl
 
     private fun initForHyperOS() {
         hook =
-            loadClass("com.android.systemui.shared.plugins.PluginInstance\$PluginFactory").declaredConstructors.single()
+            loadClass($$"com.android.systemui.shared.plugins.PluginInstance$PluginFactory").declaredConstructors.single()
                 .createHook {
                     before { param ->
                         val appInfo = param.args[2] as ApplicationInfo
@@ -30,7 +30,7 @@ object SystemUIPlugin : BaseSubPackage("com.android.systemui", "miui.systemui.pl
 
     private fun initForMIUI() {
         hook =
-            loadClass("com.android.systemui.shared.plugins.PluginInstance\$Factory").methodFinder()
+            loadClass($$"com.android.systemui.shared.plugins.PluginInstance$Factory").methodFinder()
                 .filterByName("getClassLoader")
                 .filterByAssignableParamTypes(
                     ApplicationInfo::class.java,

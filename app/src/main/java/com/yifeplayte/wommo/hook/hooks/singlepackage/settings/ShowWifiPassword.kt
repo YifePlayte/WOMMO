@@ -112,7 +112,7 @@ object ShowWifiPassword : BaseHook() {
                         }
                     }
                     val builder = newInstanceBestMatch(
-                        loadClass("miuix.appcompat.app.AlertDialog\$Builder"),
+                        loadClass($$"miuix.appcompat.app.AlertDialog$Builder"),
                         activity,
                         idStyleAlertDialogThemeDayNight
                     )

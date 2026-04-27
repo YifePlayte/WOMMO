@@ -10,7 +10,7 @@ object RestoreNearbyTile : BaseSubHook() {
     override val key = "restore_near_by_tile"
     override fun hook(subClassLoader: ClassLoader) {
         loadClass(
-            "miui.systemui.controlcenter.qs.customize.TileQueryHelper\$Companion",
+            $$"miui.systemui.controlcenter.qs.customize.TileQueryHelper$Companion",
             subClassLoader
         ).methodFinder()
             .filterByName("filterNearby").single().createHook {

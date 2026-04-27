@@ -40,7 +40,7 @@ object ShowNotificationHistoryAndLogEntry : BaseHook() {
                         "addPreference", null, generatePreferenceScreen(
                             context,
                             resources,
-                            "com.android.settings.Settings\$NotificationStationActivity",
+                            $$"com.android.settings.Settings$NotificationStationActivity",
                             "notification_log_title"
                         )
 
