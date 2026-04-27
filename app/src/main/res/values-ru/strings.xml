@@ -21,7 +21,7 @@
     <string name="change_browser_for_mi_ai">Изменить браузер для Mi Ai</string>
     <string name="contacts">Контакты и набор номера</string>
     <string name="content_extension">Taplus</string>
-    <string name="copy_direct_action_open">"Открыть %1$s"</string>
+    <string name="copy_direct_action_open">Открыть %1$s</string>
     <string name="copy_direct_action_open_content">Просмотр %1$s</string>
     <string name="default_value">По умолчанию</string>
     <string name="disable_business_hall_offline_info_manager">Отключить оффлайн-менеджер бизнес-зала</string>
@@ -111,4 +111,12 @@
     <string name="warning">Предупреждение</string>
     <string name="wave_charge">Включить анимацию волновой зарядки</string>
     <string name="widget_transition_animation">Включить анимацию переходов для всех виджетов</string>
+    <string name="xposed_desc" translatable="false"></string>
+    <string name="force_auth_success_for_xmsf_tips"></string>
+    <string name="empty_to_default"></string>
+    <string name="xmsf"></string>
+    <string name="get_apps"></string>
+    <string name="disable_market_customize_icon"></string>
+    <string name="force_auth_success_for_xmsf"></string>
+    <string name="app_name" translatable="false"></string>
 </resources>
