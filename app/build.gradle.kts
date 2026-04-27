@@ -1,10 +1,8 @@
-import com.android.build.gradle.internal.api.BaseVariantOutputImpl
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 plugins {
     id("com.android.application")
-    id("org.jetbrains.kotlin.android")
     id("org.jetbrains.kotlin.plugin.compose")
 }
 
@@ -16,44 +14,19 @@ android {
         applicationId = "com.yifeplayte.wommo"
         minSdk = 33
         versionCode = 1
-        versionName = "1.0.0"
+        versionName = DateTimeFormatter.ofPattern("yyyyMMddHHmmss").format(LocalDateTime.now())
 
         ndk {
-            abiFilters.add("armeabi-v7a")
             abiFilters.add("arm64-v8a")
-        }
-
-        splits {
-            abi {
-                isEnable = true
-                reset()
-                include("armeabi-v7a", "arm64-v8a")
-                isUniversalApk = true
-            }
-        }
-
-        applicationVariants.configureEach {
-            outputs.configureEach {
-                if (this is BaseVariantOutputImpl) {
-                    outputFileName = outputFileName.replace("app", rootProject.name)
-                        .replace(Regex("debug|release"), versionName)
-                }
-            }
         }
     }
 
     buildTypes {
-        named("release") {
+        release {
             isShrinkResources = true
             isMinifyEnabled = true
             proguardFiles("proguard-rules.pro")
-        }
-        named("debug") {
-            isShrinkResources = true
-            isMinifyEnabled = true
-            proguardFiles("proguard-rules.pro")
-            versionNameSuffix = "-debug-" + DateTimeFormatter.ofPattern("yyyyMMddHHmmss")
-                .format(LocalDateTime.now())
+            signingConfig = signingConfigs.getByName("debug")
         }
     }
 
@@ -62,10 +35,6 @@ android {
         additionalParameters += "--package-id"
         additionalParameters += "0x45"
         generateLocaleConfig = true
-    }
-
-    kotlin {
-        jvmToolchain(21)
     }
 
     externalNativeBuild {
@@ -78,6 +47,16 @@ android {
     buildFeatures {
         buildConfig = true
         compose = true
+    }
+}
+
+androidComponents {
+    onVariants { variant ->
+        variant.outputs.forEach { output ->
+            output.outputFileName.set(
+                "WOMMO-${output.versionName.get()}.apk"
+            )
+        }
     }
 }
 
