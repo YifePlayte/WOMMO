@@ -117,4 +117,6 @@
     <string name="wave_charge">启用 Alpha 充电动画</string>
     <string name="widget_transition_animation">为所有小部件添加启动动画</string>
     <string name="xmsf">小米服务框架</string>
+    <string name="xposed_desc" translatable="false"></string>
+    <string name="app_name" translatable="false"></string>
 </resources>
