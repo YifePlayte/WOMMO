@@ -111,12 +111,4 @@
     <string name="warning">Предупреждение</string>
     <string name="wave_charge">Включить анимацию волновой зарядки</string>
     <string name="widget_transition_animation">Включить анимацию переходов для всех виджетов</string>
-    <string name="xposed_desc" translatable="false"></string>
-    <string name="force_auth_success_for_xmsf_tips"></string>
-    <string name="empty_to_default"></string>
-    <string name="xmsf"></string>
-    <string name="get_apps"></string>
-    <string name="disable_market_customize_icon"></string>
-    <string name="force_auth_success_for_xmsf"></string>
-    <string name="app_name" translatable="false"></string>
 </resources>
