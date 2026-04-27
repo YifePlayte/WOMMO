@@ -69,7 +69,7 @@ object ForceSupportSendApp : BaseMultiHook() {
         val clazzRelayAppMessage = dexKitBridge.findClass {
             matcher {
                 usingStrings(
-                    listOf("RelayAppMessage{type=\'", ", isRelay="),
+                    listOf("RelayAppMessage{type='", ", isRelay='"),
                     StringMatchType.Equals
                 )
             }
