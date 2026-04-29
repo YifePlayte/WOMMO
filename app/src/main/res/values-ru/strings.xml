@@ -21,7 +21,7 @@
     <string name="change_browser_for_mi_ai">Изменить браузер для Mi Ai</string>
     <string name="contacts">Контакты и набор номера</string>
     <string name="content_extension">Taplus</string>
-    <string name="copy_direct_action_open">"Открыть %1$s"</string>
+    <string name="copy_direct_action_open">Открыть %1$s</string>
     <string name="copy_direct_action_open_content">Просмотр %1$s</string>
     <string name="default_value">По умолчанию</string>
     <string name="disable_business_hall_offline_info_manager">Отключить оффлайн-менеджер бизнес-зала</string>
