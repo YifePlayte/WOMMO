@@ -64,12 +64,21 @@ object ChangeBrowserForAIEngine : BaseHook() {
                 val copyDirectId = param.args[6] as String
 
                 if (type != 11) return@before
-                val isInstallForApp = invokeStaticMethodBestMatch(
-                    clazzSmartPasswordUtils,
-                    "isInstallForApp",
-                    null,
-                    context, type, copyText
-                ) as Boolean
+                val isInstallForApp = runCatching {
+                    invokeStaticMethodBestMatch(
+                        clazzSmartPasswordUtils,
+                        "isInstallForApp",
+                        null,
+                        context, type, copyText
+                    ) as Boolean
+                }.getOrElse {
+                    invokeStaticMethodBestMatch(
+                        clazzSmartPasswordUtils,
+                        "isInstallForApp",
+                        null,
+                        context, type
+                    ) as Boolean
+                }
                 if (!isInstallForApp) return@before
                 val isShowing = invokeStaticMethodBestMatch(
                     clazzNotificationUtils,
