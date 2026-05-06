@@ -8,6 +8,7 @@ import android.widget.FrameLayout
 import com.github.kyuubiran.ezxhelper.ClassUtils.invokeStaticMethodBestMatch
 import com.github.kyuubiran.ezxhelper.ClassUtils.loadClass
 import com.github.kyuubiran.ezxhelper.ClassUtils.loadClassOrNull
+import com.github.kyuubiran.ezxhelper.ClassUtils.loadFirstClass
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
 import com.github.kyuubiran.ezxhelper.ObjectUtils.getObjectOrNullAs
 import com.github.kyuubiran.ezxhelper.ObjectUtils.invokeMethodBestMatch
@@ -20,9 +21,16 @@ object FakeNonDefaultIcon : BaseHook() {
     override val key = "fake_non_default_icon"
     private val clazzFolderPreviewIconView by lazy { loadClassOrNull("com.miui.home.launcher.folder.FolderPreviewIconView") }
     private val clazzPathDataIconUtil by lazy { loadClass("com.miui.home.launcher.PathDataIconUtil") }
-    private val clazzDeviceConfig by lazy { loadClass("com.miui.home.launcher.DeviceConfig") }
+    private val clazzDeviceConfig by lazy {
+        loadFirstClass(
+            "com.miui.home.common.device.DeviceConfigs",
+            "com.miui.home.launcher.DeviceConfig"
+        )
+    }
+
     override fun hook() {
-        clazzDeviceConfig.methodFinder().filterByName("isDefaultIcon").single().createHook {
+        val methodIsDefaultIcon = clazzDeviceConfig.methodFinder().filter { name in setOf("isDefaultIcon", "isDefaultMiuiIcon") }.single()
+        methodIsDefaultIcon.createHook {
             returnConstant(currentThread().stackTrace.any { it.methodName == "isBlurSupported" })
         }
 
@@ -66,8 +74,7 @@ object FakeNonDefaultIcon : BaseHook() {
                     val isSupportThemeAdaptiveIcon = invokeStaticMethodBestMatch(
                         clazzPathDataIconUtil, "isSupportThemeAdaptiveIcon"
                     ) as Boolean
-                    val isDefaultIcon =
-                        invokeStaticMethodBestMatch(clazzDeviceConfig, "isDefaultIcon") as Boolean
+                    val isDefaultIcon = methodIsDefaultIcon.invoke(null) as Boolean
 
                     if (isSupportThemeAdaptiveIcon && !isDefaultIcon && mIsAdaptiveIcon) {
                         val iconWidth = iconImageView.width
@@ -125,7 +132,9 @@ object FakeNonDefaultIcon : BaseHook() {
             .filterByName("updateClipPath").singleOrNull()?.createHook {
                 before { param ->
                     val thisObject = param.thisObject
-                    val layoutParams = param.args[0] as FrameLayout.LayoutParams
+                    val layoutParams = param.args[0]
+                    val width = getObjectOrNullAs<Float>(layoutParams, "width") ?: return@before
+                    val height = getObjectOrNullAs<Float>(layoutParams, "height") ?: return@before
                     val scaleFactor = param.args[1] as Float
                     val cornerRadiusScale = param.args[2] as Float
                     val rectF = param.args[3] as RectF
@@ -168,13 +177,13 @@ object FakeNonDefaultIcon : BaseHook() {
 
                     if (mUseSurfaceShade) {
                         val shadeCornerRadius =
-                            (layoutParams.width * cornerRadiusScale) / rectF.width()
+                            (width * cornerRadiusScale) / rectF.width()
                         mShadeClipPath.reset()
                         mShadeClipPath.addRoundRect(
                             iconVerticalEdge,
                             iconHorizontalEdge,
-                            layoutParams.width - iconVerticalEdge,
-                            layoutParams.height - iconHorizontalEdge,
+                            width - iconVerticalEdge,
+                            height - iconHorizontalEdge,
                             shadeCornerRadius,
                             shadeCornerRadius,
                             Path.Direction.CW
@@ -184,8 +193,7 @@ object FakeNonDefaultIcon : BaseHook() {
                     val isSupportThemeAdaptiveIcon = invokeStaticMethodBestMatch(
                         clazzPathDataIconUtil, "isSupportThemeAdaptiveIcon"
                     ) as Boolean
-                    val isDefaultIcon =
-                        invokeStaticMethodBestMatch(clazzDeviceConfig, "isDefaultIcon") as Boolean
+                    val isDefaultIcon = false
 
                     if (isSupportThemeAdaptiveIcon && !isDefaultIcon && mIsAdaptiveIcon) {
                         val iconWidth = iconImageView.width
@@ -207,7 +215,7 @@ object FakeNonDefaultIcon : BaseHook() {
                             ) as Float) * iconHeight) / 2.0f
                         } else if (pathFromPathDataForClipIcon != null) {
                             mClipPath.set(pathFromPathDataForClipIcon)
-                            val aspectRatio = (layoutParams.height / layoutParams.width).toFloat()
+                            val aspectRatio = (height / width)
                             mScaleMatrixForClipPath.reset()
                             mScaleMatrixForClipPath.setScale(
                                 iconWidth / 100.0f, (iconHeight / 100.0f) * aspectRatio
@@ -223,8 +231,8 @@ object FakeNonDefaultIcon : BaseHook() {
                     mClipPath.addRoundRect(
                         iconHorizontalEdge,
                         iconVerticalEdge,
-                        layoutParams.width - iconHorizontalEdge,
-                        layoutParams.height - iconVerticalEdge,
+                        width - iconHorizontalEdge,
+                        height - iconVerticalEdge,
                         newCornerRadius,
                         newCornerRadius,
                         Path.Direction.CW
@@ -233,8 +241,8 @@ object FakeNonDefaultIcon : BaseHook() {
                     mForegroundClipPath.addRoundRect(
                         iconHorizontalEdge,
                         iconVerticalEdge,
-                        layoutParams.width - iconHorizontalEdge,
-                        layoutParams.width - iconVerticalEdge,
+                        width - iconHorizontalEdge,
+                        width - iconVerticalEdge,
                         newCornerRadius,
                         newCornerRadius,
                         Path.Direction.CW
