@@ -35,11 +35,15 @@ import me.zhanghai.android.appiconloader.AppIconLoader
 object ChangeBrowserForAIEngine : BaseHook() {
     override val key = "change_browser_for_ai_engine"
 
-    const val CHANNEL_ID = "phrase_channel_id"
-    const val NAME = "智能识别通知"
-    const val NOTIFICATION_ID = 111
+    private const val CHANNEL_ID = "phrase_channel_id"
+    private const val NAME = "智能识别通知"
+    private const val NOTIFICATION_ID = 111
+    private const val TRAILING_CHARS = ".,!?;:，。！？；：、）】》〉」』]}>"
     private val drawableImageActionGo by lazy {
         appContext.resources.getIdentifier("image_action_go", "drawable", hostPackageName)
+    }
+    private val uriRegex by lazy {
+        Regex("""[A-Za-z][A-Za-z0-9+.-]*://[^\s<>"'\p{IsHan}]+""")
     }
 
     @SuppressLint("NotificationPermission")
@@ -180,9 +184,23 @@ object ChangeBrowserForAIEngine : BaseHook() {
                 param.result = null
             }
         }
+        // 补充匹配链接
+        loadClass("com.xiaomi.aicr.copydirect.util.RecognitionAlgoUtil").methodFinder().filterByName("getSmartPassWordCategory").single().createHook {
+            after { param ->
+                val bundle = param.result as? Bundle ?: return@after
+                val inputTextType = bundle.getInt("inputTextType")
+                if (inputTextType != 1) return@after
+                val copyText = param.args[0] as? String ?: return@after
+                val uri = uriRegex.find(copyText)?.value?.trimEnd { it in TRAILING_CHARS } ?: return@after
+                bundle.apply {
+                    putInt("inputTextType", 11)
+                    putString("smartPassWordContent", uri)
+                }
+            }
+        }
     }
 
-    fun String.withHttpsIfMissing(): String = if (startsWith("http://", true) || startsWith("https://", true)) this else "https://$this"
+    fun String.withHttpsIfMissing(): String = if ("://" in this) this else "https://$this"
 
     fun dp2px(context: Context, dpValue: Float): Int = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dpValue, context.resources.displayMetrics).toInt()
 }
