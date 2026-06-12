@@ -43,7 +43,7 @@ object ChangeBrowserForAIEngine : BaseHook() {
         appContext.resources.getIdentifier("image_action_go", "drawable", hostPackageName)
     }
     private val uriRegex by lazy {
-        Regex("""[A-Za-z][A-Za-z0-9+.-]*://[^\s<>"'\p{IsHan}]+""")
+        Regex("""(?:[A-Za-z][A-Za-z0-9+.-]*://[^\s<>"'\p{IsHan}]+)|(?:(?:www\.)?[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)+(?:/[^\s<>"'\p{IsHan}]*)?)""")
     }
 
     @SuppressLint("NotificationPermission")
