@@ -11,6 +11,13 @@ object RemoveGameToast : BaseHook() {
     override fun hook() {
         dexKitBridge.findMethod {
             matcher {
+                usingStrings = listOf("showNewWindowToastView: ")
+            }
+        }.single().getMethodInstance(safeClassLoader).createHook {
+            returnConstant(null)
+        }
+        dexKitBridge.findMethod {
+            matcher {
                 usingStrings = listOf("showWildModeToastView: ")
             }
         }.single().getMethodInstance(safeClassLoader).createHook {
