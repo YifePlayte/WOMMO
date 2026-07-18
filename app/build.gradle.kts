@@ -62,12 +62,12 @@ androidComponents {
 
 dependencies {
     compileOnly("de.robv.android.xposed:api:82")
-    debugImplementation("androidx.compose.ui:ui-tooling-preview-android:1.11.0")
-    debugImplementation("androidx.compose.ui:ui-tooling:1.11.0")
+    debugImplementation("androidx.compose.ui:ui-tooling-preview-android:1.11.4")
+    debugImplementation("androidx.compose.ui:ui-tooling:1.11.4")
     implementation("androidx.activity:activity-compose:1.13.0")
     implementation("androidx.activity:activity-ktx:1.13.0")
-    implementation("androidx.compose.foundation:foundation-android:1.11.0")
-    implementation("androidx.compose.runtime:runtime-android:1.11.0")
+    implementation("androidx.compose.foundation:foundation-android:1.11.4")
+    implementation("androidx.compose.runtime:runtime-android:1.11.4")
     implementation("androidx.navigation:navigation-compose:2.9.8")
     implementation("com.github.kyuubiran:EzXHelper:2.2.1")
     implementation("com.github.topjohnwu.libsu:core:6.0.0")
@@ -75,7 +75,7 @@ dependencies {
     implementation("me.zhanghai.android.appiconloader:appiconloader:1.5.0")
     implementation("org.lsposed.hiddenapibypass:hiddenapibypass:6.1")
     implementation("org.luckypray:dexkit:2.2.0")
-    implementation("top.yukonga.miuix.kmp:miuix-blur-android:0.9.0")
-    implementation("top.yukonga.miuix.kmp:miuix-preference-android:0.9.0")
-    implementation("top.yukonga.miuix.kmp:miuix-ui-android:0.9.0")
+    implementation("top.yukonga.miuix.kmp:miuix-blur-android:0.9.3")
+    implementation("top.yukonga.miuix.kmp:miuix-preference-android:0.9.3")
+    implementation("top.yukonga.miuix.kmp:miuix-ui-android:0.9.3")
 }
