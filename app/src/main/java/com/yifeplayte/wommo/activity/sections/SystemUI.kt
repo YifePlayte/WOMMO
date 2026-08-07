@@ -75,6 +75,11 @@ fun LazyListScope.systemUI() {
                 key = "hide_navigation_bar",
                 titleId = R.string.hide_navigation_bar,
             )
+            SPSwitch(
+                key = "qs_tile_long_press_fallback_override",
+                titleId = R.string.qs_tile_long_press_fallback_override,
+                summaryId = R.string.qs_tile_long_press_fallback_override_tips,
+            )
         }
     }
 }

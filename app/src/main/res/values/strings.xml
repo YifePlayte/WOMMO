@@ -76,6 +76,8 @@
     <string name="package_installer">Package Installer</string>
     <string name="power_keeper">Battery and performance</string>
     <string name="prevent_disabling_dev_mode">Prevent disabling developer mode</string>
+    <string name="qs_tile_long_press_fallback_override">Quick settings tile long-press fallback override</string>
+    <string name="qs_tile_long_press_fallback_override_tips">Redirect long-press actions of Quick Settings tiles without a dedicated settings page from App Info to the app\'s main activity.</string>
     <string name="quick_manage_overlay_permission">Quick manage overlay permission</string>
     <string name="quick_manage_unknown_app_sources">Quick manage unknown app sources</string>
     <string name="reboot">Reboot</string>

@@ -75,6 +75,8 @@
     <string name="package_installer">应用包管理组件</string>
     <string name="power_keeper">电量和性能</string>
     <string name="prevent_disabling_dev_mode">防止禁用开发者模式</string>
+    <string name="qs_tile_long_press_fallback_override">快捷磁贴长按回退替换</string>
+    <string name="qs_tile_long_press_fallback_override_tips">将没有长按设置页面的快捷磁贴默认跳转目标由“应用信息”替换为应用主界面。</string>
     <string name="quick_manage_overlay_permission">快速管理悬浮窗权限</string>
     <string name="quick_manage_unknown_app_sources">快速管理未知来源安装权限</string>
     <string name="reboot">重启</string>
