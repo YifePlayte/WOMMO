@@ -1,7 +1,10 @@
 package com.yifeplayte.wommo.hook.utils
 
+import com.github.kyuubiran.ezxhelper.EzXHelper.safeClassLoader
 import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam
 import org.luckypray.dexkit.DexKitBridge
+import org.luckypray.dexkit.result.ClassData
+import org.luckypray.dexkit.result.MethodData
 
 /**
  * DexKit 工具
@@ -29,4 +32,14 @@ object DexKit {
     fun closeDexKit() {
         if (isInitialized) dexKitBridge.close()
     }
+
+    /**
+     * 使用 safeClassLoader 获得 Method
+     */
+    fun MethodData.getMethodInstance() = this.getMethodInstance(safeClassLoader)
+
+    /**
+     * 使用 safeClassLoader 获得 Class
+     */
+    fun ClassData.getInstance() = this.getInstance(safeClassLoader)
 }

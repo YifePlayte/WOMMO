@@ -1,11 +1,11 @@
 package com.yifeplayte.wommo.hook.hooks.singlepackage.voiceassist
 
 import com.github.kyuubiran.ezxhelper.ClassUtils.loadClass
-import com.github.kyuubiran.ezxhelper.EzXHelper.safeClassLoader
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder.`-Static`.methodFinder
 import com.yifeplayte.wommo.hook.hooks.BaseHook
 import com.yifeplayte.wommo.hook.utils.DexKit.dexKitBridge
+import com.yifeplayte.wommo.hook.utils.DexKit.getInstance
 
 @Suppress("unused")
 object EnableWakeUpAdvancedAnimation : BaseHook() {
@@ -44,7 +44,7 @@ object EnableWakeUpAdvancedAnimation : BaseHook() {
                     "isN8DeviceCpuOverHot: isDeviceN8 = "
                 )
             }
-        }.single().getInstance(safeClassLoader)
+        }.single().getInstance()
         clazzWakeUpAnimHelper.methodFinder()
             .filterByName("isDeviceNeedBoostGpu")
             .filterNonAbstract()

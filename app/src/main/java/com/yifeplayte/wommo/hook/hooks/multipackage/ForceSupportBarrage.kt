@@ -8,11 +8,12 @@ import android.service.notification.StatusBarNotification
 import com.github.kyuubiran.ezxhelper.ClassUtils.loadClass
 import com.github.kyuubiran.ezxhelper.ClassUtils.setStaticObject
 import com.github.kyuubiran.ezxhelper.EzXHelper.appContext
-import com.github.kyuubiran.ezxhelper.EzXHelper.safeClassLoader
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder.`-Static`.methodFinder
 import com.yifeplayte.wommo.hook.hooks.BaseMultiHook
 import com.yifeplayte.wommo.hook.utils.DexKit.dexKitBridge
+import com.yifeplayte.wommo.hook.utils.DexKit.getInstance
+import com.yifeplayte.wommo.hook.utils.DexKit.getMethodInstance
 import io.github.ranlee1.jpinyin.PinyinFormat.WITHOUT_TONE
 import io.github.ranlee1.jpinyin.PinyinHelper.convertToPinyinString
 import java.io.Serial
@@ -35,7 +36,7 @@ object ForceSupportBarrage : BaseMultiHook() {
             matcher {
                 usingStrings = listOf("game_box_barrage_v3_support_apps.json")
             }
-        }.single().getInstance(safeClassLoader).methodFinder()
+        }.single().getInstance().methodFinder()
             .filterByReturnType(java.util.List::class.java)
             .filterByParamCount(1)
             .single().createHook {
@@ -59,7 +60,7 @@ object ForceSupportBarrage : BaseMultiHook() {
             matcher {
                 usingStrings = listOf("isApplicationFloatNotificationEnable fail ")
             }
-        }.single().getMethodInstance(safeClassLoader).createHook {
+        }.single().getMethodInstance().createHook {
             returnConstant(true)
         }
     }

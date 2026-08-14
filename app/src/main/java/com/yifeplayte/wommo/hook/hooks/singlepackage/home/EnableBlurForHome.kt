@@ -1,9 +1,9 @@
 package com.yifeplayte.wommo.hook.hooks.singlepackage.home
 
-import com.github.kyuubiran.ezxhelper.EzXHelper.safeClassLoader
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHooks
 import com.yifeplayte.wommo.hook.hooks.BaseHook
 import com.yifeplayte.wommo.hook.utils.DexKit.dexKitBridge
+import com.yifeplayte.wommo.hook.utils.DexKit.getMethodInstance
 import org.luckypray.dexkit.query.matchers.base.StringMatcher
 import java.lang.reflect.Method
 
@@ -17,13 +17,13 @@ object EnableBlurForHome : BaseHook() {
                     name(StringMatcher("SupportBlur"))
                     returnType = "boolean"
                 }
-            }.map { it.getMethodInstance(safeClassLoader) })
+            }.map { it.getMethodInstance() })
             addAll(dexKitBridge.findMethod {
                 matcher {
                     name(StringMatcher("BlurSupported"))
                     returnType = "boolean"
                 }
-            }.map { it.getMethodInstance(safeClassLoader) })
+            }.map { it.getMethodInstance() })
         }.createHooks { returnConstant(true) }
     }
 }

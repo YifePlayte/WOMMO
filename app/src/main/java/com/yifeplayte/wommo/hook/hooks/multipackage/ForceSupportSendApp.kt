@@ -1,7 +1,6 @@
 package com.yifeplayte.wommo.hook.hooks.multipackage
 
 import com.github.kyuubiran.ezxhelper.ClassUtils.loadClass
-import com.github.kyuubiran.ezxhelper.EzXHelper.safeClassLoader
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHooks
 import com.github.kyuubiran.ezxhelper.ObjectHelper.Companion.objectHelper
@@ -10,6 +9,8 @@ import com.github.kyuubiran.ezxhelper.finders.FieldFinder.`-Static`.fieldFinder
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder.`-Static`.methodFinder
 import com.yifeplayte.wommo.hook.hooks.BaseMultiHook
 import com.yifeplayte.wommo.hook.utils.DexKit.dexKitBridge
+import com.yifeplayte.wommo.hook.utils.DexKit.getInstance
+import com.yifeplayte.wommo.hook.utils.DexKit.getMethodInstance
 import org.luckypray.dexkit.query.enums.StringMatchType
 
 @Suppress("unused")
@@ -63,7 +64,7 @@ object ForceSupportSendApp : BaseMultiHook() {
                 usingStrings = listOf("support_all_app_sub_screen")
                 returnType = "boolean"
             }
-        }.single().getMethodInstance(safeClassLoader).createHook {
+        }.single().getMethodInstance().createHook {
             returnConstant(true)
         }
         val clazzRelayAppMessage = dexKitBridge.findClass {
@@ -73,7 +74,7 @@ object ForceSupportSendApp : BaseMultiHook() {
                     StringMatchType.Equals
                 )
             }
-        }.single().getInstance(safeClassLoader)
+        }.single().getInstance()
         clazzRelayAppMessage.let { clazz ->
             val fieldNameIsHideIcon =
                 clazz.fieldFinder().filterByType(Boolean::class.javaPrimitiveType!!).toList()

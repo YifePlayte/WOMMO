@@ -1,10 +1,10 @@
 package com.yifeplayte.wommo.hook.hooks.singlepackage.screenrecorder
 
-import com.github.kyuubiran.ezxhelper.EzXHelper.safeClassLoader
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
 import com.github.kyuubiran.ezxhelper.MemberExtensions.isFinal
 import com.yifeplayte.wommo.hook.hooks.BaseHook
 import com.yifeplayte.wommo.hook.utils.DexKit.dexKitBridge
+import com.yifeplayte.wommo.hook.utils.DexKit.getMethodInstance
 
 @Suppress("unused")
 object ModifyScreenRecorderConfig : BaseHook() {
@@ -21,7 +21,7 @@ object ModifyScreenRecorderConfig : BaseHook() {
                 usingStrings = listOf("Error when set frame value, maxValue = ")
                 paramTypes = listOf("int", "int")
             }
-        }.single().getMethodInstance(safeClassLoader).createHook {
+        }.single().getMethodInstance().createHook {
             before { param ->
                 param.args[0] = 3600
                 param.args[1] = 1
@@ -44,7 +44,7 @@ object ModifyScreenRecorderConfig : BaseHook() {
                 paramCount = 2
                 paramTypes = listOf("int", "int")
             }
-        }.singleOrNull()?.getMethodInstance(safeClassLoader)?.createHook {
+        }.singleOrNull()?.getMethodInstance()?.createHook {
             before { param ->
                 param.args[0] = 3600
                 param.args[1] = 1

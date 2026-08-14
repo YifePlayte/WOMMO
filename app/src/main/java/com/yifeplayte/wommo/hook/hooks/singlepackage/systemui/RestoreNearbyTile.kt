@@ -2,10 +2,10 @@ package com.yifeplayte.wommo.hook.hooks.singlepackage.systemui
 
 import com.github.kyuubiran.ezxhelper.ClassUtils.loadClass
 import com.github.kyuubiran.ezxhelper.ClassUtils.setStaticObject
-import com.github.kyuubiran.ezxhelper.EzXHelper.safeClassLoader
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHooks
 import com.yifeplayte.wommo.hook.hooks.BaseHook
 import com.yifeplayte.wommo.hook.utils.DexKit.dexKitBridge
+import com.yifeplayte.wommo.hook.utils.DexKit.getMethodInstance
 import com.yifeplayte.wommo.utils.Build.IS_INTERNATIONAL_BUILD
 
 @Suppress("unused")
@@ -19,7 +19,7 @@ object RestoreNearbyTile : BaseHook() {
             matcher {
                 usingStrings = listOf("com.google.android.gms/.nearby.sharing.SharingTileService")
             }
-        }.map { it.getMethodInstance(safeClassLoader) }.createHooks {
+        }.map { it.getMethodInstance() }.createHooks {
             before {
                 setStaticObject(clazzMiuiConfigs, "IS_INTERNATIONAL_BUILD", true)
             }

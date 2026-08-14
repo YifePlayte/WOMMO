@@ -4,8 +4,14 @@ import android.annotation.SuppressLint
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
+import android.app.PendingIntent.FLAG_MUTABLE
+import android.app.PendingIntent.FLAG_UPDATE_CURRENT
 import android.content.Context
 import android.content.Intent
+import android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK
+import android.content.Intent.FLAG_RECEIVER_FOREGROUND
+import android.content.Intent.FLAG_RECEIVER_NO_ABORT
+import android.content.Intent.URI_INTENT_SCHEME
 import android.content.pm.PackageManager
 import android.graphics.drawable.Icon
 import android.os.Bundle
@@ -15,17 +21,21 @@ import androidx.core.app.NotificationCompat
 import androidx.core.graphics.drawable.IconCompat
 import androidx.core.net.toUri
 import com.github.kyuubiran.ezxhelper.ClassUtils.getStaticObjectOrNullAs
-import com.github.kyuubiran.ezxhelper.ClassUtils.invokeStaticMethodBestMatch
 import com.github.kyuubiran.ezxhelper.ClassUtils.loadClass
+import com.github.kyuubiran.ezxhelper.ClassUtils.newInstanceBestMatch
 import com.github.kyuubiran.ezxhelper.ClassUtils.setStaticObject
 import com.github.kyuubiran.ezxhelper.EzXHelper.appContext
 import com.github.kyuubiran.ezxhelper.EzXHelper.hostPackageName
 import com.github.kyuubiran.ezxhelper.EzXHelper.initAppContext
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
-import com.github.kyuubiran.ezxhelper.ObjectUtils.setObject
+import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHooks
+import com.github.kyuubiran.ezxhelper.Log
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder.`-Static`.methodFinder
 import com.yifeplayte.wommo.R
 import com.yifeplayte.wommo.hook.hooks.BaseHook
+import com.yifeplayte.wommo.hook.utils.DexKit.dexKitBridge
+import com.yifeplayte.wommo.hook.utils.DexKit.getInstance
+import com.yifeplayte.wommo.hook.utils.DexKit.getMethodInstance
 import com.yifeplayte.wommo.utils.Build.IS_SUPPORT_ISLAND
 import me.zhanghai.android.appiconloader.AppIconLoader
 
@@ -42,6 +52,45 @@ object ChangeBrowserForAIEngine : BaseHook() {
     private val drawableImageActionGo by lazy {
         appContext.resources.getIdentifier("image_action_go", "drawable", hostPackageName)
     }
+    private val drawableNotificationIconWebsite by lazy {
+        appContext.resources.getIdentifier("notification_icon_website", "drawable", hostPackageName)
+    }
+    private val methodShowNotification by lazy {
+        dexKitBridge.findMethod {
+            matcher {
+                usingStrings = listOf("NotificationUtils.showNotification")
+            }
+        }.single().getMethodInstance()
+    }
+    private val clazzNotificationUtils by lazy {
+        methodShowNotification.declaringClass
+    }
+    private val methodIsShowing by lazy {
+        clazzNotificationUtils.methodFinder()
+            .filterNonAbstract()
+            .filterStatic()
+            .filterByAssignableParamTypes(Context::class.java, String::class.java)
+            .single()
+    }
+    private val clazzNotificationInfo by lazy {
+        dexKitBridge.findClass {
+            matcher {
+                usingStrings = listOf(
+                    "NotificationInfo{iconId=",
+                    ", title='",
+                    "', content='",
+                    "', type=",
+                )
+            }
+        }.single().getInstance()
+    }
+    private val methodGetDaoInfoJson by lazy {
+        clazzNotificationUtils.methodFinder()
+            .filterNonAbstract()
+            .filterStatic()
+            .filterByAssignableParamTypes(clazzNotificationInfo, String::class.java, Context::class.java, String::class.java)
+            .single()
+    }
     private val uriRegex by lazy {
         Regex("""(?:[A-Za-z][A-Za-z0-9+.-]*://[^\s<>"'\p{IsHan}]+)|(?:(?:www\.)?[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)+(?:/[^\s<>"'\p{IsHan}]*)?)""")
     }
@@ -49,8 +98,14 @@ object ChangeBrowserForAIEngine : BaseHook() {
     @SuppressLint("NotificationPermission")
     override fun hook() {
         // 跳转所有应用
-        val clazzSmartPasswordUtils = loadClass("com.xiaomi.aicr.copydirect.util.SmartPasswordUtils")
-        clazzSmartPasswordUtils.methodFinder().filterByName("jumpToXiaoMiBrowser").single().createHook {
+        dexKitBridge.findMethod {
+            matcher {
+                usingStrings = listOf(
+                    "clipboard_open",
+                    "com.android.browser"
+                )
+            }
+        }.map { it.getMethodInstance() }.createHooks {
             replace { param ->
                 Intent(Intent.ACTION_VIEW, param.args[1].toString().withHttpsIfMissing().toUri()).let {
                     (param.args[0] as Context).startActivity(it)
@@ -58,8 +113,7 @@ object ChangeBrowserForAIEngine : BaseHook() {
             }
         }
         // 替换通知
-        val clazzNotificationUtils = loadClass("com.xiaomi.aicr.copydirect.util.NotificationUtils")
-        clazzNotificationUtils.methodFinder().filterByName("showNotification").single().createHook {
+        methodShowNotification.createHook {
             before { param ->
                 val context = param.args[0] as Context
                 val copyText = param.args[1] as String
@@ -68,12 +122,7 @@ object ChangeBrowserForAIEngine : BaseHook() {
                 val copyDirectId = param.args[6] as String
 
                 if (type != 11) return@before
-                val isShowing = invokeStaticMethodBestMatch(
-                    clazzNotificationUtils,
-                    "isShowing",
-                    null,
-                    context, copyText
-                ) as Boolean
+                val isShowing = methodIsShowing.invoke(null, context, copyText) as Boolean
                 if (isShowing) return@before
 
                 initAppContext(context, true)
@@ -89,16 +138,8 @@ object ChangeBrowserForAIEngine : BaseHook() {
 
                 val title = context.getString(R.string.copy_direct_action_open, label)
                 val text = context.getString(R.string.copy_direct_action_open_content, copyText)
-                val notificationInfo = invokeStaticMethodBestMatch(
-                    clazzNotificationUtils,
-                    "getNotificationInfo",
-                    null,
-                    context, type, copyText
-                )?.apply {
-                    setObject(this, "title", title)
-                    setObject(this, "content", text)
-                }
-
+                val notificationInfo =
+                    newInstanceBestMatch(clazzNotificationInfo, drawableNotificationIconWebsite, title, text, 11)
                 val notificationManager = getStaticObjectOrNullAs<NotificationManager>(
                     clazzNotificationUtils,
                     "notificationManager"
@@ -117,13 +158,7 @@ object ChangeBrowserForAIEngine : BaseHook() {
                 )
                 notificationChannel.description = "识别复制内容后显示的悬浮通知"
                 notificationManager.createNotificationChannel(notificationChannel)
-                val pendingIntent =
-                    invokeStaticMethodBestMatch(
-                        clazzNotificationUtils,
-                        "getPendingIntent",
-                        null,
-                        context, copyText, type, clipPkg, title, copyDirectId
-                    ) as PendingIntent
+                val pendingIntent = getPendingIntent(context, copyText, type, clipPkg, title, copyDirectId)
                 val picImage = Icon.createWithBitmap(icon)
                 val picGo = Icon.createWithResource(context, drawableImageActionGo)
                 val bundlePics = Bundle().apply {
@@ -144,22 +179,10 @@ object ChangeBrowserForAIEngine : BaseHook() {
                         .setPriority(1)
                         .setContentIntent(pendingIntent)
                         .addExtras(extras)
-                val actionIntent =
-                    invokeStaticMethodBestMatch(
-                        clazzNotificationUtils,
-                        "getActionIntent",
-                        null,
-                        context, copyText, type, clipPkg, title, copyDirectId
-                    ) as String?
+                val actionIntent = getNotificationStartIntent(context, copyText, type, clipPkg, title, copyDirectId).toUri(URI_INTENT_SCHEME)
                 val notificationBuild = contentIntent.build()
                 notificationBuild.extras.apply {
-                    val daoInfoJson =
-                        invokeStaticMethodBestMatch(
-                            clazzNotificationUtils,
-                            "getDaoInfoJson",
-                            null,
-                            notificationInfo, actionIntent, context, copyText
-                        ) as String?
+                    val daoInfoJson = methodGetDaoInfoJson.invoke(null, notificationInfo, actionIntent, context, copyText) as String?
                     putString("miui.focus.param", daoInfoJson)
                     putString("copyText", copyText)
                     putParcelable("miui.appIcon", picImage)
@@ -169,7 +192,11 @@ object ChangeBrowserForAIEngine : BaseHook() {
             }
         }
         // 补充匹配链接
-        loadClass("com.xiaomi.aicr.copydirect.util.RecognitionAlgoUtil").methodFinder().filterByName("getSmartPassWordCategory").single().createHook {
+        dexKitBridge.findMethod {
+            matcher {
+                usingStrings = listOf("Start to getSmartPassWordCategory")
+            }
+        }.map { it.getMethodInstance() }.createHooks {
             after { param ->
                 val bundle = param.result as? Bundle ?: return@after
                 val inputTextType = bundle.getInt("inputTextType")
@@ -187,4 +214,28 @@ object ChangeBrowserForAIEngine : BaseHook() {
     fun String.withHttpsIfMissing(): String = if ("://" in this) this else "https://$this"
 
     fun dp2px(context: Context, dpValue: Float): Int = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dpValue, context.resources.displayMetrics).toInt()
+
+    fun getPendingIntent(context: Context, copyText: String, type: Int, clipPkg: String, title: String, copyDirectId: String): PendingIntent {
+        return PendingIntent.getActivity(
+            context,
+            0,
+            getNotificationStartIntent(context, copyText, type, clipPkg, title, copyDirectId),
+            FLAG_UPDATE_CURRENT or FLAG_MUTABLE
+        )
+    }
+
+    fun getNotificationStartIntent(context: Context?, copyText: String?, type: Int, clipPkg: String?, title: String?, copyDirectId: String?): Intent {
+        return Intent(context, loadClass("com.xiaomi.aicr.copydirect.IntentActivity")).apply {
+            putExtra("copyText", copyText)
+            putExtra("type", type)
+            putExtra("clipPkg", clipPkg)
+            putExtra("title", title)
+            val pushShowTime = getStaticObjectOrNullAs<Long>(clazzNotificationUtils, "pushShowTime")
+            putExtra("pushShowTime", pushShowTime)
+            putExtra("copyDirectId", copyDirectId)
+            addFlags(FLAG_RECEIVER_NO_ABORT)
+            addFlags(FLAG_RECEIVER_FOREGROUND)
+            addFlags(FLAG_ACTIVITY_CLEAR_TASK)
+        }
+    }
 }

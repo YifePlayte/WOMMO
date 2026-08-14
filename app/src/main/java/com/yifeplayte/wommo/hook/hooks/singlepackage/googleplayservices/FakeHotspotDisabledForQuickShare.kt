@@ -1,9 +1,9 @@
 package com.yifeplayte.wommo.hook.hooks.singlepackage.googleplayservices
 
-import com.github.kyuubiran.ezxhelper.EzXHelper.safeClassLoader
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
 import com.yifeplayte.wommo.hook.hooks.BaseHook
 import com.yifeplayte.wommo.hook.utils.DexKit.dexKitBridge
+import com.yifeplayte.wommo.hook.utils.DexKit.getInstance
 
 @Suppress("unused")
 object FakeHotspotDisabledForQuickShare : BaseHook() {
@@ -16,7 +16,7 @@ object FakeHotspotDisabledForQuickShare : BaseHook() {
                     ", isHotspotEnabled=",
                 )
             }
-        }.single().getInstance(safeClassLoader).declaredConstructors.single().createHook {
+        }.single().getInstance().declaredConstructors.single().createHook {
             before { param ->
                 param.args[5] = false
             }

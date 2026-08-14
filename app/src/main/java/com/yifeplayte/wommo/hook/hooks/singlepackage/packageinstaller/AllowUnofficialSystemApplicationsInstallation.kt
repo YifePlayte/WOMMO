@@ -1,10 +1,10 @@
 package com.yifeplayte.wommo.hook.hooks.singlepackage.packageinstaller
 
 import android.content.pm.ApplicationInfo
-import com.github.kyuubiran.ezxhelper.EzXHelper.safeClassLoader
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHooks
 import com.yifeplayte.wommo.hook.hooks.BaseHook
 import com.yifeplayte.wommo.hook.utils.DexKit.dexKitBridge
+import com.yifeplayte.wommo.hook.utils.DexKit.getMethodInstance
 
 @Suppress("unused")
 object AllowUnofficialSystemApplicationsInstallation : BaseHook() {
@@ -15,7 +15,7 @@ object AllowUnofficialSystemApplicationsInstallation : BaseHook() {
                 paramTypes = listOf("android.content.pm.ApplicationInfo")
                 returnType = "boolean"
             }
-        }.map { it.getMethodInstance(safeClassLoader) }.createHooks {
+        }.map { it.getMethodInstance() }.createHooks {
             before { param ->
                 (param.args[0] as ApplicationInfo).flags =
                     (param.args[0] as ApplicationInfo).flags.or(ApplicationInfo.FLAG_SYSTEM)

@@ -1,9 +1,9 @@
 package com.yifeplayte.wommo.hook.hooks.singlepackage.securitycenter
 
-import com.github.kyuubiran.ezxhelper.EzXHelper.safeClassLoader
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
 import com.yifeplayte.wommo.hook.hooks.BaseHook
 import com.yifeplayte.wommo.hook.utils.DexKit.dexKitBridge
+import com.yifeplayte.wommo.hook.utils.DexKit.getMethodInstance
 
 @Suppress("unused")
 object RemoveReportInApplicationInfo : BaseHook() {
@@ -14,7 +14,7 @@ object RemoveReportInApplicationInfo : BaseHook() {
                 usingStrings = listOf("com.xiaomi.market")
                 declaredClass = "com.miui.appmanager.ApplicationsDetailsActivity"
             }
-        }.singleOrNull()?.getMethodInstance(safeClassLoader)?.createHook {
+        }.singleOrNull()?.getMethodInstance()?.createHook {
             returnConstant(false)
         }
         dexKitBridge.findMethod {
@@ -22,7 +22,7 @@ object RemoveReportInApplicationInfo : BaseHook() {
                 usingStrings = listOf("com.xiaomi.market")
                 declaredClass = "com.miui.appmanager.fragment.ApplicationsDetailsFragment"
             }
-        }.singleOrNull()?.getMethodInstance(safeClassLoader)?.createHook {
+        }.singleOrNull()?.getMethodInstance()?.createHook {
             returnConstant(false)
         }
     }
