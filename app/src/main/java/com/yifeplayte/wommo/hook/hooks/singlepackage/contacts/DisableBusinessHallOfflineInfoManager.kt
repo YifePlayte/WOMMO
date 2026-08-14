@@ -4,12 +4,18 @@ import com.github.kyuubiran.ezxhelper.ClassUtils.loadClass
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder.`-Static`.methodFinder
 import com.yifeplayte.wommo.hook.hooks.BaseHook
+import com.yifeplayte.wommo.hook.utils.DexKit.dexKitBridge
+import com.yifeplayte.wommo.hook.utils.DexKit.getInstance
 
 @Suppress("unused")
 object DisableBusinessHallOfflineInfoManager : BaseHook() {
     override val key = "disable_business_hall_offline_info_manager"
     override fun hook() {
-        val clazzOffLineInfoManager = loadClass("com.mobile.businesshall.control.OffLineInfoManager")
+        val clazzOffLineInfoManager = dexKitBridge.findClass {
+            matcher {
+                usingStrings = listOf("OFF_LINE_DATA_CACHE")
+            }
+        }.single().getInstance()
         val clazzOffLineData = loadClass("com.mobile.businesshall.bean.OffLineData")
         clazzOffLineInfoManager.methodFinder()
             .filterByReturnType(clazzOffLineData).single().createHook {

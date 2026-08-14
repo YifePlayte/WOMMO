@@ -19,7 +19,6 @@ import com.github.kyuubiran.ezxhelper.ClassUtils.invokeStaticMethodBestMatch
 import com.github.kyuubiran.ezxhelper.ClassUtils.loadClass
 import com.github.kyuubiran.ezxhelper.EzXHelper.appContext
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
-import com.github.kyuubiran.ezxhelper.Log
 import com.github.kyuubiran.ezxhelper.ObjectUtils.getObjectOrNull
 import com.github.kyuubiran.ezxhelper.ObjectUtils.getObjectOrNullAs
 import com.github.kyuubiran.ezxhelper.ObjectUtils.getObjectOrNullUntilSuperclass
@@ -36,7 +35,6 @@ object UseAOSPShareSheet : BaseHook() {
 
     @SuppressLint("DiscouragedApi")
     override fun hook() {
-        Log.i("UseAOSPShareSheet hooking")
         HiddenApiBypass.addHiddenApiExemptions(
             $$"Lcom/android/internal/R$id;",
             "Landroid/os/UserManager;",
