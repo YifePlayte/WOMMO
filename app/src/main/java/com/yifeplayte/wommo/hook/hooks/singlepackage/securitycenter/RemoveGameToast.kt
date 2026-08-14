@@ -9,26 +9,50 @@ import com.yifeplayte.wommo.hook.utils.DexKit.getMethodInstance
 object RemoveGameToast : BaseHook() {
     override val key = "remove_game_toast"
     override fun hook() {
-        dexKitBridge.findMethod {
-            matcher {
-                usingStrings = listOf("showNewWindowToastView: ")
+        runCatching {
+            dexKitBridge.findMethod {
+                matcher {
+                    usingStrings = listOf("NewDockGameToast method: ")
+                }
+            }.single().getMethodInstance().createHook {
+                returnConstant(true)
             }
-        }.single().getMethodInstance().createHook {
-            returnConstant(null)
         }
-        dexKitBridge.findMethod {
-            matcher {
-                usingStrings = listOf("showWildModeToastView: ")
+        runCatching {
+            dexKitBridge.findMethod {
+                matcher {
+                    usingStrings = listOf("showNewWindowToastView: ")
+                }
+            }.single().getMethodInstance().createHook {
+                returnConstant(null)
             }
-        }.single().getMethodInstance().createHook {
-            returnConstant(null)
         }
-        dexKitBridge.findMethod {
-            matcher {
-                usingStrings = listOf("cancel game toast , isCanceled : ")
+        runCatching {
+            dexKitBridge.findMethod {
+                matcher {
+                    usingStrings = listOf("showNewWindowToastView")
+                }
+            }.single().getMethodInstance().createHook {
+                returnConstant(null)
             }
-        }.single().getMethodInstance().createHook {
-            returnConstant(null)
+        }
+        runCatching {
+            dexKitBridge.findMethod {
+                matcher {
+                    usingStrings = listOf("showWildModeToastView: ")
+                }
+            }.single().getMethodInstance().createHook {
+                returnConstant(null)
+            }
+        }
+        runCatching {
+            dexKitBridge.findMethod {
+                matcher {
+                    usingStrings = listOf("cancel game toast , isCanceled : ")
+                }
+            }.single().getMethodInstance().createHook {
+                returnConstant(null)
+            }
         }
     }
 }
