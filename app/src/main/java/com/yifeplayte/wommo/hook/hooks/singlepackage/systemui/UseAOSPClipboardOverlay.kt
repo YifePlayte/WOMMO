@@ -5,7 +5,6 @@ import com.github.kyuubiran.ezxhelper.ClassUtils.loadClass
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
 import com.github.kyuubiran.ezxhelper.ObjectUtils.getObjectOrNullAs
 import com.github.kyuubiran.ezxhelper.ObjectUtils.invokeMethodBestMatch
-import com.github.kyuubiran.ezxhelper.ObjectUtils.setObject
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder.`-Static`.methodFinder
 import com.yifeplayte.wommo.hook.hooks.BaseHook
 
@@ -21,17 +20,16 @@ object UseAOSPClipboardOverlay : BaseHook() {
             .filterNonAbstract().single().createHook {
                 before { param ->
                     val mClipboardManager =
-                        runCatching { getObjectOrNullAs<ClipboardManager>(param.thisObject, "mClipboardManager")!! }
-                            .getOrElse { getObjectOrNullAs<ClipboardManager>(param.thisObject, "mClipboardManagerForUser")!! }
+                        runCatching {
+                            getObjectOrNullAs<ClipboardManager>(param.thisObject, "mClipboardManager")!!
+                        }.getOrElse {
+                            getObjectOrNullAs<ClipboardManager>(param.thisObject, "mClipboardManagerForUser")!!
+                        }
                     val primaryClipSource =
-                        invokeMethodBestMatch(mClipboardManager, "getPrimaryClipSource") as String?
+                        invokeMethodBestMatch(mClipboardManager, "getPrimaryClipSource") as? String ?: return@before
                     val oldList =
-                        getObjectOrNullAs<List<String>>(param.thisObject, "sCtsTestPkgList")!!
-                    val newList = mutableListOf<String>().apply {
-                        addAll(oldList)
-                        if (!contains(primaryClipSource)) primaryClipSource?.let { add(it) }
-                    }
-                    setObject(param.thisObject, "sCtsTestPkgList", newList)
+                        getObjectOrNullAs<MutableList<String>>(param.thisObject, "sCtsTestPkgList")!!
+                    oldList[0] = primaryClipSource
                 }
             }
         else clazzClipboardListener.methodFinder().filterByName("start").filterNonAbstract()
