@@ -3,16 +3,38 @@ package com.yifeplayte.wommo.hook.hooks.subpackage
 import android.content.pm.ApplicationInfo
 import com.github.kyuubiran.ezxhelper.ClassUtils.loadClass
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
+import com.github.kyuubiran.ezxhelper.ObjectUtils.getObjectOrNullAs
 import com.github.kyuubiran.ezxhelper.ObjectUtils.invokeMethodBestMatch
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder.`-Static`.methodFinder
 import com.yifeplayte.wommo.hook.hooks.BaseSubPackage
+import com.yifeplayte.wommo.utils.Build.HYPER_OS_VERSION
 import com.yifeplayte.wommo.utils.Build.IS_HYPER_OS
 import de.robv.android.xposed.XC_MethodHook.Unhook
 
 @Suppress("unused")
 object SystemUIPlugin : BaseSubPackage("com.android.systemui", "miui.systemui.plugin") {
     var hook: Unhook? = null
-    override fun initClassLoader() = if (IS_HYPER_OS) initForHyperOS() else initForMIUI()
+    override fun initClassLoader() = when {
+        HYPER_OS_VERSION >= 4 -> initForHyperOS4()
+        IS_HYPER_OS -> initForHyperOS()
+        else -> initForMIUI()
+    }
+
+    private fun initForHyperOS4() {
+        hook =
+            loadClass($$"com.android.systemui.shared.plugins.PluginInstance$PluginFactory").methodFinder()
+                .filterByName("createClassLoader")
+                .filterNonAbstract()
+                .single()
+                .createHook {
+                    after { param ->
+                        val appInfo = getObjectOrNullAs<ApplicationInfo>(param.thisObject, "pluginAppInfo") ?: return@after
+                        if (appInfo.packageName != subPackageName) return@after
+                        safeSubClassLoader = param.result as? ClassLoader ?: return@after
+                        hook?.unhook()
+                    }
+                }
+    }
 
     private fun initForHyperOS() {
         hook =
