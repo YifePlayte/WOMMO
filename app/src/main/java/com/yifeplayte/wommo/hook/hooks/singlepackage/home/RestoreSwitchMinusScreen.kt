@@ -12,6 +12,8 @@ import com.github.kyuubiran.ezxhelper.ObjectUtils.getObjectOrNull
 import com.github.kyuubiran.ezxhelper.ObjectUtils.invokeMethodBestMatch
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder.`-Static`.methodFinder
 import com.yifeplayte.wommo.hook.hooks.BaseHook
+import com.yifeplayte.wommo.utils.Build.IS_INTERNATIONAL_BUILD
+import com.yifeplayte.wommo.utils.Clazz.setStaticFinalObject
 
 @Suppress("unused")
 object RestoreSwitchMinusScreen : BaseHook() {
@@ -39,22 +41,24 @@ object RestoreSwitchMinusScreen : BaseHook() {
                     val isPersonalAssistantGoogle = (invokeStaticMethodBestMatch(
                         clazzUtilities, "getCurrentPersonalAssistant"
                     )!! as String) == "personal_assistant_google"
-                    setStaticObject(
-                        clazzMiuiBuild,
-                        "IS_INTERNATIONAL_BUILD",
-                        isPersonalAssistantGoogle
-                    )
+                    if (IS_INTERNATIONAL_BUILD != isPersonalAssistantGoogle)
+                        setStaticFinalObject(
+                            clazzMiuiBuild,
+                            "IS_INTERNATIONAL_BUILD",
+                            isPersonalAssistantGoogle
+                        )
                 }
                 after {
-                    setStaticObject(clazzMiuiBuild, "IS_INTERNATIONAL_BUILD", false)
+                    setStaticFinalObject(clazzMiuiBuild, "IS_INTERNATIONAL_BUILD", IS_INTERNATIONAL_BUILD)
                 }
             }
         clazzLauncher.declaredConstructors.createHooks {
             before {
-                setStaticObject(clazzMiuiBuild, "IS_INTERNATIONAL_BUILD", true)
+                if (!IS_INTERNATIONAL_BUILD)
+                    setStaticFinalObject(clazzMiuiBuild, "IS_INTERNATIONAL_BUILD", true)
             }
             after {
-                setStaticObject(clazzMiuiBuild, "IS_INTERNATIONAL_BUILD", false)
+                setStaticFinalObject(clazzMiuiBuild, "IS_INTERNATIONAL_BUILD", IS_INTERNATIONAL_BUILD)
             }
         }
         clazzMiuiHomeSettings.methodFinder().filterByName("onCreatePreferences")

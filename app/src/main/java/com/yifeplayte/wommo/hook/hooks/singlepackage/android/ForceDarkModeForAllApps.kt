@@ -2,12 +2,12 @@ package com.yifeplayte.wommo.hook.hooks.singlepackage.android
 
 import android.content.pm.ApplicationInfo
 import com.github.kyuubiran.ezxhelper.ClassUtils.loadClass
-import com.github.kyuubiran.ezxhelper.ClassUtils.setStaticObject
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHooks
 import com.github.kyuubiran.ezxhelper.ObjectUtils.invokeMethodBestMatch
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder.`-Static`.methodFinder
 import com.yifeplayte.wommo.hook.hooks.BaseHook
 import com.yifeplayte.wommo.utils.Build.IS_INTERNATIONAL_BUILD
+import com.yifeplayte.wommo.utils.Clazz.setStaticFinalObject
 
 @Suppress("unused")
 object ForceDarkModeForAllApps : BaseHook() {
@@ -19,10 +19,11 @@ object ForceDarkModeForAllApps : BaseHook() {
         clazzForceDarkAppListManager.methodFinder().filterByName("getDarkModeAppList").toList()
             .createHooks {
                 before {
-                    setStaticObject(clazzBuild, "IS_INTERNATIONAL_BUILD", true)
+                    if (!IS_INTERNATIONAL_BUILD)
+                        setStaticFinalObject(clazzBuild, "IS_INTERNATIONAL_BUILD", true)
                 }
                 after {
-                    setStaticObject(clazzBuild, "IS_INTERNATIONAL_BUILD", IS_INTERNATIONAL_BUILD)
+                    setStaticFinalObject(clazzBuild, "IS_INTERNATIONAL_BUILD", IS_INTERNATIONAL_BUILD)
                 }
             }
         clazzForceDarkAppListManager.methodFinder().filterByName("shouldShowInSettings").toList()

@@ -1,12 +1,12 @@
 package com.yifeplayte.wommo.hook.hooks.singlepackage.systemui
 
 import com.github.kyuubiran.ezxhelper.ClassUtils.loadClass
-import com.github.kyuubiran.ezxhelper.ClassUtils.setStaticObject
 import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHooks
 import com.yifeplayte.wommo.hook.hooks.BaseHook
 import com.yifeplayte.wommo.hook.utils.DexKit.dexKitBridge
 import com.yifeplayte.wommo.hook.utils.DexKit.getMethodInstance
 import com.yifeplayte.wommo.utils.Build.IS_INTERNATIONAL_BUILD
+import com.yifeplayte.wommo.utils.Clazz.setStaticFinalObject
 
 @Suppress("unused")
 object RestoreNearbyTile : BaseHook() {
@@ -21,10 +21,11 @@ object RestoreNearbyTile : BaseHook() {
             }
         }.map { it.getMethodInstance() }.createHooks {
             before {
-                setStaticObject(clazzMiuiConfigs, "IS_INTERNATIONAL_BUILD", true)
+                if (!IS_INTERNATIONAL_BUILD)
+                    setStaticFinalObject(clazzMiuiConfigs, "IS_INTERNATIONAL_BUILD", true)
             }
             after {
-                setStaticObject(clazzMiuiConfigs, "IS_INTERNATIONAL_BUILD", false)
+                setStaticFinalObject(clazzMiuiConfigs, "IS_INTERNATIONAL_BUILD", IS_INTERNATIONAL_BUILD)
             }
         }
     }
