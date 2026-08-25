@@ -7,7 +7,7 @@ import com.github.kyuubiran.ezxhelper.ObjectUtils.invokeMethodBestMatch
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder.`-Static`.methodFinder
 import com.yifeplayte.wommo.hook.hooks.BaseHook
 import com.yifeplayte.wommo.utils.Build.IS_INTERNATIONAL_BUILD
-import com.yifeplayte.wommo.utils.Clazz.setStaticFinal
+import com.yifeplayte.wommo.utils.Clazz.setStaticFinalObject
 
 @Suppress("unused")
 object ForceDarkModeForAllApps : BaseHook() {
@@ -19,10 +19,10 @@ object ForceDarkModeForAllApps : BaseHook() {
         clazzForceDarkAppListManager.methodFinder().filterByName("getDarkModeAppList").toList()
             .createHooks {
                 before {
-                    setStaticFinal(clazzBuild, "IS_INTERNATIONAL_BUILD", true)
+                    setStaticFinalObject(clazzBuild, "IS_INTERNATIONAL_BUILD", true)
                 }
                 after {
-                    setStaticFinal(clazzBuild, "IS_INTERNATIONAL_BUILD", IS_INTERNATIONAL_BUILD)
+                    setStaticFinalObject(clazzBuild, "IS_INTERNATIONAL_BUILD", IS_INTERNATIONAL_BUILD)
                 }
             }
         clazzForceDarkAppListManager.methodFinder().filterByName("shouldShowInSettings").toList()

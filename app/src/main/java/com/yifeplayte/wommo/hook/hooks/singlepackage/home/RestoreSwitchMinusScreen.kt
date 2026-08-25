@@ -13,7 +13,7 @@ import com.github.kyuubiran.ezxhelper.ObjectUtils.invokeMethodBestMatch
 import com.github.kyuubiran.ezxhelper.finders.MethodFinder.`-Static`.methodFinder
 import com.yifeplayte.wommo.hook.hooks.BaseHook
 import com.yifeplayte.wommo.utils.Build.IS_INTERNATIONAL_BUILD
-import com.yifeplayte.wommo.utils.Clazz.setStaticFinal
+import com.yifeplayte.wommo.utils.Clazz.setStaticFinalObject
 
 @Suppress("unused")
 object RestoreSwitchMinusScreen : BaseHook() {
@@ -41,22 +41,22 @@ object RestoreSwitchMinusScreen : BaseHook() {
                     val isPersonalAssistantGoogle = (invokeStaticMethodBestMatch(
                         clazzUtilities, "getCurrentPersonalAssistant"
                     )!! as String) == "personal_assistant_google"
-                    setStaticFinal(
+                    setStaticFinalObject(
                         clazzMiuiBuild,
                         "IS_INTERNATIONAL_BUILD",
                         isPersonalAssistantGoogle
                     )
                 }
                 after {
-                    setStaticFinal(clazzMiuiBuild, "IS_INTERNATIONAL_BUILD", IS_INTERNATIONAL_BUILD)
+                    setStaticFinalObject(clazzMiuiBuild, "IS_INTERNATIONAL_BUILD", IS_INTERNATIONAL_BUILD)
                 }
             }
         clazzLauncher.declaredConstructors.createHooks {
             before {
-                setStaticFinal(clazzMiuiBuild, "IS_INTERNATIONAL_BUILD", true)
+                setStaticFinalObject(clazzMiuiBuild, "IS_INTERNATIONAL_BUILD", true)
             }
             after {
-                setStaticFinal(clazzMiuiBuild, "IS_INTERNATIONAL_BUILD", IS_INTERNATIONAL_BUILD)
+                setStaticFinalObject(clazzMiuiBuild, "IS_INTERNATIONAL_BUILD", IS_INTERNATIONAL_BUILD)
             }
         }
         clazzMiuiHomeSettings.methodFinder().filterByName("onCreatePreferences")

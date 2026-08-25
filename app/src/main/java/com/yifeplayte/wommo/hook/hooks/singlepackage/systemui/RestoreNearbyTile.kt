@@ -6,7 +6,7 @@ import com.yifeplayte.wommo.hook.hooks.BaseHook
 import com.yifeplayte.wommo.hook.utils.DexKit.dexKitBridge
 import com.yifeplayte.wommo.hook.utils.DexKit.getMethodInstance
 import com.yifeplayte.wommo.utils.Build.IS_INTERNATIONAL_BUILD
-import com.yifeplayte.wommo.utils.Clazz.setStaticFinal
+import com.yifeplayte.wommo.utils.Clazz.setStaticFinalObject
 
 @Suppress("unused")
 object RestoreNearbyTile : BaseHook() {
@@ -21,10 +21,10 @@ object RestoreNearbyTile : BaseHook() {
             }
         }.map { it.getMethodInstance() }.createHooks {
             before {
-                setStaticFinal(clazzMiuiConfigs, "IS_INTERNATIONAL_BUILD", true)
+                setStaticFinalObject(clazzMiuiConfigs, "IS_INTERNATIONAL_BUILD", true)
             }
             after {
-                setStaticFinal(clazzMiuiConfigs, "IS_INTERNATIONAL_BUILD", IS_INTERNATIONAL_BUILD)
+                setStaticFinalObject(clazzMiuiConfigs, "IS_INTERNATIONAL_BUILD", IS_INTERNATIONAL_BUILD)
             }
         }
     }
