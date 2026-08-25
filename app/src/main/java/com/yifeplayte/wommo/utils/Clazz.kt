@@ -48,5 +48,5 @@ object Clazz {
         }
     }
 
-    fun setStaticFinal(obj: Class<*>, fieldString: String, newValue: Any?) = obj.setStaticFinal(fieldString, newValue)
+    // fun setStaticFinal(obj: Class<*>, fieldString: String, newValue: Any?) = obj.setStaticFinal(fieldString, newValue)
 }
