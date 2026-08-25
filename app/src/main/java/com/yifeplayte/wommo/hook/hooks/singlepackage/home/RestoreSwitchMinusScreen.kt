@@ -41,11 +41,12 @@ object RestoreSwitchMinusScreen : BaseHook() {
                     val isPersonalAssistantGoogle = (invokeStaticMethodBestMatch(
                         clazzUtilities, "getCurrentPersonalAssistant"
                     )!! as String) == "personal_assistant_google"
-                    setStaticFinalObject(
-                        clazzMiuiBuild,
-                        "IS_INTERNATIONAL_BUILD",
-                        isPersonalAssistantGoogle
-                    )
+                    if (IS_INTERNATIONAL_BUILD != isPersonalAssistantGoogle)
+                        setStaticFinalObject(
+                            clazzMiuiBuild,
+                            "IS_INTERNATIONAL_BUILD",
+                            isPersonalAssistantGoogle
+                        )
                 }
                 after {
                     setStaticFinalObject(clazzMiuiBuild, "IS_INTERNATIONAL_BUILD", IS_INTERNATIONAL_BUILD)
@@ -53,7 +54,8 @@ object RestoreSwitchMinusScreen : BaseHook() {
             }
         clazzLauncher.declaredConstructors.createHooks {
             before {
-                setStaticFinalObject(clazzMiuiBuild, "IS_INTERNATIONAL_BUILD", true)
+                if (!IS_INTERNATIONAL_BUILD)
+                    setStaticFinalObject(clazzMiuiBuild, "IS_INTERNATIONAL_BUILD", true)
             }
             after {
                 setStaticFinalObject(clazzMiuiBuild, "IS_INTERNATIONAL_BUILD", IS_INTERNATIONAL_BUILD)

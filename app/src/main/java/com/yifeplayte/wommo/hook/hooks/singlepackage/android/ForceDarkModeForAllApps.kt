@@ -19,7 +19,8 @@ object ForceDarkModeForAllApps : BaseHook() {
         clazzForceDarkAppListManager.methodFinder().filterByName("getDarkModeAppList").toList()
             .createHooks {
                 before {
-                    setStaticFinalObject(clazzBuild, "IS_INTERNATIONAL_BUILD", true)
+                    if (!IS_INTERNATIONAL_BUILD)
+                        setStaticFinalObject(clazzBuild, "IS_INTERNATIONAL_BUILD", true)
                 }
                 after {
                     setStaticFinalObject(clazzBuild, "IS_INTERNATIONAL_BUILD", IS_INTERNATIONAL_BUILD)

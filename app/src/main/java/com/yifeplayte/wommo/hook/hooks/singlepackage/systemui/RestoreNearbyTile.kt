@@ -21,7 +21,8 @@ object RestoreNearbyTile : BaseHook() {
             }
         }.map { it.getMethodInstance() }.createHooks {
             before {
-                setStaticFinalObject(clazzMiuiConfigs, "IS_INTERNATIONAL_BUILD", true)
+                if (!IS_INTERNATIONAL_BUILD)
+                    setStaticFinalObject(clazzMiuiConfigs, "IS_INTERNATIONAL_BUILD", true)
             }
             after {
                 setStaticFinalObject(clazzMiuiConfigs, "IS_INTERNATIONAL_BUILD", IS_INTERNATIONAL_BUILD)
