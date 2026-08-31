@@ -6,7 +6,7 @@
     <string name="ai_engine">Движок Xiaomi HyperAI</string>
     <string name="allow_move_non_miui_widgets_to_minus_screen">Разрешить перемещение виджетов не-MIUI в App vault</string>
     <string name="allow_unofficial_system_applications_installation">Разрешить установку системных приложений из неофициальных источников</string>
-    <string name="android">Системная структура</string>
+    <string name="system">Системная структура</string>
     <string name="aosp_app_info">Информация о приложении AOSP</string>
     <string name="aosp_app_manager">Менеджер приложений AOSP</string>
     <string name="app_link_open_always">Разрешить приложению открывать поддерживаемые ссылки</string>
@@ -78,8 +78,6 @@
     <string name="redirect_to_notification_channel_setting">Перенаправить настройки уведомлений на настройки канала</string>
     <string name="remove_adb_install_intercept">Удалить перехват установки adb</string>
     <string name="remove_game_toast">Удалить уведомление режима игр</string>
-    <string name="remove_miui_stroke_from_adaptive_icon">Удалить обводку MIUI из адаптивной иконки</string>
-    <string name="remove_miui_stroke_from_adaptive_icon_tips">Все приложения включены в области действия</string>
     <string name="remove_report_in_application_info">Удалить кнопку отчета на странице информации о приложении</string>
     <string name="remove_xl_download">Удалить папку .xldownload</string>
     <string name="restart_all_scope">Перезапустить все области действия</string>
@@ -110,5 +108,9 @@
     <string name="voice_assist">Mi Ai</string>
     <string name="warning">Предупреждение</string>
     <string name="wave_charge">Включить анимацию волновой зарядки</string>
+    <string name="module_status_active">Активирован</string>
+    <string name="module_status_active_desc">WOMMO работает</string>
+    <string name="module_status_inactive">Не активирован</string>
+    <string name="module_status_inactive_desc">Пожалуйста, активируйте модуль в LSPosed</string>
     <string name="widget_transition_animation">Включить анимацию переходов для всех виджетов</string>
 </resources>

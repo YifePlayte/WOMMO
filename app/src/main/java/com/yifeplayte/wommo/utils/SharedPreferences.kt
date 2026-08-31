@@ -1,22 +1,25 @@
 package com.yifeplayte.wommo.utils
 
-import android.app.Activity.MODE_WORLD_READABLE
 import android.content.SharedPreferences
 import androidx.core.content.edit
-import com.yifeplayte.wommo.activity.MainActivity.Companion.appContext
+import com.yifeplayte.wommo.App
 
 /**
  * SharedPreferences 工具
+ *
+ * API 102: 通过 XposedService.getRemotePreferences 读写模块配置。
+ * mSP 为实时属性：每次访问时检查 service 是否已绑定。
  */
 object SharedPreferences {
-    @Suppress("DEPRECATION", "WorldReadableFiles")
-    val mSP: SharedPreferences? by lazy {
-        runCatching {
-            appContext.getSharedPreferences("config", MODE_WORLD_READABLE)
+    val mSP: SharedPreferences?
+        get() = runCatching {
+            App.mService?.getRemotePreferences("config")
         }.getOrNull()
-    }
 
-    @Suppress("UNCHECKED_CAST")
+    /** 模块是否已激活（XposedService 已绑定） */
+    val isModuleActivated: Boolean
+        get() = App.mService != null
+
     fun SharedPreferences?.put(key: String, value: Any) {
         this?.edit {
             when (value) {

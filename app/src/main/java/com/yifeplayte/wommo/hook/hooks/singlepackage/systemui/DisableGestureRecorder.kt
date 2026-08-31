@@ -1,9 +1,10 @@
 package com.yifeplayte.wommo.hook.hooks.singlepackage.systemui
 
-import com.github.kyuubiran.ezxhelper.ClassUtils.loadClass
-import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
-import com.github.kyuubiran.ezxhelper.ObjectUtils.getObjectOrNullUntilSuperclass
-import com.github.kyuubiran.ezxhelper.finders.MethodFinder.`-Static`.methodFinder
+import io.github.lingqiqi5211.ezhooktool.core.findMethod
+import io.github.lingqiqi5211.ezhooktool.core.getFieldOrNull
+import io.github.lingqiqi5211.ezhooktool.core.loadClass
+import io.github.lingqiqi5211.ezhooktool.xposed.dsl.createHook
+
 import com.yifeplayte.wommo.hook.hooks.BaseHook
 import java.util.LinkedList
 
@@ -11,14 +12,15 @@ import java.util.LinkedList
 object DisableGestureRecorder : BaseHook() {
     override val key = "disable_gesture_recorder"
     override fun hook() {
-        loadClass("com.android.systemui.statusbar.GestureRecorder").methodFinder()
-            .filterByName("save").filterNonAbstract().single().createHook {
-                before {
-                    val mGestures =
-                        getObjectOrNullUntilSuperclass(it.thisObject, "mGestures") as LinkedList<*>?
-                    mGestures?.clear()
-                    it.result = null
-                }
+        loadClass("com.android.systemui.statusbar.GestureRecorder").findMethod {
+            name("save"); notAbstract()
+        }.createHook {
+            before {
+                val mGestures =
+                    it.thisObject.getFieldOrNull("mGestures") as LinkedList<*>?
+                mGestures?.clear()
+                it.result = null
             }
+        }
     }
 }

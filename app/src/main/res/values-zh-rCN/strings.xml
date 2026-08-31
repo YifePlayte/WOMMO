@@ -6,7 +6,7 @@
     <string name="ai_engine">小米澎湃AI引擎</string>
     <string name="allow_move_non_miui_widgets_to_minus_screen">允许将非 MIUI 小部件移至智能助理（负一屏）</string>
     <string name="allow_unofficial_system_applications_installation">允许从非官方渠道安装系统应用</string>
-    <string name="android">系统框架</string>
+    <string name="system">系统框架</string>
     <string name="aosp_app_info">原生应用信息</string>
     <string name="aosp_app_manager">原生应用管理</string>
     <string name="app_link_open_always">允许应用打开支持的链接</string>
@@ -85,8 +85,6 @@
     <string name="redirect_to_notification_channel_setting">重定向通知设置到频道设置</string>
     <string name="remove_adb_install_intercept">移除adb安装拦截弹窗</string>
     <string name="remove_game_toast">移除游戏模式 Toast</string>
-    <string name="remove_miui_stroke_from_adaptive_icon">移除自适应图标边界线</string>
-    <string name="remove_miui_stroke_from_adaptive_icon_tips">所有已勾选的作用域</string>
     <string name="remove_report_in_application_info">移除应用信息举报按钮</string>
     <string name="remove_xl_download">移除在根目录创建的 .xldownload 文件夹</string>
     <string name="restart_all_scope">重启全部作用域</string>
@@ -118,5 +116,9 @@
     <string name="warning">警告</string>
     <string name="wave_charge">启用 Alpha 充电动画</string>
     <string name="widget_transition_animation">为所有小部件添加启动动画</string>
+    <string name="module_status_active">已激活</string>
+    <string name="module_status_active_desc">WOMMO 正在运行</string>
+    <string name="module_status_inactive">未激活</string>
+    <string name="module_status_inactive_desc">请在 LSPosed 中激活模块</string>
     <string name="xmsf">小米服务框架</string>
 </resources>

@@ -1,12 +1,13 @@
 package com.yifeplayte.wommo.hook.hooks.singlepackage.systemui
 
 import android.content.ClipboardManager
-import com.github.kyuubiran.ezxhelper.ClassUtils.loadClass
-import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
-import com.github.kyuubiran.ezxhelper.ObjectUtils.getObjectOrNullAs
-import com.github.kyuubiran.ezxhelper.ObjectUtils.invokeMethodBestMatch
-import com.github.kyuubiran.ezxhelper.finders.MethodFinder.`-Static`.methodFinder
 import com.yifeplayte.wommo.hook.hooks.BaseHook
+import io.github.lingqiqi5211.ezhooktool.core.callMethod
+import io.github.lingqiqi5211.ezhooktool.core.findMethod
+import io.github.lingqiqi5211.ezhooktool.core.getFieldOrNullAs
+import io.github.lingqiqi5211.ezhooktool.core.getStaticFieldOrNullAs
+import io.github.lingqiqi5211.ezhooktool.core.loadClass
+import io.github.lingqiqi5211.ezhooktool.xposed.dsl.createHook
 
 @Suppress("unused")
 object UseAOSPClipboardOverlay : BaseHook() {
@@ -14,32 +15,37 @@ object UseAOSPClipboardOverlay : BaseHook() {
     override fun hook() {
         val clazzClipboardListener =
             loadClass("com.android.systemui.clipboardoverlay.ClipboardListener")
-        if (clazzClipboardListener.declaredFields.any {
-                it.name == "sCtsTestPkgList"
-            }) clazzClipboardListener.methodFinder().filterByName("onPrimaryClipChanged")
-            .filterNonAbstract().single().createHook {
+        if (clazzClipboardListener.declaredFields.any { it.name == "sCtsTestPkgList" }) {
+            clazzClipboardListener.findMethod {
+                name("onPrimaryClipChanged"); notAbstract()
+            }.createHook {
                 before { param ->
-                    val mClipboardManager =
-                        runCatching {
-                            getObjectOrNullAs<ClipboardManager>(param.thisObject, "mClipboardManager")!!
-                        }.getOrElse {
-                            getObjectOrNullAs<ClipboardManager>(param.thisObject, "mClipboardManagerForUser")!!
-                        }
+                    val mClipboardManager = runCatching {
+                        param.thisObject.getFieldOrNullAs<ClipboardManager>("mClipboardManager")!!
+                    }.getOrElse {
+                        param.thisObject.getFieldOrNullAs<ClipboardManager>("mClipboardManagerForUser")!!
+                    }
                     val primaryClipSource =
-                        invokeMethodBestMatch(mClipboardManager, "getPrimaryClipSource") as? String ?: return@before
+                        mClipboardManager.callMethod("getPrimaryClipSource") as String
                     val oldList =
-                        getObjectOrNullAs<MutableList<String>>(param.thisObject, "sCtsTestPkgList")!!
+                        param.thisObject.javaClass.getStaticFieldOrNullAs<MutableList<String>>("sCtsTestPkgList")!!
                     oldList[0] = primaryClipSource
                 }
             }
-        else clazzClipboardListener.methodFinder().filterByName("start").filterNonAbstract()
-            .single().createHook {
+        } else {
+            clazzClipboardListener.findMethod {
+                name("start"); notAbstract()
+            }.createHook {
                 before {
                     val mClipboardManager =
-                        getObjectOrNullAs<ClipboardManager>(it.thisObject, "mClipboardManager")!!
-                    mClipboardManager.addPrimaryClipChangedListener(it.thisObject as ClipboardManager.OnPrimaryClipChangedListener?)
+                        it.thisObject.getFieldOrNullAs<ClipboardManager>("mClipboardManager")!!
+                    @Suppress("UNCHECKED_CAST")
+                    mClipboardManager.addPrimaryClipChangedListener(
+                        it.thisObject as? ClipboardManager.OnPrimaryClipChangedListener
+                    )
                     it.result = null
                 }
             }
+        }
     }
 }

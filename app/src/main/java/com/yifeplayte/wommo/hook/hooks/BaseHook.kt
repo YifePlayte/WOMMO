@@ -1,7 +1,6 @@
 package com.yifeplayte.wommo.hook.hooks
 
-import com.github.kyuubiran.ezxhelper.Log
-import com.github.kyuubiran.ezxhelper.LogExtensions.logexIfThrow
+import com.yifeplayte.wommo.hook.utils.Log
 import com.yifeplayte.wommo.hook.utils.XSharedPreferences.getBoolean
 
 abstract class BaseHook {
@@ -14,7 +13,9 @@ abstract class BaseHook {
         if (isEnabled) runCatching {
             hook()
             isInit = true
-            Log.ix("Inited hook: ${this.javaClass.simpleName}")
-        }.logexIfThrow("Failed init hook: ${this.javaClass.simpleName}")
+            Log.i("Inited hook: ${this.javaClass.simpleName}")
+        }.onFailure {
+            Log.e("Failed init hook: ${this.javaClass.simpleName}", it)
+        }
     }
 }

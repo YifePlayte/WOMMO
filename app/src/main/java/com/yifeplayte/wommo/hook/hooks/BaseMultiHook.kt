@@ -1,9 +1,8 @@
 package com.yifeplayte.wommo.hook.hooks
 
-import com.github.kyuubiran.ezxhelper.EzXHelper.hostPackageName
-import com.github.kyuubiran.ezxhelper.Log
-import com.github.kyuubiran.ezxhelper.LogExtensions.logexIfThrow
+import com.yifeplayte.wommo.hook.utils.Log
 import com.yifeplayte.wommo.hook.utils.XSharedPreferences.getBoolean
+import com.yifeplayte.wommo.hook.utils.hostPackageName
 
 abstract class BaseMultiHook {
     private var isInit: Boolean = false
@@ -13,10 +12,13 @@ abstract class BaseMultiHook {
     fun init() {
         if (isInit) return
         if (!isEnabled) return
-        hooks[hostPackageName]?.runCatching {
-            invoke()
+        val hook = hooks[hostPackageName] ?: return
+        runCatching {
+            hook()
             isInit = true
-            Log.ix("Inited hook: ${this@BaseMultiHook.javaClass.simpleName} in: $hostPackageName")
-        }?.logexIfThrow("Failed init hook: ${this@BaseMultiHook.javaClass.simpleName} in: $hostPackageName")
+            Log.i("Inited hook: ${this@BaseMultiHook.javaClass.simpleName} in: $hostPackageName")
+        }.onFailure {
+            Log.e("Failed init hook: ${this@BaseMultiHook.javaClass.simpleName} in: $hostPackageName", it)
+        }
     }
 }

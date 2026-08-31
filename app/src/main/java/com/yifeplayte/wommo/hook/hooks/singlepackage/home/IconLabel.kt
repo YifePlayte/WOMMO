@@ -1,9 +1,10 @@
 package com.yifeplayte.wommo.hook.hooks.singlepackage.home
 
 import android.annotation.SuppressLint
-import com.github.kyuubiran.ezxhelper.ClassUtils.loadFirstClass
-import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
-import com.github.kyuubiran.ezxhelper.finders.MethodFinder.`-Static`.methodFinder
+import io.github.lingqiqi5211.ezhooktool.core.findMethod
+import io.github.lingqiqi5211.ezhooktool.core.loadClassFirst
+import io.github.lingqiqi5211.ezhooktool.xposed.dsl.createHook
+
 import com.yifeplayte.wommo.hook.hooks.BaseHook
 import com.yifeplayte.wommo.hook.utils.XSharedPreferences.getFloat
 
@@ -15,14 +16,13 @@ object IconLabel : BaseHook() {
 
     @SuppressLint("DiscouragedApi")
     override fun hook() {
-        loadFirstClass(
+        loadClassFirst(
             "com.miui.home.common.device.DeviceConfigs",
             "com.miui.home.launcher.DeviceConfig",
-        ).methodFinder()
-            .filterByName("getIconTitleTextSize").single().createHook {
-                before {
-                    it.result = labelSize
-                }
+        ).findMethod { name("getIconTitleTextSize") }.createHook {
+            before {
+                it.result = labelSize
             }
+        }
     }
 }

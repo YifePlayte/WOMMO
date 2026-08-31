@@ -5,11 +5,12 @@ import android.app.Notification
 import android.content.Context
 import android.content.pm.ApplicationInfo
 import android.service.notification.StatusBarNotification
-import com.github.kyuubiran.ezxhelper.ClassUtils.loadClass
-import com.github.kyuubiran.ezxhelper.ClassUtils.setStaticObject
-import com.github.kyuubiran.ezxhelper.EzXHelper.appContext
-import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
-import com.github.kyuubiran.ezxhelper.finders.MethodFinder.`-Static`.methodFinder
+import io.github.lingqiqi5211.ezhooktool.core.findMethod
+import io.github.lingqiqi5211.ezhooktool.core.loadClass
+import io.github.lingqiqi5211.ezhooktool.core.putStaticField
+import io.github.lingqiqi5211.ezhooktool.xposed.EzXposed
+import io.github.lingqiqi5211.ezhooktool.xposed.dsl.createHook
+
 import com.yifeplayte.wommo.hook.hooks.BaseMultiHook
 import com.yifeplayte.wommo.hook.utils.DexKit.dexKitBridge
 import com.yifeplayte.wommo.hook.utils.DexKit.getInstance
@@ -36,26 +37,25 @@ object ForceSupportBarrage : BaseMultiHook() {
             matcher {
                 usingStrings = listOf("game_box_barrage_v3_support_apps.json")
             }
-        }.single().getInstance().methodFinder()
-            .filterByReturnType(java.util.List::class.java)
-            .filterByParamCount(1)
-            .single().createHook {
-                after { param ->
-                    val barragePackageList = appContext.packageManager.getInstalledApplications(0)
-                        .filter { (it.flags and ApplicationInfo.FLAG_SYSTEM) != 1 }.filter {
-                            methodAreNotificationsEnabled.invoke(
-                                clazzNotificationFilterHelper, appContext, it.packageName
-                            ) == true
-                        }.associateWith {
-                            val label = it.loadLabel(appContext.packageManager).toString()
-                            convertToPinyinString(label, "", WITHOUT_TONE).lowercase()
-                        }.entries.sortedBy { it.value }.map { it.key.packageName }
-                    @Suppress("UNCHECKED_CAST") val supportedList = param.result as MutableList<String>
-                    for (s in barragePackageList) {
-                        if (!supportedList.contains(s)) supportedList.add(s)
-                    }
+        }.single().getInstance().findMethod {
+            returnType(java.util.List::class.java); paramCount(1)
+        }.createHook {
+            after { param ->
+                val barragePackageList = EzXposed.appContext.packageManager.getInstalledApplications(0)
+                    .filter { (it.flags and ApplicationInfo.FLAG_SYSTEM) != 1 }.filter {
+                        methodAreNotificationsEnabled.invoke(
+                            clazzNotificationFilterHelper, EzXposed.appContext, it.packageName
+                        ) == true
+                    }.associateWith {
+                        val label = it.loadLabel(EzXposed.appContext.packageManager).toString()
+                        convertToPinyinString(label, "", WITHOUT_TONE).lowercase()
+                    }.entries.sortedBy { it.value }.map { it.key.packageName }
+                @Suppress("UNCHECKED_CAST") val supportedList = param.result as MutableList<String>
+                for (s in barragePackageList) {
+                    if (!supportedList.contains(s)) supportedList.add(s)
                 }
             }
+        }
         dexKitBridge.findMethod {
             matcher {
                 usingStrings = listOf("isApplicationFloatNotificationEnable fail ")
@@ -68,8 +68,7 @@ object ForceSupportBarrage : BaseMultiHook() {
     private fun hookForBarrage() {
         val clazzNotificationMonitorService =
             loadClass("com.xiaomi.barrage.service.NotificationMonitorService")
-        setStaticObject(
-            clazzNotificationMonitorService,
+        clazzNotificationMonitorService.putStaticField(
             "mBarragePackageList",
             object : ArrayList<String?>() {
                 @Serial
@@ -78,13 +77,12 @@ object ForceSupportBarrage : BaseMultiHook() {
                     return true
                 }
             })
-        clazzNotificationMonitorService.methodFinder().filterByName("filterNotification").single()
-            .createHook {
-                before { param ->
-                    val statusBarNotification = param.args[0] as StatusBarNotification
-                    if (statusBarNotification.shouldBeFiltered()) param.result = true
-                }
+        clazzNotificationMonitorService.findMethod { name("filterNotification") }.createHook {
+            before { param ->
+                val statusBarNotification = param.args[0] as StatusBarNotification
+                if (statusBarNotification.shouldBeFiltered()) param.result = true
             }
+        }
     }
 
     object NotificationCache {

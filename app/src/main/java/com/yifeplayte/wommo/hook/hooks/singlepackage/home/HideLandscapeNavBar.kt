@@ -1,20 +1,21 @@
 package com.yifeplayte.wommo.hook.hooks.singlepackage.home
 
-import com.github.kyuubiran.ezxhelper.ClassUtils.loadClass
-import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
-import com.github.kyuubiran.ezxhelper.finders.MethodFinder.`-Static`.methodFinder
+import io.github.lingqiqi5211.ezhooktool.core.findMethod
+import io.github.lingqiqi5211.ezhooktool.core.loadClass
+import io.github.lingqiqi5211.ezhooktool.xposed.dsl.createHook
+
 import com.yifeplayte.wommo.hook.hooks.BaseHook
 
 @Suppress("unused")
 object HideLandscapeNavBar : BaseHook() {
     override val key = "hide_landscape_nav_bar"
     override fun hook() {
-        loadClass("com.miui.home.recents.views.RecentsContainer").methodFinder()
-            .filterByName("hideFakeNavBarForHidingGestureLine")
-            .single().createHook {
-                before {
-                    it.args[0] = true
-                }
+        loadClass("com.miui.home.recents.views.RecentsContainer").findMethod {
+            name("hideFakeNavBarForHidingGestureLine")
+        }.createHook {
+            before {
+                it.args[0] = true
             }
+        }
     }
 }

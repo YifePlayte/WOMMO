@@ -1,13 +1,14 @@
-package com.yifeplayte.wommo.hook.hooks.singlepackage.android
+package com.yifeplayte.wommo.hook.hooks.singlepackage.system
 
 import android.content.pm.ApplicationInfo
-import com.github.kyuubiran.ezxhelper.ClassUtils.loadClass
-import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHooks
-import com.github.kyuubiran.ezxhelper.ObjectUtils.invokeMethodBestMatch
-import com.github.kyuubiran.ezxhelper.finders.MethodFinder.`-Static`.methodFinder
+import io.github.lingqiqi5211.ezhooktool.core.callMethod
+import io.github.lingqiqi5211.ezhooktool.core.loadClass
+import io.github.lingqiqi5211.ezhooktool.xposed.dsl.createHooks
+
 import com.yifeplayte.wommo.hook.hooks.BaseHook
 import com.yifeplayte.wommo.utils.Build.IS_INTERNATIONAL_BUILD
 import com.yifeplayte.wommo.utils.Clazz.setStaticFinalObject
+import io.github.lingqiqi5211.ezhooktool.core.findAllMethods
 
 @Suppress("unused")
 object ForceDarkModeForAllApps : BaseHook() {
@@ -16,7 +17,7 @@ object ForceDarkModeForAllApps : BaseHook() {
     private val clazzBuild by lazy { loadClass("miui.os.Build") }
     override fun hook() {
         val clazzForceDarkAppListManager = loadClass("com.android.server.ForceDarkAppListManager")
-        clazzForceDarkAppListManager.methodFinder().filterByName("getDarkModeAppList").toList()
+        clazzForceDarkAppListManager.findAllMethods { name("getDarkModeAppList") }
             .createHooks {
                 before {
                     if (!IS_INTERNATIONAL_BUILD)
@@ -26,12 +27,12 @@ object ForceDarkModeForAllApps : BaseHook() {
                     setStaticFinalObject(clazzBuild, "IS_INTERNATIONAL_BUILD", IS_INTERNATIONAL_BUILD)
                 }
             }
-        clazzForceDarkAppListManager.methodFinder().filterByName("shouldShowInSettings").toList()
+        clazzForceDarkAppListManager.findAllMethods { name("shouldShowInSettings") }
             .createHooks {
                 before { param ->
                     val info = param.args[0] as ApplicationInfo?
-                    param.result = !(info == null || (invokeMethodBestMatch(
-                        info, "isSystemApp"
+                    param.result = !(info == null || (info.callMethod(
+                        "isSystemApp"
                     ) as Boolean) || info.uid < 10000)
                 }
             }

@@ -1,9 +1,10 @@
 package com.yifeplayte.wommo.hook.hooks.singlepackage.securitycenter
 
-import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
+import io.github.lingqiqi5211.ezhooktool.xposed.dsl.createHook
 import com.yifeplayte.wommo.hook.hooks.BaseHook
 import com.yifeplayte.wommo.hook.utils.DexKit.dexKitBridge
 import com.yifeplayte.wommo.hook.utils.DexKit.getMethodInstance
+import io.github.lingqiqi5211.ezhooktool.core.findMethod
 
 @Suppress("unused")
 object RemoveReportInApplicationInfo : BaseHook() {

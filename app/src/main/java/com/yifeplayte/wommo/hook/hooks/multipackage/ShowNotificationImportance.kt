@@ -1,17 +1,15 @@
 package com.yifeplayte.wommo.hook.hooks.multipackage
 
 import android.app.NotificationChannel
-import com.github.kyuubiran.ezxhelper.ClassUtils.loadClass
-import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
-import com.github.kyuubiran.ezxhelper.ObjectUtils.getObjectOrNullAs
-import com.github.kyuubiran.ezxhelper.ObjectUtils.getObjectOrNullUntilSuperclass
-import com.github.kyuubiran.ezxhelper.ObjectUtils.getObjectOrNullUntilSuperclassAs
-import com.github.kyuubiran.ezxhelper.ObjectUtils.invokeMethodBestMatch
-import com.github.kyuubiran.ezxhelper.ObjectUtils.setObject
-import com.github.kyuubiran.ezxhelper.finders.MethodFinder.`-Static`.methodFinder
 import com.yifeplayte.wommo.hook.hooks.BaseMultiHook
-import de.robv.android.xposed.XposedHelpers.getAdditionalInstanceField
-import de.robv.android.xposed.XposedHelpers.setAdditionalInstanceField
+import com.yifeplayte.wommo.hook.utils.AdditionalFields
+import io.github.lingqiqi5211.ezhooktool.core.callMethod
+import io.github.lingqiqi5211.ezhooktool.core.findMethod
+import io.github.lingqiqi5211.ezhooktool.core.getFieldOrNull
+import io.github.lingqiqi5211.ezhooktool.core.getFieldOrNullAs
+import io.github.lingqiqi5211.ezhooktool.core.loadClass
+import io.github.lingqiqi5211.ezhooktool.core.putField
+import io.github.lingqiqi5211.ezhooktool.xposed.dsl.createHook
 
 @Suppress("unused")
 object ShowNotificationImportance : BaseMultiHook() {
@@ -22,82 +20,79 @@ object ShowNotificationImportance : BaseMultiHook() {
     )
 
     private fun settings() {
-        loadClass("com.android.settings.notification.ChannelNotificationSettings").methodFinder()
-            .filterByName("removeDefaultPrefs").single().createHook {
-                before {
-                    val importance =
-                        invokeMethodBestMatch(it.thisObject, "findPreference", null, "importance")
-                            ?: return@before
-                    val mChannel = getObjectOrNullUntilSuperclassAs<NotificationChannel>(
-                        it.thisObject,
+        loadClass("com.android.settings.notification.ChannelNotificationSettings").findMethod {
+            name("removeDefaultPrefs")
+        }.createHook {
+            before {
+                val importance =
+                    it.thisObject.callMethod("findPreference", "importance")
+                        ?: return@before
+                val mChannel = it.thisObject.getFieldOrNullAs<NotificationChannel>(
+                    "mChannel"
+                )!!
+                val index = importance.callMethod(
+                    "findSpinnerIndexOfValue", mChannel.importance.toString()
+                )!! as Int
+                if (index < 0) return@before
+                importance.callMethod("setValueIndex", index)
+                AdditionalFields.set(
+                    importance,
+                    "channelNotificationSettings",
+                    it.thisObject
+                )
+                it.result = null
+            }
+        }
+        loadClass("androidx.preference.Preference").findMethod {
+            name("callChangeListener")
+            params(Any::class.java)
+        }.createHook {
+            after {
+                val channelNotificationSettings =
+                    AdditionalFields.get(it.thisObject, "channelNotificationSettings")
+                        ?: return@after
+                val mChannel =
+                    channelNotificationSettings.getFieldOrNullAs<NotificationChannel>(
                         "mChannel"
                     )!!
-                    val index = invokeMethodBestMatch(
-                        importance, "findSpinnerIndexOfValue", null, mChannel.importance.toString()
-                    )!! as Int
-                    if (index < 0) return@before
-                    invokeMethodBestMatch(importance, "setValueIndex", null, index)
-                    setAdditionalInstanceField(
-                        importance,
-                        "channelNotificationSettings",
-                        it.thisObject
-                    )
-                    it.result = null
-                }
+                mChannel.callMethod(
+                    "setImportance",
+                    (it.args[0] as String).toInt()
+                )
+                val mBackend =
+                    channelNotificationSettings.getFieldOrNull("mBackend")!!
+                val mPkg = channelNotificationSettings.getFieldOrNullAs<String>(
+                    "mPkg"
+                )
+                val mUid =
+                    channelNotificationSettings.getFieldOrNullAs<Int>("mUid")
+                mBackend.callMethod("updateChannel", mPkg, mUid, mChannel)
             }
-        loadClass("androidx.preference.Preference").methodFinder()
-            .filterByName("callChangeListener")
-            .filterByParamTypes(Any::class.java).single().createHook {
-                after {
-                    val channelNotificationSettings =
-                        getAdditionalInstanceField(it.thisObject, "channelNotificationSettings")
-                            ?: return@after
-                    val mChannel =
-                        getObjectOrNullUntilSuperclassAs<NotificationChannel>(
-                            channelNotificationSettings,
-                            "mChannel"
-                        )!!
-                    invokeMethodBestMatch(
-                        mChannel,
-                        "setImportance",
-                        null,
-                        (it.args[0] as String).toInt()
-                    )
-                    val mBackend =
-                        getObjectOrNullUntilSuperclass(channelNotificationSettings, "mBackend")!!
-                    val mPkg = getObjectOrNullUntilSuperclassAs<String>(
-                        channelNotificationSettings,
-                        "mPkg"
-                    )
-                    val mUid =
-                        getObjectOrNullUntilSuperclassAs<Int>(channelNotificationSettings, "mUid")
-                    invokeMethodBestMatch(mBackend, "updateChannel", null, mPkg, mUid, mChannel)
-                }
-            }
+        }
     }
 
     private fun systemUi() {
-        loadClass("com.android.systemui.statusbar.phone.NotificationIconAreaController").methodFinder()
-            .filterByName("updateStatusBarIcons").single().createHook {
-                before { param ->
-                    val mNotificationEntries = getObjectOrNullAs<List<Any>>(
-                        param.thisObject,
-                        "mNotificationEntries"
-                    )!!
-                    if (mNotificationEntries.isNotEmpty()) {
-                        val list = ArrayList<Any>()
-                        mNotificationEntries.forEach {
-                            val representativeEntry =
-                                invokeMethodBestMatch(it, "getRepresentativeEntry")!!
-                            val importance =
-                                invokeMethodBestMatch(representativeEntry, "getImportance") as Int
-                            if (importance > 1) list.add(it)
-                        }
-                        if (list.size != mNotificationEntries.size) {
-                            setObject(param.thisObject, "mNotificationEntries", list)
-                        }
+        loadClass("com.android.systemui.statusbar.phone.NotificationIconAreaController").findMethod {
+            name("updateStatusBarIcons")
+        }.createHook {
+            before { param ->
+                val mNotificationEntries = param.thisObject.getFieldOrNullAs<List<Any>>(
+                    "mNotificationEntries"
+                )!!
+                if (mNotificationEntries.isNotEmpty()) {
+                    val list = ArrayList<Any>()
+                    mNotificationEntries.forEach {
+                        val representativeEntry =
+                            it.callMethod("getRepresentativeEntry")!!
+                        val importance =
+                            representativeEntry.callMethod("getImportance") as Int
+                        if (importance > 1) list.add(it)
+                    }
+                    if (list.size != mNotificationEntries.size) {
+                        param.thisObject.putField("mNotificationEntries", list)
                     }
                 }
             }
+        }
     }
 }

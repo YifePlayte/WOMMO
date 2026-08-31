@@ -1,6 +1,6 @@
 package com.yifeplayte.wommo.hook.hooks.singlepackage.systemui
 
-import com.github.kyuubiran.ezxhelper.ClassUtils.loadClass
+import io.github.lingqiqi5211.ezhooktool.core.loadClass
 import com.yifeplayte.wommo.hook.hooks.BaseHook
 import com.yifeplayte.wommo.hook.utils.XSharedPreferences.getBoolean
 

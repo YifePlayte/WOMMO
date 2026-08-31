@@ -1,26 +1,3 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="xposedscope">
-        <item>android</item>
-        <item>com.android.contacts</item>
-        <item>com.android.intentresolver</item>
-        <item>com.android.providers.downloads</item>
-        <item>com.android.settings</item>
-        <item>com.android.systemui</item>
-        <item>com.google.android.gms</item>
-        <item>com.milink.service</item>
-        <item>com.miui.contentextension</item>
-        <item>com.miui.home</item>
-        <item>com.miui.packageinstaller</item>
-        <item>com.miui.personalassistant</item>
-        <item>com.miui.powerkeeper</item>
-        <item>com.miui.screenrecorder</item>
-        <item>com.miui.securitycenter</item>
-        <item>com.miui.voiceassist</item>
-        <item>com.xiaomi.aicr</item>
-        <item>com.xiaomi.barrage</item>
-        <item>com.xiaomi.market</item>
-        <item>com.xiaomi.mirror</item>
-        <item>com.xiaomi.xmsf</item>
-    </string-array>
 </resources>

@@ -1,8 +1,7 @@
 package com.yifeplayte.wommo.hook.hooks
 
-import com.github.kyuubiran.ezxhelper.EzXHelper
-import com.github.kyuubiran.ezxhelper.Log
-import com.github.kyuubiran.ezxhelper.LogExtensions.logexIfThrow
+import com.yifeplayte.wommo.hook.utils.Log
+import com.yifeplayte.wommo.hook.utils.isHostPackage
 import com.yifeplayte.wommo.utils.ClassScanner.scanObjectOf
 
 abstract class BasePackage(val packageName: String) {
@@ -12,12 +11,14 @@ abstract class BasePackage(val packageName: String) {
     }
 
     fun init() {
-        if (EzXHelper.hostPackageName != packageName) return
+        if (!isHostPackage(packageName)) return
         if (isInit) return
         runCatching {
             hooks.forEach { it.init() }
             isInit = true
-            Log.ix("Inited package: ${this.javaClass.simpleName}")
-        }.logexIfThrow("Failed init package: ${this.javaClass.simpleName}")
+            Log.i("Inited package: ${this.javaClass.simpleName}")
+        }.onFailure {
+            Log.e("Failed init package: ${this.javaClass.simpleName}", it)
+        }
     }
 }

@@ -1,10 +1,12 @@
 package com.yifeplayte.wommo.hook.hooks.singlepackage.xiaomiserviceframework
 
 import android.os.Bundle
-import com.github.kyuubiran.ezxhelper.ClassUtils.loadClass
-import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
-import com.github.kyuubiran.ezxhelper.finders.MethodFinder.`-Static`.methodFinder
+import io.github.lingqiqi5211.ezhooktool.core.findMethod
+import io.github.lingqiqi5211.ezhooktool.core.loadClass
+import io.github.lingqiqi5211.ezhooktool.xposed.dsl.createHook
+
 import com.yifeplayte.wommo.hook.hooks.BaseHook
+import java.lang.reflect.Method
 
 
 @Suppress("unused")
@@ -12,16 +14,20 @@ object ForceAuthSuccess : BaseHook() {
     override val key = "force_auth_success_for_xmsf"
     override fun hook() {
         val clazzAuthSession = loadClass("com.xiaomi.xms.auth.AuthSession")
-        val methodOnFailure = clazzAuthSession.methodFinder()
-            .filterByParamCount(1)
-            .filterByAssignableReturnType(Bundle::class.java)
-            .filterNonAbstract()
-            .single()
-        val methodOnSuccess = clazzAuthSession.methodFinder()
-            .filterByParamCount(0)
-            .filterByAssignableReturnType(Bundle::class.java)
-            .filterNonAbstract()
-            .single()
+        // 返回值与 Bundle 双向可赋值（等价旧 filterByAssignableReturnType）
+        val returnTypeRelatedToBundle: Method.() -> Boolean = {
+            returnType.isAssignableFrom(Bundle::class.java) || Bundle::class.java.isAssignableFrom(returnType)
+        }
+        val methodOnFailure = clazzAuthSession.findMethod {
+            paramCount(1)
+            filter(returnTypeRelatedToBundle)
+            notAbstract()
+        }
+        val methodOnSuccess = clazzAuthSession.findMethod {
+            paramCount(0)
+            filter(returnTypeRelatedToBundle)
+            notAbstract()
+        }
         methodOnFailure.createHook {
             before {
                 it.result = methodOnSuccess.invoke(it.thisObject)

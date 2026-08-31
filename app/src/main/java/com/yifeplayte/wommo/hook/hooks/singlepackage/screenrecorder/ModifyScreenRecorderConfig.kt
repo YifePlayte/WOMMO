@@ -1,10 +1,11 @@
 package com.yifeplayte.wommo.hook.hooks.singlepackage.screenrecorder
 
-import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
-import com.github.kyuubiran.ezxhelper.MemberExtensions.isFinal
+import io.github.lingqiqi5211.ezhooktool.xposed.dsl.createHook
 import com.yifeplayte.wommo.hook.hooks.BaseHook
 import com.yifeplayte.wommo.hook.utils.DexKit.dexKitBridge
 import com.yifeplayte.wommo.hook.utils.DexKit.getMethodInstance
+import java.lang.reflect.Modifier
+import io.github.lingqiqi5211.ezhooktool.core.findMethod
 
 @Suppress("unused")
 object ModifyScreenRecorderConfig : BaseHook() {
@@ -25,11 +26,11 @@ object ModifyScreenRecorderConfig : BaseHook() {
             before { param ->
                 param.args[0] = 3600
                 param.args[1] = 1
-                param.method.declaringClass.declaredFields.firstOrNull { field ->
+                param.executable.declaringClass.declaredFields.firstOrNull { field ->
                     field.also {
                         it.isAccessible = true
                     }.let { fieldAccessible ->
-                        fieldAccessible.isFinal && fieldAccessible.get(null).let {
+                        Modifier.isFinal(fieldAccessible.modifiers) && fieldAccessible.get(null).let {
                             runCatching {
                                 (it as IntArray).contentEquals(intArrayFrameRateOld)
                             }.getOrDefault(false)
@@ -48,11 +49,11 @@ object ModifyScreenRecorderConfig : BaseHook() {
             before { param ->
                 param.args[0] = 3600
                 param.args[1] = 1
-                param.method.declaringClass.declaredFields.firstOrNull { field ->
+                param.executable.declaringClass.declaredFields.firstOrNull { field ->
                     field.also {
                         it.isAccessible = true
                     }.let { fieldAccessible ->
-                        fieldAccessible.isFinal && fieldAccessible.get(null).let {
+                        Modifier.isFinal(fieldAccessible.modifiers) && fieldAccessible.get(null).let {
                             runCatching {
                                 (it as IntArray).contentEquals(intArrayBitRateOld)
                             }.getOrDefault(false)

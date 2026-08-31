@@ -1,8 +1,9 @@
 package com.yifeplayte.wommo.hook.hooks.subpackage.systemuiplugin
 
-import com.github.kyuubiran.ezxhelper.ClassUtils.loadClass
-import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
-import com.github.kyuubiran.ezxhelper.finders.MethodFinder.`-Static`.methodFinder
+import io.github.lingqiqi5211.ezhooktool.core.findMethod
+import io.github.lingqiqi5211.ezhooktool.core.loadClass
+import io.github.lingqiqi5211.ezhooktool.xposed.dsl.createHook
+
 import com.yifeplayte.wommo.hook.hooks.BaseSubHook
 
 @Suppress("unused")
@@ -12,9 +13,8 @@ object RestoreNearbyTile : BaseSubHook() {
         loadClass(
             $$"miui.systemui.controlcenter.qs.customize.TileQueryHelper$Companion",
             subClassLoader
-        ).methodFinder()
-            .filterByName("filterNearby").single().createHook {
-                returnConstant(false)
-            }
+        ).findMethod { name("filterNearby") }.createHook {
+            returnConstant(false)
+        }
     }
 }

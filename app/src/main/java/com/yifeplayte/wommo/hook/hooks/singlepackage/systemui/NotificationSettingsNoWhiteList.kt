@@ -1,7 +1,7 @@
 package com.yifeplayte.wommo.hook.hooks.singlepackage.systemui
 
-import com.github.kyuubiran.ezxhelper.ClassUtils.loadClass
-import com.github.kyuubiran.ezxhelper.ClassUtils.setStaticObject
+import io.github.lingqiqi5211.ezhooktool.core.loadClass
+import io.github.lingqiqi5211.ezhooktool.core.putStaticField
 import com.yifeplayte.wommo.hook.hooks.BaseHook
 import com.yifeplayte.wommo.utils.Build.IS_INTERNATIONAL_BUILD
 
@@ -10,8 +10,7 @@ object NotificationSettingsNoWhiteList : BaseHook() {
     override val key = "notification_settings_no_white_list"
     override val isEnabled get() = !IS_INTERNATIONAL_BUILD && super.isEnabled
     override fun hook() {
-        setStaticObject(
-            loadClass("com.android.systemui.statusbar.notification.NotificationSettingsManager"),
+        loadClass("com.android.systemui.statusbar.notification.NotificationSettingsManager").putStaticField(
             "USE_WHITE_LISTS",
             false
         )

@@ -8,18 +8,19 @@ import android.os.Handler
 import android.os.PowerManager
 import android.util.ArrayMap
 import android.widget.TextView
-import com.github.kyuubiran.ezxhelper.ClassUtils.getStaticObjectOrNull
-import com.github.kyuubiran.ezxhelper.ClassUtils.invokeStaticMethodBestMatch
-import com.github.kyuubiran.ezxhelper.ClassUtils.loadClass
-import com.github.kyuubiran.ezxhelper.ClassUtils.loadClassOrNull
-import com.github.kyuubiran.ezxhelper.ClassUtils.loadFirstClass
-import com.github.kyuubiran.ezxhelper.EzXHelper
-import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
-import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHooks
-import com.github.kyuubiran.ezxhelper.ObjectUtils.getObjectOrNull
-import com.github.kyuubiran.ezxhelper.ObjectUtils.invokeMethodBestMatch
-import com.github.kyuubiran.ezxhelper.ObjectUtils.setObject
-import com.github.kyuubiran.ezxhelper.finders.MethodFinder.`-Static`.methodFinder
+import io.github.lingqiqi5211.ezhooktool.core.callMethod
+import io.github.lingqiqi5211.ezhooktool.core.callStaticMethod
+import io.github.lingqiqi5211.ezhooktool.core.findMethod
+import io.github.lingqiqi5211.ezhooktool.core.getFieldOrNull
+import io.github.lingqiqi5211.ezhooktool.core.getStaticFieldOrNull
+import io.github.lingqiqi5211.ezhooktool.core.loadClass
+import io.github.lingqiqi5211.ezhooktool.core.loadClassFirst
+import io.github.lingqiqi5211.ezhooktool.core.loadClassOrNull
+import io.github.lingqiqi5211.ezhooktool.core.putField
+import io.github.lingqiqi5211.ezhooktool.xposed.EzXposed
+import io.github.lingqiqi5211.ezhooktool.xposed.dsl.createHook
+import io.github.lingqiqi5211.ezhooktool.xposed.dsl.createHooks
+
 import com.yifeplayte.wommo.R
 import com.yifeplayte.wommo.hook.hooks.BaseHook
 import com.yifeplayte.wommo.utils.Build.IS_HYPER_OS
@@ -33,21 +34,21 @@ object LockscreenChargingInfo : BaseHook() {
         val clazzDependency = loadClass("com.android.systemui.Dependency")
         val clazzKeyguardIndicationController =
             loadClass("com.android.systemui.statusbar.KeyguardIndicationController")
-        loadClassOrNull("com.android.systemui.statusbar.phone.KeyguardIndicationTextView")?.constructors?.createHooks {
+        loadClassOrNull("com.android.systemui.statusbar.phone.KeyguardIndicationTextView")?.constructors?.toList()?.createHooks {
             after { param ->
                 (param.thisObject as TextView).isSingleLine = false
                 val screenOnOffReceiver = object : BroadcastReceiver() {
                     val keyguardIndicationController = runCatching {
-                        invokeStaticMethodBestMatch(
-                            clazzDependency, "get", null, clazzKeyguardIndicationController
+                        clazzDependency.callStaticMethod(
+                            "get", clazzKeyguardIndicationController
                         )!!
                     }.getOrElse {
                         val clazzMiuiStub = loadClass("miui.stub.MiuiStub")
-                        val instanceMiuiStub = getStaticObjectOrNull(clazzMiuiStub, "INSTANCE")!!
-                        val mSysUIProvider = getObjectOrNull(instanceMiuiStub, "mSysUIProvider")!!
+                        val instanceMiuiStub = clazzMiuiStub.getStaticFieldOrNull("INSTANCE")!!
+                        val mSysUIProvider = instanceMiuiStub.getFieldOrNull("mSysUIProvider")!!
                         val mKeyguardIndicationController =
-                            getObjectOrNull(mSysUIProvider, "mKeyguardIndicationController")!!
-                        invokeMethodBestMatch(mKeyguardIndicationController, "get")!!
+                            mSysUIProvider.getFieldOrNull("mKeyguardIndicationController")!!
+                        mKeyguardIndicationController.callMethod("get")!!
                     }
                     val handler = Handler((param.thisObject as TextView).context.mainLooper)
                     val runnable = object : Runnable {
@@ -55,50 +56,43 @@ object LockscreenChargingInfo : BaseHook() {
                         val clazzMiuiChargeController =
                             loadClass("com.miui.charge.MiuiChargeController")
                         val sDependency =
-                            getStaticObjectOrNull(clazzMiuiDependency, "sDependency")!!
+                            clazzMiuiDependency.getStaticFieldOrNull("sDependency")!!
                         val mProviders =
-                            getObjectOrNull(sDependency, "mProviders") as ArrayMap<*, *>
+                            sDependency.getFieldOrNull("mProviders") as ArrayMap<*, *>
                         val mMiuiChargeControllerProvider = mProviders[clazzMiuiChargeController]!!
-                        val instanceMiuiChargeController = invokeMethodBestMatch(
-                            mMiuiChargeControllerProvider, "createDependency"
+                        val instanceMiuiChargeController = mMiuiChargeControllerProvider.callMethod(
+                            "createDependency"
                         )!!
 
                         override fun run() {
                             if (IS_HYPER_OS) {
                                 doUpdateForHyperOS()
                             } else {
-                                invokeMethodBestMatch(
-                                    keyguardIndicationController, "updatePowerIndication"
-                                )
+                                keyguardIndicationController.callMethod("updatePowerIndication")
                             }
                             handler.postDelayed(this, 1000)
                         }
 
                         fun doUpdateForHyperOS() {
-                            val mBatteryStatus = getObjectOrNull(
-                                instanceMiuiChargeController, "mBatteryStatus"
+                            val mBatteryStatus = instanceMiuiChargeController.getFieldOrNull(
+                                "mBatteryStatus"
                             )!!
-                            val level = getObjectOrNull(mBatteryStatus, "level")
-                            val isPluggedIn = invokeMethodBestMatch(mBatteryStatus, "isPluggedIn")
-                            val mContext = getObjectOrNull(instanceMiuiChargeController, "mContext")
+                            val level = mBatteryStatus.getFieldOrNull("level")
+                            val isPluggedIn = mBatteryStatus.callMethod("isPluggedIn")
+                            val mContext = instanceMiuiChargeController.getFieldOrNull("mContext")
                             val clazzChargeUtils = loadClass("com.miui.charge.ChargeUtils")
-                            val chargingHintText = invokeStaticMethodBestMatch(
-                                clazzChargeUtils,
+                            val chargingHintText = clazzChargeUtils.callStaticMethod(
                                 "getChargingHintText",
-                                null,
                                 level,
                                 isPluggedIn,
                                 mContext
                             )
-                            setObject(
-                                keyguardIndicationController,
+                            keyguardIndicationController.putField(
                                 "mComputePowerIndication",
                                 chargingHintText
                             )
-                            invokeMethodBestMatch(
-                                keyguardIndicationController,
+                            keyguardIndicationController.callMethod(
                                 "updateDeviceEntryIndication",
-                                null,
                                 false
                             )
                         }
@@ -132,14 +126,13 @@ object LockscreenChargingInfo : BaseHook() {
                 )
             }
         }
-        loadFirstClass(
+        loadClassFirst(
             "com.miui.charge.ChargeUtils", "com.android.keyguard.charge.ChargeUtils"
-        ).methodFinder().filterByName("getChargingHintText").filterByParamCount(3).single()
-            .createHook {
-                after { param ->
-                    param.result = param.result?.let { "$it\n${getChargingInfo()}" }
-                }
+        ).findMethod { name("getChargingHintText"); paramCount(3) }.createHook {
+            after { param ->
+                param.result = param.result?.let { "$it\n${getChargingInfo()}" }
             }
+        }
     }
 
     private fun getChargingInfo(): String {
@@ -161,41 +154,8 @@ object LockscreenChargingInfo : BaseHook() {
                 }
             }
 
-            // val clazzMiuiChargeManager = loadClass("com.android.keyguard.charge.MiuiChargeManager")
-            // val plugState = loadClass("com.android.systemui.Dependency").classHelper()
-            //     .invokeStaticMethodBestMatch("get", null, clazzMiuiChargeManager)!!.objectHelper()
-            //     .getObjectOrNull("mBatteryStatus")!!.objectHelper().getObjectOrNullAs<Int>("wireState")
-            // when (plugState) {
-            //     10 -> {
-            //         current =
-            //             FileReader("/sys/class/power_supply/wireless/rx_iout").use { fileReader ->
-            //                 BufferedReader(fileReader).use { bufferedReader ->
-            //                     bufferedReader.readLine().toDouble() / 1000000.0
-            //                 }
-            //             }
-            //         voltage = FileReader("/sys/class/power_supply/wireless/input_voltage_vrect").use { fileReader ->
-            //             BufferedReader(fileReader).use { bufferedReader ->
-            //                 bufferedReader.readLine().toDouble() / 1000000.0
-            //             }
-            //         }
-            //     }
-            //
-            //     else -> {
-            //         current =
-            //             FileReader("/sys/class/power_supply/usb/input_current_now").use { fileReader ->
-            //                 BufferedReader(fileReader).use { bufferedReader ->
-            //                     bufferedReader.readLine().toDouble() / 1000000.0
-            //                 }
-            //             }
-            //         voltage = FileReader("/sys/class/power_supply/usb/voltage_now").use { fileReader ->
-            //             BufferedReader(fileReader).use { bufferedReader ->
-            //                 bufferedReader.readLine().toDouble() / 1000000.0
-            //             }
-            //         }
-            //     }
-            // }
             return String.format("%.2f A · %.2f V\n%.2f W", current, voltage, watt)
         }
-        return EzXHelper.moduleRes.getString(R.string.lockscreen_charging_info_not_supported)
+        return EzXposed.moduleRes.getString(R.string.lockscreen_charging_info_not_supported)
     }
 }

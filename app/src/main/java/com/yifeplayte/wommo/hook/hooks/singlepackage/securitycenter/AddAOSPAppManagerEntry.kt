@@ -5,12 +5,12 @@ import android.app.Activity
 import android.content.Intent
 import android.view.Menu
 import android.view.MenuItem
-import com.github.kyuubiran.ezxhelper.ClassUtils.loadClass
-import com.github.kyuubiran.ezxhelper.EzXHelper.appContext
-import com.github.kyuubiran.ezxhelper.EzXHelper.hostPackageName
-import com.github.kyuubiran.ezxhelper.EzXHelper.initAppContext
-import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
-import com.github.kyuubiran.ezxhelper.finders.MethodFinder.`-Static`.methodFinder
+import io.github.lingqiqi5211.ezhooktool.core.findMethod
+import io.github.lingqiqi5211.ezhooktool.core.loadClass
+import io.github.lingqiqi5211.ezhooktool.xposed.EzXposed
+import com.yifeplayte.wommo.hook.utils.hostPackageName
+import io.github.lingqiqi5211.ezhooktool.xposed.dsl.createHook
+
 import com.yifeplayte.wommo.R
 import com.yifeplayte.wommo.hook.hooks.BaseHook
 
@@ -19,18 +19,18 @@ import com.yifeplayte.wommo.hook.hooks.BaseHook
 object AddAOSPAppManagerEntry : BaseHook() {
     override val key = "add_aosp_app_manager_entry"
     private val idIdMiuixActionEndMenuGroup by lazy {
-        appContext.resources.getIdentifier("miuix_action_end_menu_group", "id", hostPackageName)
+        EzXposed.appContext.resources.getIdentifier("miuix_action_end_menu_group", "id", hostPackageName)
     }
     private val idDrawableIconSettings by lazy {
-        appContext.resources.getIdentifier("icon_settings", "drawable", hostPackageName)
+        EzXposed.appContext.resources.getIdentifier("icon_settings", "drawable", hostPackageName)
     }
 
     override fun hook() {
         val clazzAppManagerMainActivity = loadClass("com.miui.appmanager.AppManagerMainActivity")
-        clazzAppManagerMainActivity.methodFinder().filterByName("onCreateOptionsMenu").single()
+        clazzAppManagerMainActivity.findMethod { name("onCreateOptionsMenu") }
             .createHook {
                 after {
-                    initAppContext(it.thisObject as Activity, true)
+                    EzXposed.initAppContext(it.thisObject as Activity, true)
                     val menuItem = (it.args[0] as Menu).add(
                         idIdMiuixActionEndMenuGroup, 0, 0, R.string.aosp_app_manager
                     )

@@ -12,10 +12,10 @@ import com.yifeplayte.wommo.utils.Build.IS_INTERNATIONAL_BUILD
 import top.yukonga.miuix.kmp.basic.Card
 import top.yukonga.miuix.kmp.basic.SmallTitle
 
-fun LazyListScope.android() {
+fun LazyListScope.system() {
     item {
         SmallTitle(
-            text = stringResource(R.string.android),
+            text = stringResource(R.string.system),
         )
     }
     item {

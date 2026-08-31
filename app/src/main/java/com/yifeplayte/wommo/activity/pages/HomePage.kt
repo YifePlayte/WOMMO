@@ -5,15 +5,20 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
+import com.yifeplayte.wommo.App
 import com.yifeplayte.wommo.R
-import com.yifeplayte.wommo.activity.dialogs.NotActivatedDialog
 import com.yifeplayte.wommo.activity.sections.aiEngine
-import com.yifeplayte.wommo.activity.sections.android
+import com.yifeplayte.wommo.activity.sections.system
 import com.yifeplayte.wommo.activity.sections.barrage
 import com.yifeplayte.wommo.activity.sections.bottomSpacer
 import com.yifeplayte.wommo.activity.sections.contacts
@@ -35,7 +40,9 @@ import com.yifeplayte.wommo.activity.sections.voiceAssist
 import com.yifeplayte.wommo.activity.sections.xmsf
 import com.yifeplayte.wommo.activity.ui.AdaptiveTopAppBar
 import com.yifeplayte.wommo.activity.ui.BlurredBar
-import com.yifeplayte.wommo.utils.SharedPreferences.mSP
+import com.yifeplayte.wommo.activity.ui.StatusCard
+import com.yifeplayte.wommo.activity.ui.WithServiceReady
+import com.yifeplayte.wommo.utils.SharedPreferences.isModuleActivated
 import top.yukonga.miuix.kmp.basic.MiuixScrollBehavior
 import top.yukonga.miuix.kmp.basic.Scaffold
 import top.yukonga.miuix.kmp.basic.VerticalScrollBar
@@ -59,6 +66,20 @@ fun HomePage() {
     val barColor = if (blurActive) Color.Transparent else MiuixTheme.colorScheme.surface
     val lazyListState = rememberLazyListState()
 
+    // 响应式监听 XposedService 绑定状态
+    var serviceReady by remember { mutableStateOf(App.mService != null) }
+    DisposableEffect(Unit) {
+        val listener = object : App.ServiceStateListener {
+            override fun onServiceStateChanged(service: io.github.libxposed.service.XposedService?) {
+                serviceReady = service != null
+            }
+        }
+        App.addServiceStateListener(listener, notifyImmediately = true)
+        onDispose {
+            App.removeServiceStateListener(listener)
+        }
+    }
+
     Scaffold(
         topBar = {
             BlurredBar(backdrop, blurActive) {
@@ -70,52 +91,51 @@ fun HomePage() {
             }
         },
     ) { innerPadding ->
-        Box(modifier = if (blurActive) Modifier.layerBackdrop(backdrop) else Modifier) {
-            LazyColumn(
-                state = lazyListState,
-                modifier = Modifier
-                    .scrollEndHaptic()
-                    .overScrollVertical()
-                    .nestedScroll(scrollBehavior.nestedScrollConnection)
-                    .fillMaxHeight(),
-                contentPadding = innerPadding,
-            ) {
-                android()
-                systemUI()
-                home()
-                securityCenter()
-                contacts()
-                screenRecorder()
-                packageInstaller()
-                barrage()
-                settings()
-                downloadProvider()
-                voiceAssist()
-                contentExtension()
-                powerKeeper()
-                intentResolver()
-                aiEngine()
-                xmsf()
-                getApps()
-                googlePlayServices()
-                others()
-                reboot()
-                bottomSpacer()
+        WithServiceReady(serviceReady) {
+            Box(modifier = if (blurActive) Modifier.layerBackdrop(backdrop) else Modifier) {
+                LazyColumn(
+                    state = lazyListState,
+                    modifier = Modifier
+                        .scrollEndHaptic()
+                        .overScrollVertical()
+                        .nestedScroll(scrollBehavior.nestedScrollConnection)
+                        .fillMaxHeight(),
+                    contentPadding = innerPadding,
+                ) {
+                    item { StatusCard(isActive = serviceReady && isModuleActivated) }
+                    system()
+                    systemUI()
+                    home()
+                    securityCenter()
+                    contacts()
+                    screenRecorder()
+                    packageInstaller()
+                    barrage()
+                    settings()
+                    downloadProvider()
+                    voiceAssist()
+                    contentExtension()
+                    powerKeeper()
+                    intentResolver()
+                    aiEngine()
+                    xmsf()
+                    getApps()
+                    googlePlayServices()
+                    others()
+                    reboot()
+                    bottomSpacer()
+                }
+                VerticalScrollBar(
+                    adapter = rememberScrollBarAdapter(lazyListState),
+                    modifier = Modifier
+                        .align(Alignment.CenterEnd)
+                        .fillMaxHeight(),
+                    trackPadding = innerPadding,
+                )
             }
-            VerticalScrollBar(
-                adapter = rememberScrollBarAdapter(lazyListState),
-                modifier = Modifier
-                    .align(Alignment.CenterEnd)
-                    .fillMaxHeight(),
-                trackPadding = innerPadding,
-            )
         }
     }
 
-
-    if (mSP == null) {
-        NotActivatedDialog()
-    }
 }
 
 @Composable

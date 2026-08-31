@@ -1,8 +1,9 @@
 package com.yifeplayte.wommo.hook.hooks.singlepackage.voiceassist
 
-import com.github.kyuubiran.ezxhelper.ClassUtils.loadClass
-import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
-import com.github.kyuubiran.ezxhelper.finders.MethodFinder.`-Static`.methodFinder
+import io.github.lingqiqi5211.ezhooktool.core.findMethod
+import io.github.lingqiqi5211.ezhooktool.core.loadClass
+import io.github.lingqiqi5211.ezhooktool.xposed.dsl.createHook
+
 import com.yifeplayte.wommo.hook.hooks.BaseHook
 import com.yifeplayte.wommo.hook.utils.DexKit.dexKitBridge
 import com.yifeplayte.wommo.hook.utils.DexKit.getInstance
@@ -12,30 +13,28 @@ object EnableWakeUpAdvancedAnimation : BaseHook() {
     override val key = "enable_wake_up_advanced_animation"
     override fun hook() {
         val clazzSystemProperties = loadClass("miuix.core.util.SystemProperties")
-        clazzSystemProperties.methodFinder()
-            .filterByName("get")
-            .filterByParamCount(2)
-            .filterNonAbstract()
-            .single()
-            .createHook {
-                before {
-                    if (it.args[0] == "persist.sys.background_blur_supported") {
-                        it.result = "true"
-                    }
+        clazzSystemProperties.findMethod {
+            name("get")
+            paramCount(2)
+            notAbstract()
+        }.createHook {
+            before {
+                if (it.args[0] == "persist.sys.background_blur_supported") {
+                    it.result = "true"
                 }
             }
-        clazzSystemProperties.methodFinder()
-            .filterByName("getBoolean")
-            .filterByParamCount(2)
-            .filterNonAbstract()
-            .single()
-            .createHook {
-                before {
-                    if (it.args[0] == "persist.sys.background_blur_supported") {
-                        it.result = true
-                    }
+        }
+        clazzSystemProperties.findMethod {
+            name("getBoolean")
+            paramCount(2)
+            notAbstract()
+        }.createHook {
+            before {
+                if (it.args[0] == "persist.sys.background_blur_supported") {
+                    it.result = true
                 }
             }
+        }
         val clazzWakeUpAnimHelper = dexKitBridge.findClass {
             matcher {
                 usingStrings = listOf(
@@ -45,19 +44,17 @@ object EnableWakeUpAdvancedAnimation : BaseHook() {
                 )
             }
         }.single().getInstance()
-        clazzWakeUpAnimHelper.methodFinder()
-            .filterByName("isDeviceNeedBoostGpu")
-            .filterNonAbstract()
-            .single()
-            .createHook {
-                returnConstant(true)
-            }
-        clazzWakeUpAnimHelper.methodFinder()
-            .filterByName("isDeviceOpenAdvanceAnim")
-            .filterNonAbstract()
-            .single()
-            .createHook {
-                returnConstant(true)
-            }
+        clazzWakeUpAnimHelper.findMethod {
+            name("isDeviceNeedBoostGpu")
+            notAbstract()
+        }.createHook {
+            returnConstant(true)
+        }
+        clazzWakeUpAnimHelper.findMethod {
+            name("isDeviceOpenAdvanceAnim")
+            notAbstract()
+        }.createHook {
+            returnConstant(true)
+        }
     }
 }

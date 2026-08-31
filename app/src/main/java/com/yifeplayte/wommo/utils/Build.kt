@@ -1,11 +1,14 @@
 package com.yifeplayte.wommo.utils
 
-import com.github.kyuubiran.ezxhelper.ClassUtils.getStaticObjectOrNullAs
-import com.github.kyuubiran.ezxhelper.ClassUtils.invokeStaticMethodBestMatch
-import com.github.kyuubiran.ezxhelper.ClassUtils.loadClass
+import io.github.lingqiqi5211.ezhooktool.core.callStaticMethod
+import io.github.lingqiqi5211.ezhooktool.core.getStaticFieldOrNullAs
+import io.github.lingqiqi5211.ezhooktool.core.loadClass
 
 /**
  * 获取系统信息
+ *
+ * 在模块 UI 进程与 hook 进程中都会使用；
+ * miui.os.Build / SystemProperties 均为框架类，core 的 loadClass 默认 ClassLoader 即可解析
  */
 @Suppress("unused")
 object Build {
@@ -21,40 +24,42 @@ object Build {
      * 设备是否为平板
      */
     val IS_TABLET by lazy {
-        getStaticObjectOrNullAs<Boolean>(clazzMiuiBuild, "IS_TABLET") ?: false
+        runCatching { clazzMiuiBuild.getStaticFieldOrNullAs<Boolean>("IS_TABLET") }.getOrNull() ?: false
     }
 
     /**
      * 是否为国际版系统
      */
     val IS_INTERNATIONAL_BUILD by lazy {
-        getStaticObjectOrNullAs<Boolean>(clazzMiuiBuild, "IS_INTERNATIONAL_BUILD") ?: false
+        runCatching { clazzMiuiBuild.getStaticFieldOrNullAs<Boolean>("IS_INTERNATIONAL_BUILD") }.getOrNull() ?: false
+    }
+
+    private val hyperOsVersionCode: Int by lazy {
+        runCatching {
+            clazzSystemProperties.callStaticMethod("getInt", "ro.mi.os.version.code", -1) as? Int
+        }.getOrNull() ?: -1
     }
 
     /**
      * 是否为HyperOS
      */
     val IS_HYPER_OS by lazy {
-        invokeStaticMethodBestMatch(
-            clazzSystemProperties, "getInt", null, "ro.mi.os.version.code", -1
-        ) != -1
+        hyperOsVersionCode != -1
     }
 
     /**
      * HyperOS版本
      */
     val HYPER_OS_VERSION by lazy {
-        invokeStaticMethodBestMatch(
-            clazzSystemProperties, "getInt", null, "ro.mi.os.version.code", -1
-        ) as Int
+        hyperOsVersionCode
     }
 
     /**
      * 是否支持超级岛
      */
     val IS_SUPPORT_ISLAND by lazy {
-        invokeStaticMethodBestMatch(
-            clazzSystemProperties, "getBoolean", null, "persist.sys.feature.island", false
-        ) as Boolean
+        runCatching {
+            clazzSystemProperties.callStaticMethod("getBoolean", "persist.sys.feature.island", false) as? Boolean
+        }.getOrNull() ?: false
     }
 }

@@ -1,8 +1,9 @@
 package com.yifeplayte.wommo.hook.hooks.singlepackage.home
 
-import com.github.kyuubiran.ezxhelper.ClassUtils.loadClass
-import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
-import com.github.kyuubiran.ezxhelper.finders.MethodFinder.`-Static`.methodFinder
+import io.github.lingqiqi5211.ezhooktool.core.findMethod
+import io.github.lingqiqi5211.ezhooktool.core.loadClass
+import io.github.lingqiqi5211.ezhooktool.xposed.dsl.createHook
+
 import com.yifeplayte.wommo.hook.hooks.BaseHook
 
 
@@ -17,16 +18,16 @@ object UnlockGrids : BaseHook() {
             loadClass("com.miui.home.launcher.compat.LauncherCellCountCompatResource")
         )
         clazzSet.forEach {
-            it.methodFinder().findSuper().filterByName("getCellCountXMin").first().createHook {
+            it.findMethod { name("getCellCountXMin"); findAndSuper() }.createHook {
                 returnConstant(4)
             }
-            it.methodFinder().findSuper().filterByName("getCellCountYMin").first().createHook {
+            it.findMethod { name("getCellCountYMin"); findAndSuper() }.createHook {
                 returnConstant(6)
             }
-            it.methodFinder().findSuper().filterByName("getCellCountXMax").first().createHook {
+            it.findMethod { name("getCellCountXMax"); findAndSuper() }.createHook {
                 returnConstant(16)
             }
-            it.methodFinder().findSuper().filterByName("getCellCountYMax").first().createHook {
+            it.findMethod { name("getCellCountYMax"); findAndSuper() }.createHook {
                 returnConstant(18)
             }
         }

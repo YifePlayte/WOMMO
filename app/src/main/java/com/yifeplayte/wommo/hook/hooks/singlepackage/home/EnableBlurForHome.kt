@@ -1,11 +1,12 @@
 package com.yifeplayte.wommo.hook.hooks.singlepackage.home
 
-import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHooks
+import io.github.lingqiqi5211.ezhooktool.xposed.dsl.createHooks
 import com.yifeplayte.wommo.hook.hooks.BaseHook
 import com.yifeplayte.wommo.hook.utils.DexKit.dexKitBridge
 import com.yifeplayte.wommo.hook.utils.DexKit.getMethodInstance
 import org.luckypray.dexkit.query.matchers.base.StringMatcher
 import java.lang.reflect.Method
+import io.github.lingqiqi5211.ezhooktool.core.findMethod
 
 @Suppress("unused")
 object EnableBlurForHome : BaseHook() {

@@ -1,12 +1,12 @@
 package com.yifeplayte.wommo.hook.hooks.multipackage
 
-import com.github.kyuubiran.ezxhelper.ClassUtils.loadClass
-import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
-import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHooks
-import com.github.kyuubiran.ezxhelper.ObjectHelper.Companion.objectHelper
-import com.github.kyuubiran.ezxhelper.ObjectUtils.setObject
-import com.github.kyuubiran.ezxhelper.finders.FieldFinder.`-Static`.fieldFinder
-import com.github.kyuubiran.ezxhelper.finders.MethodFinder.`-Static`.methodFinder
+import io.github.lingqiqi5211.ezhooktool.core.findAllMethods
+import io.github.lingqiqi5211.ezhooktool.core.findMethod
+import io.github.lingqiqi5211.ezhooktool.core.loadClass
+import io.github.lingqiqi5211.ezhooktool.core.putField
+import io.github.lingqiqi5211.ezhooktool.xposed.dsl.createHook
+import io.github.lingqiqi5211.ezhooktool.xposed.dsl.createHooks
+
 import com.yifeplayte.wommo.hook.hooks.BaseMultiHook
 import com.yifeplayte.wommo.hook.utils.DexKit.dexKitBridge
 import com.yifeplayte.wommo.hook.utils.DexKit.getInstance
@@ -23,7 +23,7 @@ object ForceSupportSendApp : BaseMultiHook() {
 
     private fun milink() {
         val clazzMiuiSynergySdk = loadClass("com.xiaomi.mirror.synergy.MiuiSynergySdk")
-        clazzMiuiSynergySdk.methodFinder().filterByName("isSupportSendApp").toList().createHooks {
+        clazzMiuiSynergySdk.findAllMethods { name("isSupportSendApp") }.createHooks {
             after {
                 it.result = true
             }
@@ -33,13 +33,14 @@ object ForceSupportSendApp : BaseMultiHook() {
     private fun mirror(): Boolean = runCatching {
         val clazzRelayAppMessage = loadClass("com.xiaomi.mirror.message.RelayAppMessage")
         val clazzMiCloudUtils = loadClass("com.xiaomi.mirror.settings.micloud.MiCloudUtils")
-        clazzRelayAppMessage.methodFinder().filterByAssignableReturnType(clazzRelayAppMessage)
-            .toList().createHooks {
-                after {
-                    it.result.objectHelper().setObject("isHideIcon", false)
-                }
+        clazzRelayAppMessage.findAllMethods {
+            filter { returnType == clazzRelayAppMessage || clazzRelayAppMessage.isAssignableFrom(returnType) || returnType.isAssignableFrom(clazzRelayAppMessage) }
+        }.createHooks {
+            after {
+                (it.result as Any).putField("isHideIcon", false)
             }
-        clazzMiCloudUtils.methodFinder().filterByName("isSupportSubScreen").single().createHook {
+        }
+        clazzMiCloudUtils.findMethod { name("isSupportSubScreen") }.createHook {
             returnConstant(true)
         }
     }.isSuccess
@@ -47,18 +48,15 @@ object ForceSupportSendApp : BaseMultiHook() {
     private fun mirrorNew() {
         val clazzRelayApplication =
             loadClass($$"com.xiaomi.mirror.message.proto.RelayApp$RelayApplication")
-        clazzRelayApplication.methodFinder().filterByName("getIsHideIcon").filterNonAbstract()
-            .single().createHook {
-                returnConstant(false)
-            }
-        clazzRelayApplication.methodFinder().filterByName("getSupportHandOff").filterNonAbstract()
-            .single().createHook {
-                returnConstant(true)
-            }
-        clazzRelayApplication.methodFinder().filterByName("getSupportSubScreen").filterNonAbstract()
-            .single().createHook {
-                returnConstant(true)
-            }
+        clazzRelayApplication.findMethod { name("getIsHideIcon"); notAbstract() }.createHook {
+            returnConstant(false)
+        }
+        clazzRelayApplication.findMethod { name("getSupportHandOff"); notAbstract() }.createHook {
+            returnConstant(true)
+        }
+        clazzRelayApplication.findMethod { name("getSupportSubScreen"); notAbstract() }.createHook {
+            returnConstant(true)
+        }
         dexKitBridge.findMethod {
             matcher {
                 usingStrings = listOf("support_all_app_sub_screen")
@@ -77,19 +75,19 @@ object ForceSupportSendApp : BaseMultiHook() {
         }.single().getInstance()
         clazzRelayAppMessage.let { clazz ->
             val fieldNameIsHideIcon =
-                clazz.fieldFinder().filterByType(Boolean::class.javaPrimitiveType!!).toList()
+                clazz.declaredFields.filter { it.type == Boolean::class.javaPrimitiveType }
                     .sortedBy { it.name }[1].name
-            clazz.methodFinder().filterByReturnType(clazz).toList().createHooks {
+            clazz.findAllMethods { returnType(clazz) }.createHooks {
                 after {
-                    setObject(it.result, fieldNameIsHideIcon, false)
+                    (it.result as Any).putField(fieldNameIsHideIcon, false)
                 }
             }
         }
         runCatching {
             loadClass("com.xiaomi.mirror.message.RelayAppMessage").let { clazz ->
-                clazz.methodFinder().filterByReturnType(clazz).toList().createHooks {
+                clazz.findAllMethods { returnType(clazz) }.createHooks {
                     after {
-                        setObject(it.result, "isHideIcon", false)
+                        (it.result as Any).putField("isHideIcon", false)
                     }
                 }
             }

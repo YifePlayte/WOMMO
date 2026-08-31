@@ -1,8 +1,9 @@
 package com.yifeplayte.wommo.hook.hooks.singlepackage.contacts
 
-import com.github.kyuubiran.ezxhelper.ClassUtils.loadClass
-import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
-import com.github.kyuubiran.ezxhelper.finders.MethodFinder.`-Static`.methodFinder
+import io.github.lingqiqi5211.ezhooktool.core.findMethod
+import io.github.lingqiqi5211.ezhooktool.core.loadClass
+import io.github.lingqiqi5211.ezhooktool.xposed.dsl.createHook
+
 import com.yifeplayte.wommo.hook.hooks.BaseHook
 import com.yifeplayte.wommo.hook.utils.DexKit.dexKitBridge
 import com.yifeplayte.wommo.hook.utils.DexKit.getInstance
@@ -17,13 +18,11 @@ object DisableBusinessHallOfflineInfoManager : BaseHook() {
             }
         }.single().getInstance()
         val clazzOffLineData = loadClass("com.mobile.businesshall.bean.OffLineData")
-        clazzOffLineInfoManager.methodFinder()
-            .filterByReturnType(clazzOffLineData).single().createHook {
-                returnConstant(null)
-            }
-        clazzOffLineInfoManager.methodFinder()
-            .filterByParamCount(0).filterByReturnType(Void.TYPE).single().createHook {
-                returnConstant(null)
-            }
+        clazzOffLineInfoManager.findMethod { returnType(clazzOffLineData) }.createHook {
+            returnConstant(null)
+        }
+        clazzOffLineInfoManager.findMethod { paramCount(0); returnType(Void.TYPE) }.createHook {
+            returnConstant(null)
+        }
     }
 }

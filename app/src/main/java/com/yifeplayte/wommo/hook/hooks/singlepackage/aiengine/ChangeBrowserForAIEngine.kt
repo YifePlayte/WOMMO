@@ -20,17 +20,16 @@ import android.util.TypedValue
 import androidx.core.app.NotificationCompat
 import androidx.core.graphics.drawable.IconCompat
 import androidx.core.net.toUri
-import com.github.kyuubiran.ezxhelper.ClassUtils.getStaticObjectOrNullAs
-import com.github.kyuubiran.ezxhelper.ClassUtils.loadClass
-import com.github.kyuubiran.ezxhelper.ClassUtils.newInstanceBestMatch
-import com.github.kyuubiran.ezxhelper.ClassUtils.setStaticObject
-import com.github.kyuubiran.ezxhelper.EzXHelper.appContext
-import com.github.kyuubiran.ezxhelper.EzXHelper.hostPackageName
-import com.github.kyuubiran.ezxhelper.EzXHelper.initAppContext
-import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
-import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHooks
-import com.github.kyuubiran.ezxhelper.Log
-import com.github.kyuubiran.ezxhelper.finders.MethodFinder.`-Static`.methodFinder
+import io.github.lingqiqi5211.ezhooktool.core.findMethod
+import io.github.lingqiqi5211.ezhooktool.core.getStaticFieldOrNullAs
+import io.github.lingqiqi5211.ezhooktool.core.loadClass
+import io.github.lingqiqi5211.ezhooktool.core.newInstanceAuto
+import io.github.lingqiqi5211.ezhooktool.core.putStaticField
+import io.github.lingqiqi5211.ezhooktool.xposed.EzXposed
+import com.yifeplayte.wommo.hook.utils.hostPackageName
+import io.github.lingqiqi5211.ezhooktool.xposed.dsl.createHook
+import io.github.lingqiqi5211.ezhooktool.xposed.dsl.createHooks
+
 import com.yifeplayte.wommo.R
 import com.yifeplayte.wommo.hook.hooks.BaseHook
 import com.yifeplayte.wommo.hook.utils.DexKit.dexKitBridge
@@ -50,10 +49,10 @@ object ChangeBrowserForAIEngine : BaseHook() {
     private const val NOTIFICATION_ID = 111
     private const val TRAILING_CHARS = ".,!?;:，。！？；：、）】》〉」』]}>"
     private val drawableImageActionGo by lazy {
-        appContext.resources.getIdentifier("image_action_go", "drawable", hostPackageName)
+        EzXposed.appContext.resources.getIdentifier("image_action_go", "drawable", hostPackageName)
     }
     private val drawableNotificationIconWebsite by lazy {
-        appContext.resources.getIdentifier("notification_icon_website", "drawable", hostPackageName)
+        EzXposed.appContext.resources.getIdentifier("notification_icon_website", "drawable", hostPackageName)
     }
     private val methodShowNotification by lazy {
         dexKitBridge.findMethod {
@@ -66,11 +65,10 @@ object ChangeBrowserForAIEngine : BaseHook() {
         methodShowNotification.declaringClass
     }
     private val methodIsShowing by lazy {
-        clazzNotificationUtils.methodFinder()
-            .filterNonAbstract()
-            .filterStatic()
-            .filterByAssignableParamTypes(Context::class.java, String::class.java)
-            .single()
+        clazzNotificationUtils.findMethod {
+            notAbstract(); isStatic()
+            paramsAssignableFrom(Context::class.java, String::class.java)
+        }
     }
     private val clazzNotificationInfo by lazy {
         dexKitBridge.findClass {
@@ -85,11 +83,10 @@ object ChangeBrowserForAIEngine : BaseHook() {
         }.single().getInstance()
     }
     private val methodGetDaoInfoJson by lazy {
-        clazzNotificationUtils.methodFinder()
-            .filterNonAbstract()
-            .filterStatic()
-            .filterByAssignableParamTypes(clazzNotificationInfo, String::class.java, Context::class.java, String::class.java)
-            .single()
+        clazzNotificationUtils.findMethod {
+            notAbstract(); isStatic()
+            paramsAssignableFrom(clazzNotificationInfo, String::class.java, Context::class.java, String::class.java)
+        }
     }
     private val uriRegex by lazy {
         Regex("""(?:[A-Za-z][A-Za-z0-9+.-]*://[^\s<>"'\p{IsHan}]+)|(?:(?:www\.)?[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)+(?:/[^\s<>"'\p{IsHan}]*)?)""")
@@ -125,7 +122,7 @@ object ChangeBrowserForAIEngine : BaseHook() {
                 val isShowing = methodIsShowing.invoke(null, context, copyText) as Boolean
                 if (isShowing) return@before
 
-                initAppContext(context, true)
+                EzXposed.initAppContext(context, true)
 
                 // 获取待启动应用信息
                 val intent = Intent(Intent.ACTION_VIEW, param.args[1].toString().withHttpsIfMissing().toUri())
@@ -139,15 +136,13 @@ object ChangeBrowserForAIEngine : BaseHook() {
                 val title = context.getString(R.string.copy_direct_action_open, label)
                 val text = context.getString(R.string.copy_direct_action_open_content, copyText)
                 val notificationInfo =
-                    newInstanceBestMatch(clazzNotificationInfo, drawableNotificationIconWebsite, title, text, 11)
-                val notificationManager = getStaticObjectOrNullAs<NotificationManager>(
-                    clazzNotificationUtils,
+                    clazzNotificationInfo.newInstanceAuto(drawableNotificationIconWebsite, title, text, 11)
+                val notificationManager = clazzNotificationUtils.getStaticFieldOrNullAs<NotificationManager>(
                     "notificationManager"
                 ) ?: return@before
 
                 val timeout = if (IS_SUPPORT_ISLAND) 10000L else 5000L
-                setStaticObject(
-                    clazzNotificationUtils,
+                clazzNotificationUtils.putStaticField(
                     "pushShowTime",
                     SystemClock.elapsedRealtime()
                 )
@@ -230,7 +225,7 @@ object ChangeBrowserForAIEngine : BaseHook() {
             putExtra("type", type)
             putExtra("clipPkg", clipPkg)
             putExtra("title", title)
-            val pushShowTime = getStaticObjectOrNullAs<Long>(clazzNotificationUtils, "pushShowTime")
+            val pushShowTime = clazzNotificationUtils.getStaticFieldOrNullAs<Long>("pushShowTime")
             putExtra("pushShowTime", pushShowTime)
             putExtra("copyDirectId", copyDirectId)
             addFlags(FLAG_RECEIVER_NO_ABORT)

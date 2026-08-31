@@ -1,21 +1,22 @@
 package com.yifeplayte.wommo.hook.hooks.singlepackage.systemui
 
+import android.content.Context
 import android.content.Intent
 import android.os.UserHandle
 import android.provider.Settings
 import android.service.notification.StatusBarNotification
 import android.widget.ImageView
-import com.github.kyuubiran.ezxhelper.ClassUtils.getStaticObjectOrNullAs
-import com.github.kyuubiran.ezxhelper.ClassUtils.invokeStaticMethodBestMatch
-import com.github.kyuubiran.ezxhelper.ClassUtils.loadClass
-import com.github.kyuubiran.ezxhelper.EzXHelper.appContext
-import com.github.kyuubiran.ezxhelper.EzXHelper.initAppContext
-import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
-import com.github.kyuubiran.ezxhelper.ObjectHelper.Companion.objectHelper
-import com.github.kyuubiran.ezxhelper.ObjectUtils.getObjectOrNull
-import com.github.kyuubiran.ezxhelper.ObjectUtils.getObjectOrNullAs
-import com.github.kyuubiran.ezxhelper.ObjectUtils.invokeMethodBestMatch
-import com.github.kyuubiran.ezxhelper.finders.MethodFinder.`-Static`.methodFinder
+import io.github.lingqiqi5211.ezhooktool.core.callMethod
+import io.github.lingqiqi5211.ezhooktool.core.callStaticMethod
+import io.github.lingqiqi5211.ezhooktool.core.findMethod
+import io.github.lingqiqi5211.ezhooktool.core.findMethodOrNull
+import io.github.lingqiqi5211.ezhooktool.core.getFieldOrNull
+import io.github.lingqiqi5211.ezhooktool.core.getFieldOrNullAs
+import io.github.lingqiqi5211.ezhooktool.core.getStaticFieldOrNullAs
+import io.github.lingqiqi5211.ezhooktool.core.loadClass
+import io.github.lingqiqi5211.ezhooktool.xposed.EzXposed
+import io.github.lingqiqi5211.ezhooktool.xposed.dsl.createHook
+
 import com.yifeplayte.wommo.hook.hooks.BaseHook
 import com.yifeplayte.wommo.utils.Build.IS_HYPER_OS
 
@@ -31,48 +32,47 @@ object RedirectToNotificationChannelSetting : BaseHook() {
             val clazzModalController =
                 loadClass("com.android.systemui.statusbar.notification.modal.ModalController")
             val clazzCommandQueue = loadClass("com.android.systemui.statusbar.CommandQueue")
-            clazzMiuiNotificationMenuRow.methodFinder().filterByName("createMenuViews").single()
-                .createHook {
-                    after { param ->
-                        val mSbn =
-                            getObjectOrNullAs<StatusBarNotification>(param.thisObject, "mSbn")
-                                ?: return@after
-                        val mInfoItem =
-                            getObjectOrNull(param.thisObject, "mInfoItem") ?: return@after
-                        initAppContext(getObjectOrNullAs(param.thisObject, "mContext"))
-                        val mIcon = getObjectOrNullAs<ImageView>(mInfoItem, "mIcon") ?: return@after
-                        mIcon.setOnClickListener {
-                            startChannelNotificationSettings(mSbn)
-                            val modalController = invokeStaticMethodBestMatch(
-                                clazzDependency, "get", null, clazzModalController
-                            ) ?: return@setOnClickListener
-                            invokeMethodBestMatch(
-                                modalController, "animExitModal", null, 50L, true, "MORE", false
-                            )
-                            val commandQueue = invokeStaticMethodBestMatch(
-                                clazzDependency, "get", null, clazzCommandQueue
-                            ) ?: return@setOnClickListener
-                            invokeMethodBestMatch(
-                                commandQueue, "animateCollapsePanels", null, 0, false
-                            )
-                        }
+            clazzMiuiNotificationMenuRow.findMethod { name("createMenuViews") }.createHook {
+                after { param ->
+                    val mSbn =
+                        param.thisObject.getFieldOrNullAs<StatusBarNotification>("mSbn")
+                            ?: return@after
+                    val mInfoItem =
+                        param.thisObject.getFieldOrNull("mInfoItem") ?: return@after
+                    EzXposed.initAppContext(param.thisObject.getFieldOrNullAs<Context>("mContext"))
+                    val mIcon = (mInfoItem as Any).getFieldOrNullAs<ImageView>("mIcon") ?: return@after
+                    mIcon.setOnClickListener {
+                        startChannelNotificationSettings(mSbn)
+                        val modalController = clazzDependency.callStaticMethod(
+                            "get", clazzModalController
+                        ) ?: return@setOnClickListener
+                        modalController.callMethod(
+                            "animExitModal", 50L, true, "MORE", false
+                        )
+                        val commandQueue = clazzDependency.callStaticMethod(
+                            "get", clazzCommandQueue
+                        ) ?: return@setOnClickListener
+                        commandQueue.callMethod(
+                            "animateCollapsePanels", 0, false
+                        )
                     }
                 }
+            }
         }
-        clazzMiuiNotificationMenuRow.methodFinder().filterByName("onClickInfoItem").singleOrNull()
+        clazzMiuiNotificationMenuRow.findMethodOrNull { name("onClickInfoItem") }
             ?.createHook {
                 before { param ->
-                    param.thisObject.objectHelper {
-                        initAppContext(getObjectOrNullAs("mContext"))
-                        statusBarNotification = getObjectOrNullAs("mSbn")
-                    }
+                    val self = param.thisObject
+                    EzXposed.initAppContext(self.getFieldOrNullAs("mContext"))
+                    statusBarNotification = self.getFieldOrNullAs("mSbn")
                 }
                 after {
                     statusBarNotification = null
                 }
             }
-        loadClass("com.android.systemui.statusbar.notification.NotificationSettingsHelper").methodFinder()
-            .filterByName("startAppNotificationSettings").singleOrNull()?.createHook {
+        loadClass("com.android.systemui.statusbar.notification.NotificationSettingsHelper").findMethodOrNull {
+            name("startAppNotificationSettings")
+        }?.createHook {
                 before { param ->
                     startChannelNotificationSettings(statusBarNotification!!)
                     param.result = null
@@ -101,11 +101,7 @@ object RedirectToNotificationChannelSetting : BaseHook() {
                 Settings.EXTRA_CONVERSATION_ID, statusBarNotification.notification.shortcutId
             )
         }
-        val userHandleCurrent = getStaticObjectOrNullAs<UserHandle>(
-            UserHandle::class.java, "CURRENT"
-        )
-        invokeMethodBestMatch(
-            appContext, "startActivityAsUser", null, intent, userHandleCurrent
-        )
+        val userHandleCurrent = UserHandle::class.java.getStaticFieldOrNullAs<UserHandle>("CURRENT")
+        EzXposed.appContext.callMethod("startActivityAsUser", intent, userHandleCurrent)
     }
 }

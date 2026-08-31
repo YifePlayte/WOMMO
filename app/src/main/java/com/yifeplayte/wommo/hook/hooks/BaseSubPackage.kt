@@ -1,10 +1,9 @@
 package com.yifeplayte.wommo.hook.hooks
 
-import com.github.kyuubiran.ezxhelper.EzXHelper.hostPackageName
-import com.github.kyuubiran.ezxhelper.EzXHelper.safeClassLoader
-import com.github.kyuubiran.ezxhelper.Log
-import com.github.kyuubiran.ezxhelper.LogExtensions.logexIfThrow
+import com.yifeplayte.wommo.hook.utils.Log
+import com.yifeplayte.wommo.hook.utils.isHostPackage
 import com.yifeplayte.wommo.utils.ClassScanner.scanObjectOf
+import io.github.lingqiqi5211.ezhooktool.xposed.EzXposed
 
 abstract class BaseSubPackage(
     val packageName: String,
@@ -13,7 +12,7 @@ abstract class BaseSubPackage(
     private var isInit: Boolean = false
     private lateinit var subClassLoader: ClassLoader
     var safeSubClassLoader
-        get() = if (this::subClassLoader.isInitialized) subClassLoader else safeClassLoader
+        get() = if (this::subClassLoader.isInitialized) subClassLoader else EzXposed.safeClassLoader
         set(value) {
             if (this::subClassLoader.isInitialized) return
             subClassLoader = value
@@ -24,11 +23,13 @@ abstract class BaseSubPackage(
     }
 
     fun init() {
-        if (hostPackageName != packageName) return
+        if (!isHostPackage(packageName)) return
         if (isInit) return
         kotlin.runCatching {
             initClassLoader()
-        }.logexIfThrow("Failed init sub-package classloader for: $subPackageName in: $packageName")
+        }.onFailure {
+            Log.e("Failed init sub-package classloader for: $subPackageName in: $packageName", it)
+        }
     }
 
     private fun initHook() {
@@ -36,8 +37,10 @@ abstract class BaseSubPackage(
             if (isInit) return
             hooks.forEach { it.init(safeSubClassLoader) }
             isInit = true
-            Log.ix("Inited sub-package: ${this.javaClass.simpleName} in: $packageName")
-        }.logexIfThrow("Failed init sub-package: ${this.javaClass.simpleName} in: $packageName")
+            Log.i("Inited sub-package: ${this.javaClass.simpleName} in: $packageName")
+        }.onFailure {
+            Log.e("Failed init sub-package: ${this.javaClass.simpleName} in: $packageName", it)
+        }
     }
 
     /**

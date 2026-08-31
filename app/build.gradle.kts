@@ -61,7 +61,8 @@ androidComponents {
 }
 
 dependencies {
-    compileOnly("de.robv.android.xposed:api:82")
+    compileOnly("io.github.libxposed:api:102.0.0")
+    implementation("io.github.libxposed:service:102.0.0")
     debugImplementation("androidx.compose.ui:ui-tooling-preview-android:1.11.4")
     debugImplementation("androidx.compose.ui:ui-tooling:1.11.4")
     implementation("androidx.activity:activity-compose:1.13.0")
@@ -69,7 +70,8 @@ dependencies {
     implementation("androidx.compose.foundation:foundation-android:1.11.4")
     implementation("androidx.compose.runtime:runtime-android:1.11.4")
     implementation("androidx.navigation:navigation-compose:2.9.8")
-    implementation("com.github.kyuubiran:EzXHelper:2.2.1")
+    implementation("io.github.lingqiqi5211.ezhooktool:core:1.1.3")
+    implementation("io.github.lingqiqi5211.ezhooktool:hook-xposed-102:1.1.3")
     implementation("com.github.topjohnwu.libsu:core:6.0.0")
     implementation("io.github.ranlee1:jpinyin:1.0.1")
     implementation("me.zhanghai.android.appiconloader:appiconloader:1.5.0")
@@ -78,4 +80,5 @@ dependencies {
     implementation("top.yukonga.miuix.kmp:miuix-blur-android:0.9.3")
     implementation("top.yukonga.miuix.kmp:miuix-preference-android:0.9.3")
     implementation("top.yukonga.miuix.kmp:miuix-ui-android:0.9.3")
+    implementation("androidx.compose.material:material-icons-extended:1.7.6")
 }

@@ -1,12 +1,13 @@
 package com.yifeplayte.wommo.hook.hooks.singlepackage.systemui
 
-import com.github.kyuubiran.ezxhelper.ClassUtils.loadClass
-import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHooks
+import io.github.lingqiqi5211.ezhooktool.core.loadClass
+import io.github.lingqiqi5211.ezhooktool.xposed.dsl.createHooks
 import com.yifeplayte.wommo.hook.hooks.BaseHook
 import com.yifeplayte.wommo.hook.utils.DexKit.dexKitBridge
 import com.yifeplayte.wommo.hook.utils.DexKit.getMethodInstance
 import com.yifeplayte.wommo.utils.Build.IS_INTERNATIONAL_BUILD
 import com.yifeplayte.wommo.utils.Clazz.setStaticFinalObject
+import io.github.lingqiqi5211.ezhooktool.core.findMethod
 
 @Suppress("unused")
 object RestoreNearbyTile : BaseHook() {

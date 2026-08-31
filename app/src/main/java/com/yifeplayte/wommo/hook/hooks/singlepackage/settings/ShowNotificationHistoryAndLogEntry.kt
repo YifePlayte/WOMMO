@@ -1,19 +1,17 @@
 package com.yifeplayte.wommo.hook.hooks.singlepackage.settings
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.res.Resources
 import android.util.AttributeSet
-import com.github.kyuubiran.ezxhelper.ClassUtils.loadClass
-import com.github.kyuubiran.ezxhelper.EzXHelper.hostPackageName
-import com.github.kyuubiran.ezxhelper.HookFactory
-import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
-import com.github.kyuubiran.ezxhelper.ObjectHelper.Companion.objectHelper
-import com.github.kyuubiran.ezxhelper.ObjectUtils.invokeMethodBestMatch
-import com.github.kyuubiran.ezxhelper.finders.MethodFinder.`-Static`.methodFinder
 import com.yifeplayte.wommo.hook.hooks.BaseHook
-import de.robv.android.xposed.callbacks.XCallback.PRIORITY_DEFAULT
+import com.yifeplayte.wommo.hook.utils.hostPackageName
+import io.github.libxposed.api.XposedInterface
+import io.github.lingqiqi5211.ezhooktool.core.callMethod
+import io.github.lingqiqi5211.ezhooktool.core.findMethod
+import io.github.lingqiqi5211.ezhooktool.core.loadClass
+import io.github.lingqiqi5211.ezhooktool.xposed.dsl.HookFactory
+import io.github.lingqiqi5211.ezhooktool.xposed.dsl.createHook
 
 @Suppress("unused")
 object ShowNotificationHistoryAndLogEntry : BaseHook() {
@@ -22,43 +20,43 @@ object ShowNotificationHistoryAndLogEntry : BaseHook() {
         val hook: HookFactory.() -> Unit = {
             after {
                 val thisObject = it.thisObject
-                val resources = invokeMethodBestMatch(thisObject, "getResources") as Resources
-                val preferenceManager = invokeMethodBestMatch(thisObject, "getPreferenceManager")!!
-                val context = invokeMethodBestMatch(preferenceManager, "getContext") as Context
-                invokeMethodBestMatch(
-                    thisObject, "findPreference", null, "notification_managing"
-                )?.objectHelper()?.invokeMethodBestMatch("getParent")?.objectHelper {
-                    invokeMethodBestMatch(
-                        "addPreference", null, generatePreferenceScreen(
-                            context,
-                            resources,
-                            "com.android.settings.notification.history.NotificationHistoryActivity",
-                            "notification_history_title"
-                        )
+                val resources = thisObject.callMethod("getResources") as Resources
+                val preferenceManager = thisObject.callMethod("getPreferenceManager")!!
+                val context = preferenceManager.callMethod("getContext") as Context
+                val parent = thisObject.callMethod(
+                    "findPreference", "notification_managing"
+                )?.callMethod("getParent")!!
+                parent.callMethod(
+                    "addPreference", generatePreferenceScreen(
+                        context,
+                        resources,
+                        "com.android.settings.notification.history.NotificationHistoryActivity",
+                        "notification_history_title"
                     )
-                    invokeMethodBestMatch(
-                        "addPreference", null, generatePreferenceScreen(
-                            context,
-                            resources,
-                            $$"com.android.settings.Settings$NotificationStationActivity",
-                            "notification_log_title"
-                        )
-
+                )
+                parent.callMethod(
+                    "addPreference", generatePreferenceScreen(
+                        context,
+                        resources,
+                        $$"com.android.settings.Settings$NotificationStationActivity",
+                        "notification_log_title"
                     )
-                }
+                )
             }
         }
         runCatching {
-            loadClass("com.android.settings.NotificationControlCenterSettings").methodFinder()
-                .filterByName("onCreate").single().createHook(PRIORITY_DEFAULT, hook)
+            loadClass("com.android.settings.NotificationControlCenterSettings").findMethod {
+                name("onCreate")
+            }.createHook(priority = XposedInterface.PRIORITY_DEFAULT, block = hook)
         }
         runCatching {
-            loadClass("com.android.settings.NotificationStatusBarSettings").methodFinder()
-                .filterByName("onCreate").single().createHook(PRIORITY_DEFAULT, hook)
+            loadClass("com.android.settings.NotificationStatusBarSettings").findMethod {
+                name("onCreate")
+            }.createHook(priority = XposedInterface.PRIORITY_DEFAULT, block = hook)
         }
     }
 
-    @SuppressLint("DiscouragedApi")
+    @android.annotation.SuppressLint("DiscouragedApi")
     private fun generatePreferenceScreen(
         context: Context, resources: Resources, className: String, titleIdName: String
     ): Any {
@@ -66,20 +64,16 @@ object ShowNotificationHistoryAndLogEntry : BaseHook() {
             loadClass("androidx.preference.Preference").getDeclaredConstructor(
                 Context::class.java, AttributeSet::class.java
             ).newInstance(context, null)
-        invokeMethodBestMatch(
-            preferenceScreenForNotificationHistory,
+        preferenceScreenForNotificationHistory.callMethod(
             "setIntent",
-            null,
             Intent().apply {
                 action = Intent.ACTION_MAIN
                 setClassName(
                     "com.android.settings", className
                 )
             })
-        invokeMethodBestMatch(
-            preferenceScreenForNotificationHistory,
+        preferenceScreenForNotificationHistory.callMethod(
             "setTitle",
-            null,
             resources.getIdentifier(titleIdName, "string", hostPackageName)
         )
         return preferenceScreenForNotificationHistory

@@ -6,7 +6,7 @@
     <string name="ai_engine">Xiaomi HyperAI Engine</string>
     <string name="allow_move_non_miui_widgets_to_minus_screen">Allow to move non-MIUI-widgets to App vault</string>
     <string name="allow_unofficial_system_applications_installation">Allow the installation of system applications from unofficial channels</string>
-    <string name="android">System Framework</string>
+    <string name="system">System Framework</string>
     <string name="aosp_app_info">AOSP app info</string>
     <string name="aosp_app_manager">AOSP app manager</string>
     <string name="app_link_open_always">Allow app to open supported links</string>
@@ -86,8 +86,6 @@
     <string name="redirect_to_notification_channel_setting">Redirect notification setting to channel setting</string>
     <string name="remove_adb_install_intercept">Remove adb install intercept</string>
     <string name="remove_game_toast">Remove game mode toast</string>
-    <string name="remove_miui_stroke_from_adaptive_icon">Remove MIUI stroke from adaptive icon</string>
-    <string name="remove_miui_stroke_from_adaptive_icon_tips">All apps enabled in scope</string>
     <string name="remove_report_in_application_info">Remove report button in application info page</string>
     <string name="remove_xl_download">Remove .xldownload folder</string>
     <string name="restart_all_scope">Restart all scope</string>
@@ -120,5 +118,9 @@
     <string name="wave_charge">Enable wave charge animation</string>
     <string name="widget_transition_animation">Enable transition animation for all widgets</string>
     <string name="xmsf">Xiaomi service framework</string>
+    <string name="module_status_active">Activated</string>
+    <string name="module_status_active_desc">WOMMO is working</string>
+    <string name="module_status_inactive">Not Activated</string>
+    <string name="module_status_inactive_desc">Please activate the module in LSPosed</string>
     <string name="xposed_desc" translatable="false">Works on my machine ONLY</string>
 </resources>

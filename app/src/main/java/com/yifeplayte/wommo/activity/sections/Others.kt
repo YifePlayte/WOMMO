@@ -37,11 +37,6 @@ fun LazyListScope.others() {
                 titleId = R.string.show_notification_importance,
                 summaryId = R.string.show_notification_importance_tips,
             )
-            SPSwitch(
-                key = "remove_miui_stroke_from_adaptive_icon",
-                titleId = R.string.remove_miui_stroke_from_adaptive_icon,
-                summaryId = R.string.remove_miui_stroke_from_adaptive_icon_tips,
-            )
         }
     }
 }

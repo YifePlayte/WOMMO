@@ -1,17 +1,19 @@
 package com.yifeplayte.wommo.hook.hooks.singlepackage.powerkeeper
 
-import com.github.kyuubiran.ezxhelper.ClassUtils.loadClass
-import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
-import com.github.kyuubiran.ezxhelper.finders.MethodFinder.`-Static`.methodFinder
+import io.github.lingqiqi5211.ezhooktool.core.findMethod
+import io.github.lingqiqi5211.ezhooktool.core.loadClass
+import io.github.lingqiqi5211.ezhooktool.xposed.dsl.createHook
+
 import com.yifeplayte.wommo.hook.hooks.BaseHook
 
 @Suppress("unused")
 object EnableBatteryMonitorService : BaseHook() {
     override val key = "enable_battery_monitor_service"
     override fun hook() {
-        loadClass("com.miui.powerkeeper.utils.Utils").methodFinder()
-            .filterByName("isDevelopmentOrDebugVersion").single().createHook {
-                returnConstant(true)
-            }
+        loadClass("com.miui.powerkeeper.utils.Utils").findMethod {
+            name("isDevelopmentOrDebugVersion")
+        }.createHook {
+            returnConstant(true)
+        }
     }
 }

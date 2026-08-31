@@ -1,10 +1,11 @@
 package com.yifeplayte.wommo.hook.hooks.singlepackage.systemui
 
-import com.github.kyuubiran.ezxhelper.ClassUtils.invokeStaticMethodBestMatch
-import com.github.kyuubiran.ezxhelper.ClassUtils.loadClass
-import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHook
-import com.github.kyuubiran.ezxhelper.ObjectUtils.setObject
-import com.github.kyuubiran.ezxhelper.finders.MethodFinder.`-Static`.methodFinder
+import io.github.lingqiqi5211.ezhooktool.core.callStaticMethod
+import io.github.lingqiqi5211.ezhooktool.core.findMethod
+import io.github.lingqiqi5211.ezhooktool.core.loadClass
+import io.github.lingqiqi5211.ezhooktool.core.putField
+import io.github.lingqiqi5211.ezhooktool.xposed.dsl.createHook
+
 import com.yifeplayte.wommo.hook.hooks.BaseHook
 
 @Suppress("unused")
@@ -14,21 +15,19 @@ object RestoreHiddenCustomMediaAction : BaseHook() {
         val clazzDependency = loadClass("com.android.systemui.Dependency")
         val clazzNotificationSettingsManager =
             loadClass("com.android.systemui.statusbar.notification.NotificationSettingsManager")
-        invokeStaticMethodBestMatch(
-            clazzDependency, "get", null, clazzNotificationSettingsManager
-        )
+        clazzDependency.callStaticMethod("get", clazzNotificationSettingsManager)
     }
 
     override fun hook() {
-        loadClass("com.android.systemui.media.controls.pipeline.MediaDataManager").methodFinder()
-            .filterByName("createActionsFromState").single().createHook {
-                before {
-                    setObject(
-                        notificationSettingsManager ?: return@before,
-                        "mHiddenCustomActionsList",
-                        listOf<String>()
-                    )
-                }
+        loadClass("com.android.systemui.media.controls.pipeline.MediaDataManager").findMethod {
+            name("createActionsFromState")
+        }.createHook {
+            before {
+                (notificationSettingsManager ?: return@before).putField(
+                    "mHiddenCustomActionsList",
+                    listOf<String>()
+                )
             }
+        }
     }
 }

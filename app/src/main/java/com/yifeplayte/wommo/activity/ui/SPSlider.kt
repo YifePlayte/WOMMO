@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableFloatState
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
@@ -22,6 +23,7 @@ import com.yifeplayte.wommo.R
 import com.yifeplayte.wommo.utils.SharedPreferences.get
 import com.yifeplayte.wommo.utils.SharedPreferences.mSP
 import com.yifeplayte.wommo.utils.SharedPreferences.put
+import com.yifeplayte.wommo.utils.reloadAllTargets
 import top.yukonga.miuix.kmp.basic.ButtonDefaults
 import top.yukonga.miuix.kmp.basic.Slider
 import top.yukonga.miuix.kmp.basic.SliderDefaults
@@ -45,9 +47,16 @@ fun SPSlider(
     enabled: Boolean = true,
     isInt: Boolean = true,
     sharedPreferences: SharedPreferences? = mSP,
-    progress: MutableFloatState = remember { mutableFloatStateOf(sharedPreferences.get(key, defaultValue).coerceIn(minValue, maxValue)) },
+    progress: MutableFloatState = remember { mutableFloatStateOf(defaultValue) },
 ) {
     val mTitle = title ?: titleId?.let { stringResource(it) } ?: ""
+    // service 绑定后立即从 SharedPreferences 刷新滑块状态
+    val serviceReady = LocalServiceReady.current
+    LaunchedEffect(serviceReady) {
+        if (serviceReady) {
+            mSP?.let { sp -> progress.floatValue = sp.get(key, defaultValue).coerceIn(minValue, maxValue) }
+        }
+    }
     val showSliderDialog = remember { mutableStateOf(false) }
     val sliderDialogHoldDown = remember { mutableStateOf(false) }
 
@@ -153,6 +162,7 @@ private fun SliderDialog(
                         val clamped = parsed?.coerceIn(valueRange) ?: defaultValue
                         onValueChange(clamped)
                         showDialog.value = false
+                        reloadAllTargets()
                     },
                     modifier = Modifier.weight(1f),
                     colors = ButtonDefaults.textButtonColorsPrimary(),

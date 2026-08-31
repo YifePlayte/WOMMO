@@ -1,19 +1,18 @@
 package com.yifeplayte.wommo.hook.hooks.singlepackage.home
 
 import android.content.ComponentName
-import com.github.kyuubiran.ezxhelper.ClassUtils.loadClass
-import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHooks
-import com.github.kyuubiran.ezxhelper.ObjectUtils.getObjectOrNullAs
+import io.github.lingqiqi5211.ezhooktool.core.getFieldOrNullAs
+import io.github.lingqiqi5211.ezhooktool.core.loadClass
+import io.github.lingqiqi5211.ezhooktool.xposed.dsl.createHooks
 import com.yifeplayte.wommo.hook.hooks.BaseHook
 
 @Suppress("unused")
 object RestoreGoogleAppIcon : BaseHook() {
     override val key = "restore_google_app_icon"
     override fun hook() {
-        loadClass("com.miui.home.launcher.AppFilter").declaredConstructors.createHooks {
+        loadClass("com.miui.home.launcher.AppFilter").declaredConstructors.toList().createHooks {
             after { param ->
-                getObjectOrNullAs<HashSet<ComponentName>>(
-                    param.thisObject,
+                param.thisObject.getFieldOrNullAs<HashSet<ComponentName>>(
                     "mSkippedItems"
                 )!!.removeIf {
                     it.packageName in setOf(

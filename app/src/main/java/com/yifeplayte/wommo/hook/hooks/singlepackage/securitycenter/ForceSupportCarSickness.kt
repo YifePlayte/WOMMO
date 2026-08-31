@@ -1,9 +1,10 @@
 package com.yifeplayte.wommo.hook.hooks.singlepackage.securitycenter
 
-import com.github.kyuubiran.ezxhelper.HookFactory.`-Static`.createHooks
+import io.github.lingqiqi5211.ezhooktool.xposed.dsl.createHooks
 import com.yifeplayte.wommo.hook.hooks.BaseHook
 import com.yifeplayte.wommo.hook.utils.DexKit.dexKitBridge
 import com.yifeplayte.wommo.hook.utils.DexKit.getMethodInstance
+import io.github.lingqiqi5211.ezhooktool.core.findMethod
 
 @Suppress("unused")
 object ForceSupportCarSickness : BaseHook() {
