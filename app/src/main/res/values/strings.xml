@@ -6,7 +6,6 @@
     <string name="ai_engine">Xiaomi HyperAI Engine</string>
     <string name="allow_move_non_miui_widgets_to_minus_screen">Allow to move non-MIUI-widgets to App vault</string>
     <string name="allow_unofficial_system_applications_installation">Allow the installation of system applications from unofficial channels</string>
-    <string name="system">System Framework</string>
     <string name="aosp_app_info">AOSP app info</string>
     <string name="aosp_app_manager">AOSP app manager</string>
     <string name="app_link_open_always">Allow app to open supported links</string>
@@ -27,6 +26,8 @@
     <string name="default_value">Default</string>
     <string name="disable_business_hall_offline_info_manager">Disable business hall offline info manager</string>
     <string name="disable_business_hall_offline_info_manager_tips">Block \"Data plan and balance inquiry service adjustment\"</string>
+    <string name="disable_display_content_mode_management">Disable switching the content mode of connected displays between mirroring and extended</string>
+    <string name="disable_display_content_mode_management_tips">System Framework, System UI</string>
     <string name="disable_gesture_recorder">Disable gesture recorder</string>
     <string name="disable_market_customize_icon">Disable marketing icons</string>
     <string name="disable_network_assistant_offline_info_manager">Disable network assistant offline info manager</string>
@@ -68,6 +69,10 @@
     <string name="lockscreen_charging_info">Display charging power on lock screen</string>
     <string name="lockscreen_charging_info_not_supported">Device currently unsupported</string>
     <string name="miui_home">Launcher</string>
+    <string name="module_status_active">Activated</string>
+    <string name="module_status_active_desc">WOMMO is working</string>
+    <string name="module_status_inactive">Not Activated</string>
+    <string name="module_status_inactive_desc">Please activate the module in LSPosed</string>
     <string name="not_support">You seem to be using an outdated version of LSPosed or LSPosed is not active, please update LSPosed or activate it and try again.</string>
     <string name="notification_settings_no_white_list">Remove white list for notification settings</string>
     <string name="open_battery_status_activity">Open battery status activity</string>
@@ -105,6 +110,7 @@
     <string name="show_notification_importance_tips">System UI, Settings</string>
     <string name="show_wifi_password">Show password of saved Wi-Fi network</string>
     <string name="skip_count_down">Skip count down</string>
+    <string name="system">System Framework</string>
     <string name="system_ui">System UI</string>
     <string name="unlock_control_center_style">Unlock control center style</string>
     <string name="unlock_grids">Unlock launcher icon grids</string>
@@ -118,9 +124,5 @@
     <string name="wave_charge">Enable wave charge animation</string>
     <string name="widget_transition_animation">Enable transition animation for all widgets</string>
     <string name="xmsf">Xiaomi service framework</string>
-    <string name="module_status_active">Activated</string>
-    <string name="module_status_active_desc">WOMMO is working</string>
-    <string name="module_status_inactive">Not Activated</string>
-    <string name="module_status_inactive_desc">Please activate the module in LSPosed</string>
     <string name="xposed_desc" translatable="false">Works on my machine ONLY</string>
 </resources>

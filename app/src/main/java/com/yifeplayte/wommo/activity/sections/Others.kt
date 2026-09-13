@@ -37,6 +37,11 @@ fun LazyListScope.others() {
                 titleId = R.string.show_notification_importance,
                 summaryId = R.string.show_notification_importance_tips,
             )
+            SPSwitch(
+                key = "disable_display_content_mode_management",
+                titleId = R.string.disable_display_content_mode_management,
+                summaryId = R.string.disable_display_content_mode_management_tips,
+            )
         }
     }
 }
