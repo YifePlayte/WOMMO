@@ -19,6 +19,16 @@ android {
         ndk {
             abiFilters.add("arm64-v8a")
         }
+
+        externalNativeBuild {
+            cmake {
+                arguments += listOf(
+                    "-DANDROID_STL=c++_static"
+                )
+                targets += "wommo_native"
+                targets += "classhelper"
+            }
+        }
     }
 
     buildTypes {
@@ -39,7 +49,7 @@ android {
 
     externalNativeBuild {
         cmake {
-            path = file("src/main/cpp/classhelper/CMakeLists.txt")
+            path = file("src/main/cpp/CMakeLists.txt")
             version = "3.22.1"
         }
     }
@@ -47,6 +57,12 @@ android {
     buildFeatures {
         buildConfig = true
         compose = true
+        prefab = true
+    }
+
+    packaging {
+        jniLibs.useLegacyPackaging = false
+        resources.merges += "META-INF/xposed/*"
     }
 }
 
