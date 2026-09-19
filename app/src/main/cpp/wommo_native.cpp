@@ -112,6 +112,7 @@ struct DartHook {
 constexpr DartHook kDartHooks[] = {
     {"drag_to_pa", &wommo::hooks::InstallDragToPaHook},
     {"hide_landscape_nav_bar", &wommo::hooks::InstallHideLandscapeNavBarHook},
+    {"perfect_icons", &wommo::hooks::InstallPerfectIconsHook},
 };
 
 bool IsLauncherDartLibraryPath(const char* path) {

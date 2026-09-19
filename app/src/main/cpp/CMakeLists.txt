@@ -22,6 +22,7 @@ set(WOMMO_NATIVE_SOURCES
     lsposed_hook_backend.cpp
     hooks/drag_to_pa_hook.cpp
     hooks/hide_landscape_nav_bar_hook.cpp
+    hooks/perfect_icons_hook.cpp
 )
 
 set(WOMMO_NATIVE_TARGET wommo_native)
@@ -56,7 +57,7 @@ target_link_options(${WOMMO_NATIVE_TARGET} PRIVATE
     -Wl,-z,now
 )
 
-target_link_libraries(${WOMMO_NATIVE_TARGET} PRIVATE log dl)
+target_link_libraries(${WOMMO_NATIVE_TARGET} PRIVATE log dl z)
 
 set_target_properties(${WOMMO_NATIVE_TARGET} PROPERTIES
     CXX_EXTENSIONS OFF

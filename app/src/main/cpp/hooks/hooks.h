@@ -23,4 +23,11 @@ bool InstallDragToPaHook(const dart::Image& image);
 // landscape, matching the legacy HideLandscapeNavBar Java hook.
 bool InstallHideLandscapeNavBarHook(const dart::Image& image);
 
+// Feed the launcher's mod-icon layered pipeline from the applied theme and the
+// stock icons package so static layer pairs ('res/drawable-<density>/<pkg>/
+// 0.png' and '1.png') are used as app icons.  The applied theme wins over the
+// built-in product mod icons and the stock package.  Matches the legacy
+// EnablePerfectIcons Java hook (shared preference key "enable_perfect_icons").
+bool InstallPerfectIconsHook(const dart::Image& image);
+
 }  // namespace wommo::hooks
