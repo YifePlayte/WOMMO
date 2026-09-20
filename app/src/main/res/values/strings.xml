@@ -22,6 +22,7 @@
     <string name="contacts">Contacts and dialer</string>
     <string name="content_extension">Taplus</string>
     <string name="copy_direct_action_open">Open %1$s</string>
+    <string name="copy_direct_action_open_in">Open in %1$s</string>
     <string name="copy_direct_action_open_content">View %1$s</string>
     <string name="default_value">Default</string>
     <string name="disable_business_hall_offline_info_manager">Disable business hall offline info manager</string>
