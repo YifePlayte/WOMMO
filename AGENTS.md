@@ -190,6 +190,36 @@ name (`utils/Object.kt`).
 3. Register `{ "<feature>", &wommo::hooks::Install<Feature>Hook }` in
    `kDartHooks[]` in `wommo_native.cpp`.
 4. Add the source to `WOMMO_NATIVE_SOURCES` in `cpp/CMakeLists.txt`.
+5. Installers must stay idempotent across the repeated `libapp.so` load
+   callbacks: skip the fingerprint scan once the original hook pointer is
+   set, otherwise the rescan fails because the function now starts with the
+   hook jump.
+6. When a feature needs symbols from another launcher library (for example
+   the lazily loaded `librust_maml_sdk.so`), do not load it from the
+   `libapp.so` callback.  Add a per-library installer (see
+   `InstallBackHomeRatioSdkHooks`) and call it from `OnLibraryLoaded` with
+   the LSPosed handle; `dlopen(RTLD_NOLOAD)` fails inside that callback.
+   Protect every hooked address with `ProtectHookRange` first.
+
+### Dart runtime hooks (runtime values)
+
+Some features need values that only exist while Dart code runs (gesture
+geometry, live window rects).  Dart AOT uses `x15` as its frame/stack
+pointer, so a Dart function must never be replaced by a plain C function:
+the C compiler clobbers `x15` and the caller's frame is corrupted.  Use a
+naked assembly trampoline instead (`back_home_ratio_hook.cpp` is the
+reference):
+
+- save `x0..x18`, `x30` and `d0..d7` on the real `sp`, call a C recorder
+  with the registers it needs (pass `x28` too when the recorder reads
+  compressed pointers), restore every register and `br` to the LSPosed
+  `original` pointer;
+- to capture a return value, `blr` the original first, keep `x0` on the
+  stack, feed it to the recorder and restore it before `ret`;
+- read Dart fields at `offset + 7`, rebuild compressed pointers as
+  `low32 | (x28 << 32)` and treat boxed values as objects.  Validate every
+  captured value (range, finiteness, freshness timestamp) and fail closed;
+  object layouts are not guaranteed across launcher builds.
 
 ### Patching rules
 
@@ -219,6 +249,14 @@ HyperOS logd filters INFO/DEBUG from the launcher process. Use `WOMMO_LOGW` /
 `WOMMO_LOGE` (tag `WommoNative`) for everything. Never use `android.util.Log`
 from native code; keep diagnostics in logcat under the module tag or in the
 LSPosed logs.
+
+Feature hooks mute their runtime logs by default so animation hot paths never
+pay for IO: each hook file defines a local `WOMMO_<FEATURE>_LOGW/LOGE` macro
+that expands to `((void)0)` under a commented
+`// #define WOMMO_<FEATURE>_DEBUG` line.  Uncomment that line to get the logs
+back when debugging on device.  The entry and backend (`wommo_native.cpp`,
+`lsposed_hook_backend.cpp`) keep their one-shot startup WARN logs because the
+deploy workflow checks them.
 
 ## Device and Testing Workflow
 
@@ -256,6 +294,13 @@ Cross-version testing (native): keep both launcher APKs (system
 uniquely and patch correctly on both before the change is considered done.
 Meta field offsets must not be hardcoded (they differ per launcher build).
 
+Gesture paths (recents/back-home) only run on a fast diagonal swipe from the
+bottom edge (`input swipe <x> 2560 <x2> 1950 <150-400>`); a slow or straight
+swipe and a HOME key event return home without engaging the close animation.
+The Flutter launcher exposes no uiautomator hierarchy (`null root node`), so
+locate grid icons by tapping and reading `mCurrentFocus` instead of
+`uiautomator dump`.
+
 LSPosed scope is controlled only through:
 
 ```text
@@ -277,7 +322,16 @@ Keep the previous known-good MiuiHome APK on hand before every native test.
 - Dart AOT facts: `x27` is the object pool pointer, `x28 << 32` supplies the
   high bits when decompressing 32-bit pointers, `x22` holds the null object,
   and the bool singletons are `x22+0x20` (true) and `x22+0x30` (false), so a
-  bool condition often appears as `tbnz/tbz wN, #4`.
+  bool condition often appears as `tbnz/tbz wN, #4`.  `x15` is the Dart
+  frame/stack pointer (see the Dart runtime hooks section).
+- Maml icons and widgets are rendered by `librust_maml_sdk.so`: external
+  commands go through the exported `send_command(id, ...)` and variables
+  through `put_variable_number(id, ...)`, so those symbols are the native
+  boundary for anything maml-related.
+- The applied icon theme (`/data/system/theme/icons`) also carries maml fancy
+  icons under `layer_animating_icons/<pkg>/<n>/{fancy,quiet}/`; built-in
+  dynamic icons live in `/system/media/theme/default/dynamicicons`.  Copy the
+  device file before analysing it, local copies can lag behind.
 - To observe the pool or objects at runtime, read the target process memory as
   root (`/proc/<pid>/mem`); a small static NDK scanner is enough.
 - Strings in the APK are authoritative for user-visible behavior (toasts, log
