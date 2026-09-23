@@ -16,6 +16,18 @@
 
 #include <inttypes.h>
 
+// Runtime logs are muted: hooks sit on hot paths and the log traffic is
+// not worth the IO.  Uncomment the define below to re-enable them when
+// debugging on device.
+// #define WOMMO_HIDE_LANDSCAPE_NAV_BAR_DEBUG
+#ifdef WOMMO_HIDE_LANDSCAPE_NAV_BAR_DEBUG
+#define WOMMO_HIDE_LANDSCAPE_NAV_BAR_LOGW(...) WOMMO_LOGW(__VA_ARGS__)
+#define WOMMO_HIDE_LANDSCAPE_NAV_BAR_LOGE(...) WOMMO_LOGE(__VA_ARGS__)
+#else
+#define WOMMO_HIDE_LANDSCAPE_NAV_BAR_LOGW(...) ((void)0)
+#define WOMMO_HIDE_LANDSCAPE_NAV_BAR_LOGE(...) ((void)0)
+#endif
+
 namespace wommo::hooks {
 namespace {
 
@@ -64,7 +76,7 @@ bool InstallHideLandscapeNavBarHook(const dart::Image& image) {
                 sizeof(kFakeNavPainterPattern) / sizeof(kFakeNavPainterPattern[0]),
                 &paint, &matches) ||
             !dart::RangeInExecutableSegment(image, paint, sizeof(uint32_t))) {
-        WOMMO_LOGW("hide_landscape_nav_bar: fake nav painter pattern rejected "
+        WOMMO_HIDE_LANDSCAPE_NAV_BAR_LOGW("hide_landscape_nav_bar: fake nav painter pattern rejected "
                    "(matches=%u), keeping original behavior",
                    matches);
         __atomic_store_n(&g_state, 0u, __ATOMIC_RELEASE);
@@ -73,13 +85,13 @@ bool InstallHideLandscapeNavBarHook(const dart::Image& image) {
 
     const uint32_t patch[1] = {kRet};
     if (!dart::PatchCode(paint, patch, 1u)) {
-        WOMMO_LOGE("hide_landscape_nav_bar: failed to patch fake nav painter");
+        WOMMO_HIDE_LANDSCAPE_NAV_BAR_LOGE("hide_landscape_nav_bar: failed to patch fake nav painter");
         __atomic_store_n(&g_state, 0u, __ATOMIC_RELEASE);
         return false;
     }
 
     __atomic_store_n(&g_state, 2u, __ATOMIC_RELEASE);
-    WOMMO_LOGW("hide_landscape_nav_bar: fake nav painter disabled at "
+    WOMMO_HIDE_LANDSCAPE_NAV_BAR_LOGW("hide_landscape_nav_bar: fake nav painter disabled at "
                "0x%" PRIxPTR " (file offset 0x%" PRIxPTR ")",
                paint, paint - image.bias);
     return true;

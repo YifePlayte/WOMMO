@@ -22,6 +22,18 @@
 
 #include <inttypes.h>
 
+// Runtime logs are muted: hooks sit on hot paths and the log traffic is
+// not worth the IO.  Uncomment the define below to re-enable them when
+// debugging on device.
+// #define WOMMO_DRAG_TO_PA_DEBUG
+#ifdef WOMMO_DRAG_TO_PA_DEBUG
+#define WOMMO_DRAG_TO_PA_LOGW(...) WOMMO_LOGW(__VA_ARGS__)
+#define WOMMO_DRAG_TO_PA_LOGE(...) WOMMO_LOGE(__VA_ARGS__)
+#else
+#define WOMMO_DRAG_TO_PA_LOGW(...) ((void)0)
+#define WOMMO_DRAG_TO_PA_LOGE(...) ((void)0)
+#endif
+
 namespace wommo::hooks {
 namespace {
 
@@ -55,7 +67,7 @@ bool InstallDragToPaHook(const dart::Image& image) {
                                      &gate, &matches) ||
             !dart::RangeInExecutableSegment(
                     image, gate, kGatePatternLength * sizeof(uint32_t))) {
-        WOMMO_LOGW("drag_to_pa: isMIUIWidget gate pattern rejected "
+        WOMMO_DRAG_TO_PA_LOGW("drag_to_pa: isMIUIWidget gate pattern rejected "
                    "(matches=%u), keeping original behavior",
                    matches);
         __atomic_store_n(&g_state, 0u, __ATOMIC_RELEASE);
@@ -65,13 +77,13 @@ bool InstallDragToPaHook(const dart::Image& image) {
     const uintptr_t branch = gate + 2u * sizeof(uint32_t);
     const uint32_t patch[1] = {kNop};
     if (!dart::PatchCode(branch, patch, 1u)) {
-        WOMMO_LOGE("drag_to_pa: failed to patch isMIUIWidget gate");
+        WOMMO_DRAG_TO_PA_LOGE("drag_to_pa: failed to patch isMIUIWidget gate");
         __atomic_store_n(&g_state, 0u, __ATOMIC_RELEASE);
         return false;
     }
 
     __atomic_store_n(&g_state, 2u, __ATOMIC_RELEASE);
-    WOMMO_LOGW("drag_to_pa: canDragToPA isMIUIWidget gate ignored at "
+    WOMMO_DRAG_TO_PA_LOGW("drag_to_pa: canDragToPA isMIUIWidget gate ignored at "
                "0x%" PRIxPTR " (file offset 0x%" PRIxPTR ")",
                branch, branch - image.bias);
     return true;

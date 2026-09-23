@@ -50,6 +50,18 @@
 #define MFD_CLOEXEC 0x0001U
 #endif
 
+// Runtime logs are muted: hooks sit on hot paths and the log traffic is
+// not worth the IO.  Uncomment the define below to re-enable them when
+// debugging on device.
+// #define WOMMO_PERFECT_ICONS_DEBUG
+#ifdef WOMMO_PERFECT_ICONS_DEBUG
+#define WOMMO_PERFECT_ICONS_LOGW(...) WOMMO_LOGW(__VA_ARGS__)
+#define WOMMO_PERFECT_ICONS_LOGE(...) WOMMO_LOGE(__VA_ARGS__)
+#else
+#define WOMMO_PERFECT_ICONS_LOGW(...) ((void)0)
+#define WOMMO_PERFECT_ICONS_LOGE(...) ((void)0)
+#endif
+
 namespace wommo::hooks {
 namespace {
 
@@ -431,7 +443,7 @@ int ServeZipLayer(const CandidateTargets& targets, size_t first_source,
         if (fd < 0) {
             if (__atomic_exchange_n(&g_memfd_log_state, 1u, __ATOMIC_ACQ_REL) ==
                     0u) {
-                WOMMO_LOGE("perfect_icons: memfd_create failed (%d)", errno);
+                WOMMO_PERFECT_ICONS_LOGE("perfect_icons: memfd_create failed (%d)", errno);
             }
             return -1;
         }
@@ -493,14 +505,14 @@ bool EnsureZips() {
         zip.size = static_cast<size_t>(status.st_size);
         __atomic_store_n(&zip.ready, 1u, __ATOMIC_RELEASE);
         any_ready = true;
-        WOMMO_LOGW("perfect_icons: layer source %s (%zu bytes)",
+        WOMMO_PERFECT_ICONS_LOGW("perfect_icons: layer source %s (%zu bytes)",
                    kLayerSources[index], zip.size);
     }
     __atomic_store_n(&g_zip_lock, 0u, __ATOMIC_RELEASE);
     if (!any_ready &&
             __atomic_exchange_n(&g_source_log_state, 1u, __ATOMIC_ACQ_REL) ==
                     0u) {
-        WOMMO_LOGW("perfect_icons: no layer source found, keeping stock "
+        WOMMO_PERFECT_ICONS_LOGW("perfect_icons: no layer source found, keeping stock "
                    "icons");
     }
     return any_ready;
@@ -533,7 +545,7 @@ int ServeLayerFileRange(const LayerRequest& request, size_t first_source,
         if (fd >= 0) {
             if (__atomic_exchange_n(&g_serve_log_state, 1u, __ATOMIC_ACQ_REL) ==
                     0u) {
-                WOMMO_LOGW("perfect_icons: serving layers from %s for %s",
+                WOMMO_PERFECT_ICONS_LOGW("perfect_icons: serving layers from %s for %s",
                            kLayerSources[source_index], request.name);
             }
             return fd;
@@ -667,7 +679,7 @@ bool InstallFileHooks() {
                               reinterpret_cast<void*>(HookedOpen),
                               &backup) != kHookSuccess ||
                 backup == nullptr) {
-            WOMMO_LOGE("perfect_icons: failed to hook open");
+            WOMMO_PERFECT_ICONS_LOGE("perfect_icons: failed to hook open");
             ok = false;
         } else {
             __atomic_store_n(&g_original_open,
@@ -683,7 +695,7 @@ bool InstallFileHooks() {
                               reinterpret_cast<void*>(HookedOpenAt),
                               &backup) != kHookSuccess ||
                 backup == nullptr) {
-            WOMMO_LOGE("perfect_icons: failed to hook openat");
+            WOMMO_PERFECT_ICONS_LOGE("perfect_icons: failed to hook openat");
             ok = false;
         } else {
             __atomic_store_n(&g_original_openat,
@@ -691,7 +703,7 @@ bool InstallFileHooks() {
                              __ATOMIC_RELEASE);
         }
     } else {
-        WOMMO_LOGW("perfect_icons: openat not found, open hook only");
+        WOMMO_PERFECT_ICONS_LOGW("perfect_icons: openat not found, open hook only");
     }
 
     __atomic_store_n(&g_fs_state, ok ? 2u : 0u, __ATOMIC_RELEASE);
@@ -737,7 +749,7 @@ bool InstallProbePatch(const dart::Image& image) {
                                      &probe, &matches) ||
             !dart::RangeInExecutableSegment(
                     image, probe, kProbePatternLength * sizeof(uint32_t))) {
-        WOMMO_LOGW("perfect_icons: mod layer probe pattern rejected "
+        WOMMO_PERFECT_ICONS_LOGW("perfect_icons: mod layer probe pattern rejected "
                    "(matches=%u), keeping original behavior",
                    matches);
         __atomic_store_n(&g_patch_state, 0u, __ATOMIC_RELEASE);
@@ -747,13 +759,13 @@ bool InstallProbePatch(const dart::Image& image) {
     const uintptr_t branch = probe + 2u * sizeof(uint32_t);
     const uint32_t patch[1] = {kUnconditionalBranch};
     if (!dart::PatchCode(branch, patch, 1u)) {
-        WOMMO_LOGE("perfect_icons: failed to patch mod layer probe");
+        WOMMO_PERFECT_ICONS_LOGE("perfect_icons: failed to patch mod layer probe");
         __atomic_store_n(&g_patch_state, 0u, __ATOMIC_RELEASE);
         return false;
     }
 
     __atomic_store_n(&g_patch_state, 2u, __ATOMIC_RELEASE);
-    WOMMO_LOGW("perfect_icons: mod layer probe forced at 0x%" PRIxPTR
+    WOMMO_PERFECT_ICONS_LOGW("perfect_icons: mod layer probe forced at 0x%" PRIxPTR
                " (file offset 0x%" PRIxPTR ")",
                branch, branch - image.bias);
     return true;
