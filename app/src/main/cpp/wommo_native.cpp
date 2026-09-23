@@ -31,6 +31,7 @@ namespace {
 constexpr char kLauncherProcessName[] = "com.miui.home";
 constexpr char kSpawnerPath[] = "/system_ext/bin/hyos_spawner";
 constexpr char kDartLibraryName[] = "libapp.so";
+constexpr char kMamlSdkLibraryName[] = "librust_maml_sdk.so";
 
 // Only these mapped paths are accepted as the launcher's Dart AOT image.
 // Launcher libraries are mapped straight out of the APK, so dladdr reports the
@@ -113,6 +114,7 @@ constexpr DartHook kDartHooks[] = {
     {"drag_to_pa", &wommo::hooks::InstallDragToPaHook},
     {"hide_landscape_nav_bar", &wommo::hooks::InstallHideLandscapeNavBarHook},
     {"perfect_icons", &wommo::hooks::InstallPerfectIconsHook},
+    {"back_home_ratio", &wommo::hooks::InstallBackHomeRatioHook},
 };
 
 bool IsLauncherDartLibraryPath(const char* path) {
@@ -183,6 +185,13 @@ void OnLibraryLoaded(const char* name, void* handle) {
     // The spawner is the parent of the launcher child; only the launcher runs
     // the business hooks, and only once libapp.so is mapped there.
     if (!IsLauncherProcess()) return;
+
+    // The maml SDK is loaded lazily after libapp.so; the back-home ratio hook
+    // needs its exports.
+    if (EndsWith(name, kMamlSdkLibraryName)) {
+        wommo::hooks::InstallBackHomeRatioSdkHooks(handle);
+        return;
+    }
     if (!EndsWith(name, kDartLibraryName)) return;
 
     WOMMO_LOGW("libapp.so loaded, installing native hooks");

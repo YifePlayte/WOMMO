@@ -30,4 +30,16 @@ bool InstallHideLandscapeNavBarHook(const dart::Image& image);
 // EnablePerfectIcons Java hook (shared preference key "enable_perfect_icons").
 bool InstallPerfectIconsHook(const dart::Image& image);
 
+// Restore the maml "ratio" variable seed on the way back home.  The legacy
+// launcher wrote the flying icon's horizontal offset (normalised by the device
+// width) before sending "back_home_start"/"back_home_finish"; the Flutter
+// launcher only sends the commands.  Mirrors the legacy
+// FancyDrawableCompat.updateRatio behavior for theme maml icons.
+bool InstallBackHomeRatioHook(const dart::Image& image);
+
+// Retry the librust_maml_sdk.so part of InstallBackHomeRatioHook.  The maml SDK
+// is loaded lazily after libapp.so, so the library-load callback calls this
+// with the LSPosed-reported handle when the SDK appears.
+bool InstallBackHomeRatioSdkHooks(void* library_handle);
+
 }  // namespace wommo::hooks

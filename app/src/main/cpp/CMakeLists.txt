@@ -20,6 +20,7 @@ set(WOMMO_NATIVE_SOURCES
     wommo_native.cpp
     dart_image.cpp
     lsposed_hook_backend.cpp
+    hooks/back_home_ratio_hook.cpp
     hooks/drag_to_pa_hook.cpp
     hooks/hide_landscape_nav_bar_hook.cpp
     hooks/perfect_icons_hook.cpp
