@@ -4,6 +4,9 @@
     <string name="add_aosp_app_manager_entry">向应用管理页添加“原生应用管理”入口</string>
     <string name="add_open_by_default_entry">向应用详情页添加“默认打开”入口</string>
     <string name="ai_engine">小米澎湃AI引擎</string>
+    <string name="ai_summary_extra_rules">额外规则（每行一条）</string>
+    <string name="allow_extra_ai_summary_apps">允许更多应用使用 AI 录音纪要</string>
+    <string name="allow_extra_ai_summary_apps_tips">应用通话录音，系统框架\n把自定义应用加入内置名单，每行一条「包名/通话活动」，例如 com.example.app/.ui.CallActivity</string>
     <string name="allow_move_non_miui_widgets_to_minus_screen">允许将非 MIUI 小部件移至智能助理（负一屏）</string>
     <string name="allow_unofficial_system_applications_installation">允许从非官方渠道安装系统应用</string>
     <string name="aosp_app_info">原生应用信息</string>

@@ -13,6 +13,7 @@ import androidx.compose.ui.unit.dp
 import com.yifeplayte.wommo.R
 import com.yifeplayte.wommo.activity.MainActivity.Companion.appContext
 import com.yifeplayte.wommo.hook.PACKAGE_NAME_HOOKED
+import com.yifeplayte.wommo.hook.utils.SYSTEM_SERVER_PACKAGE_NAME
 import com.yifeplayte.wommo.utils.Terminal
 import top.yukonga.miuix.kmp.basic.ButtonDefaults
 import top.yukonga.miuix.kmp.basic.TextButton
@@ -43,7 +44,10 @@ fun RestartAllScopeDialog(showDialog: MutableState<Boolean>) {
                 colors = ButtonDefaults.textButtonColorsPrimary(),
                 onClick = {
                     PACKAGE_NAME_HOOKED.forEach {
-                        if (it != "android") Terminal.exec("killall $it")
+                        // system_server 不能靠 killall 重载（它靠热重载生效），且设备上存在
+                        // 同名进程：/system/bin/app_process64 以 "system" 为 argv[0] 的 MIUI
+                        // daemon，误杀会连带重启它。
+                        if (it != SYSTEM_SERVER_PACKAGE_NAME) Terminal.exec("killall $it")
                     }
                     Toast.makeText(
                         appContext, appContext.getString(R.string.finished), Toast.LENGTH_SHORT

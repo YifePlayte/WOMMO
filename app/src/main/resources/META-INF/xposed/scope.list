@@ -6,6 +6,7 @@ com.android.settings
 com.android.systemui
 com.google.android.gms
 com.milink.service
+com.miui.audiomonitor
 com.miui.contentextension
 com.miui.home
 com.miui.packageinstaller
