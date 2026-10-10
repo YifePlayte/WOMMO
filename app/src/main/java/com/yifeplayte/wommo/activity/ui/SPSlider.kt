@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableFloatState
@@ -17,7 +19,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import com.yifeplayte.wommo.R
 import com.yifeplayte.wommo.utils.SharedPreferences.get
@@ -131,6 +135,8 @@ private fun SliderDialog(
         onDismissFinished = onDismissFinished,
         content = {
             var text by remember { mutableStateOf((if (isInt) valueState().toInt() else valueState()).toString()) }
+            val focusManager = LocalFocusManager.current
+            ClearFocusWhenImeHidden()
             TextField(
                 label = stringResource(R.string.empty_to_default),
                 modifier = Modifier.padding(bottom = 16.dp),
@@ -147,6 +153,8 @@ private fun SliderDialog(
                         text = (if (isInt) clamped.toInt() else clamped).toString()
                     }
                 },
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
             )
             Row(horizontalArrangement = Arrangement.SpaceBetween) {
                 TextButton(
