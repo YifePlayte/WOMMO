@@ -19,6 +19,11 @@ namespace wommo::hooks {
 // patched; every other consumer of the flag sees the real metadata value.
 bool InstallDragToPaHook(const dart::Image& image);
 
+// Allow the 4x7 desktop to keep capsule search (minimal / ask XiaoAI) by
+// forcing LauncherLayoutType.isLayoutAndSearchTypeSupported true.  Classic
+// search keeps stock behavior.  OS3 reference: the same remainSpace check.
+bool InstallAllowSearchOn4x7Hook(const dart::Image& image);
+
 // Hide the launcher-drawn gesture hint line (fake navigation bar) in
 // landscape, matching the legacy HideLandscapeNavBar Java hook.
 bool InstallHideLandscapeNavBarHook(const dart::Image& image);

@@ -22,6 +22,7 @@ set(WOMMO_NATIVE_SOURCES
     lsposed_hook_backend.cpp
     hooks/back_home_ratio_hook.cpp
     hooks/drag_to_pa_hook.cpp
+    hooks/allow_search_on_4x7_hook.cpp
     hooks/hide_landscape_nav_bar_hook.cpp
     hooks/perfect_icons_hook.cpp
 )

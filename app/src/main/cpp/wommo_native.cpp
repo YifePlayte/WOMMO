@@ -112,6 +112,7 @@ struct DartHook {
 
 constexpr DartHook kDartHooks[] = {
     {"drag_to_pa", &wommo::hooks::InstallDragToPaHook},
+    {"allow_search_on_4x7", &wommo::hooks::InstallAllowSearchOn4x7Hook},
     {"hide_landscape_nav_bar", &wommo::hooks::InstallHideLandscapeNavBarHook},
     {"perfect_icons", &wommo::hooks::InstallPerfectIconsHook},
     {"back_home_ratio", &wommo::hooks::InstallBackHomeRatioHook},
