@@ -29,9 +29,14 @@
 namespace {
 
 constexpr char kLauncherProcessName[] = "com.miui.home";
+constexpr char kWeatherProcessName[] = "com.miui.weather2";
+constexpr char kGalleryProcessName[] = "com.miui.gallery";
 constexpr char kSpawnerPath[] = "/system_ext/bin/hyos_spawner";
 constexpr char kDartLibraryName[] = "libapp.so";
 constexpr char kMamlSdkLibraryName[] = "librust_maml_sdk.so";
+constexpr char kAppLauncherLibraryName[] = "libapp_launcher.so";
+constexpr char kWeatherAppLibraryName[] = "libweather_app.so";
+constexpr char kGalleryLibraryName[] = "libapp_gallery.so";
 
 // Only these mapped paths are accepted as the launcher's Dart AOT image.
 // Launcher libraries are mapped straight out of the APK, so dladdr reports the
@@ -98,8 +103,26 @@ bool IsHyosSpawnerProcessFamily() {
     return StringsEqual(executable, kSpawnerPath);
 }
 
-bool IsLauncherHookProcess() {
-    return IsLauncherProcess() || IsHyosSpawnerProcessFamily();
+// The joystick guard covers the launcher, weather and gallery: all three
+// statically link the same Rust backend. Dart business hooks stay
+// launcher-only.
+bool IsJoystickGuardProcess() {
+    const int fd = open("/proc/self/cmdline", O_RDONLY | O_CLOEXEC);
+    if (fd < 0) return false;
+    char command_line[64]{};
+    ssize_t result;
+    do {
+        result = read(fd, command_line, sizeof(command_line));
+    } while (result < 0 && errno == EINTR);
+    close(fd);
+    if (result <= 0) return false;
+    return StringsEqual(command_line, kLauncherProcessName) ||
+            StringsEqual(command_line, kWeatherProcessName) ||
+            StringsEqual(command_line, kGalleryProcessName);
+}
+
+bool IsJoystickGuardHookProcess() {
+    return IsJoystickGuardProcess() || IsHyosSpawnerProcessFamily();
 }
 
 // The feature hooks installed once per launcher process.
@@ -183,16 +206,35 @@ bool RunDartHooks(void* handle) {
 void OnLibraryLoaded(const char* name, void* handle) {
     if (name == nullptr || handle == nullptr) return;
 
-    // The spawner is the parent of the launcher child; only the launcher runs
-    // the business hooks, and only once libapp.so is mapped there.
-    if (!IsLauncherProcess()) return;
+    // The spawner is the parent of the app children; business hooks only run
+    // in the app processes, once their libraries are mapped there.
+    if (!IsJoystickGuardProcess()) return;
 
     // The maml SDK is loaded lazily after libapp.so; the back-home ratio hook
-    // needs its exports.
+    // needs its exports. Launcher only.
     if (EndsWith(name, kMamlSdkLibraryName)) {
-        wommo::hooks::InstallBackHomeRatioSdkHooks(handle);
+        if (IsLauncherProcess()) {
+            wommo::hooks::InstallBackHomeRatioSdkHooks(handle);
+        }
         return;
     }
+    // Joystick guard: backend 1.7 (launcher + weather share fingerprints).
+    if (EndsWith(name, kAppLauncherLibraryName) ||
+            EndsWith(name, kWeatherAppLibraryName)) {
+        if (!wommo::hooks::InstallJoystickTouchGuardHooks(handle)) {
+            WOMMO_LOGE("joystick_touch_guard failed to install");
+        }
+        return;
+    }
+    // Joystick guard: backend 3.9 (gallery, refactored converter).
+    if (EndsWith(name, kGalleryLibraryName)) {
+        if (!wommo::hooks::InstallJoystickTouchGuardGalleryHooks(handle)) {
+            WOMMO_LOGE("joystick_touch_guard gallery failed to install");
+        }
+        return;
+    }
+    // Dart business hooks are launcher-only.
+    if (!IsLauncherProcess()) return;
     if (!EndsWith(name, kDartLibraryName)) return;
 
     WOMMO_LOGW("libapp.so loaded, installing native hooks");
@@ -215,17 +257,39 @@ NativeOnModuleLoaded native_init(const NativeAPIEntries* entries) {
                launcher ? 1u : 0u, spawner ? 1u : 0u);
 
     if (!backend_ready) return nullptr;
-    if (!IsLauncherHookProcess()) {
-        WOMMO_LOGW("rejected non-launcher HYOS process");
+    if (!IsJoystickGuardHookProcess()) {
+        WOMMO_LOGW("rejected non-hooked HYOS process");
         return nullptr;
     }
 
-    // In the launcher child libapp.so may already be mapped when the entry is
-    // initialized (e.g. after a LSPosed hot reload), so backfill once here.
-    if (launcher) {
-        void* dart_handle = dlopen(kDartLibraryName, RTLD_NOLOAD);
-        if (dart_handle != nullptr) {
-            RunDartHooks(dart_handle);
+    // In the app children the libraries may already be mapped when the entry
+    // is initialized (e.g. after a LSPosed hot reload), so backfill once here.
+    if (IsJoystickGuardProcess()) {
+        if (IsLauncherProcess()) {
+            void* dart_handle = dlopen(kDartLibraryName, RTLD_NOLOAD);
+            if (dart_handle != nullptr) {
+                RunDartHooks(dart_handle);
+            }
+        }
+        void* app_launcher_handle = dlopen(kAppLauncherLibraryName, RTLD_NOLOAD);
+        if (app_launcher_handle != nullptr) {
+            if (!wommo::hooks::InstallJoystickTouchGuardHooks(
+                        app_launcher_handle)) {
+                WOMMO_LOGE("joystick_touch_guard failed to install");
+            }
+        }
+        void* weather_handle = dlopen(kWeatherAppLibraryName, RTLD_NOLOAD);
+        if (weather_handle != nullptr) {
+            if (!wommo::hooks::InstallJoystickTouchGuardHooks(weather_handle)) {
+                WOMMO_LOGE("joystick_touch_guard failed to install");
+            }
+        }
+        void* gallery_handle = dlopen(kGalleryLibraryName, RTLD_NOLOAD);
+        if (gallery_handle != nullptr) {
+            if (!wommo::hooks::InstallJoystickTouchGuardGalleryHooks(
+                        gallery_handle)) {
+                WOMMO_LOGE("joystick_touch_guard gallery failed to install");
+            }
         }
     }
 

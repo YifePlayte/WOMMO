@@ -47,4 +47,10 @@ bool InstallBackHomeRatioHook(const dart::Image& image);
 // with the LSPosed-reported handle when the SDK appears.
 bool InstallBackHomeRatioSdkHooks(void* library_handle);
 
+// Drop non-pointer-class motion from the engine pointer pipeline. Backend 1.7
+// (launcher libapp_launcher.so, weather libweather_app.so): two router tails.
+// Backend 3.9 (gallery libapp_gallery.so): shared generic converter entry.
+bool InstallJoystickTouchGuardHooks(void* library_handle);
+bool InstallJoystickTouchGuardGalleryHooks(void* library_handle);
+
 }  // namespace wommo::hooks

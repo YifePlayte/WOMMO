@@ -8,6 +8,7 @@ com.google.android.gms
 com.milink.service
 com.miui.audiomonitor
 com.miui.contentextension
+com.miui.gallery
 com.miui.home
 com.miui.packageinstaller
 com.miui.personalassistant
@@ -15,6 +16,7 @@ com.miui.powerkeeper
 com.miui.screenrecorder
 com.miui.securitycenter
 com.miui.voiceassist
+com.miui.weather2
 com.xiaomi.aicr
 com.xiaomi.barrage
 com.xiaomi.market
