@@ -32,6 +32,7 @@ import com.yifeplayte.wommo.hook.utils.hostPackageName
 import io.github.lingqiqi5211.ezhooktool.xposed.dsl.createHook
 import io.github.lingqiqi5211.ezhooktool.xposed.dsl.createHooks
 import org.json.JSONObject
+import java.lang.reflect.Modifier
 
 import com.yifeplayte.wommo.R
 import com.yifeplayte.wommo.hook.hooks.BaseHook
@@ -52,6 +53,7 @@ object ChangeBrowserForAIEngine : BaseHook() {
     private const val NOTIFICATION_ID = 111
     private const val TRAILING_CHARS = ".,!?;:，。！？；：、）】》〉」』]}>"
     private const val STATUS_NOT_RECOGNIZED = -103
+    private const val TAG_BROWSER = 11
     private const val PACKAGE_NAME_XIAOMI_BROWSER = "com.android.browser"
     private const val BROWSER_ICON_RES = "app_icon_com_android_browser"
     private const val TARGET_PACKAGE_PREFIX = "wommo_target:"
@@ -163,6 +165,7 @@ object ChangeBrowserForAIEngine : BaseHook() {
 
     override fun hook() {
         if (isAgentGeneration) {
+            hookAcquireInstallCheck()
             hookAgentBrowserInstallCheck()
             hookAgentClipTextCategory()
             hookAgentCopyDirectData()
@@ -295,6 +298,39 @@ object ChangeBrowserForAIEngine : BaseHook() {
         }
     }
 
+    // The get-app branch probes installs through a marker-less util instead of the logged
+    // SmartPasswordUtils check, so it bypasses hookAgentBrowserInstallCheck entirely. The probe
+    // itself carries no usable strings; anchor it through its caller, the acquire-candidate step
+    // holding this unique log string, and keep only its (Context, String) -> boolean shape. The
+    // before block only answers for the Xiaomi browser package and only when a usable browser
+    // resolves, so unrelated checks and browser-less devices keep stock behavior. Absent on old
+    // builds, in which case there is nothing to hook.
+    private fun hookAcquireInstallCheck() {
+        val targets = runCatching {
+            dexKitBridge.findMethod {
+                matcher {
+                    paramTypes(Context::class.java, String::class.java)
+                    addCaller {
+                        usingStrings(" jump -> appCategory=")
+                    }
+                }
+            }.map { it.getMethodInstance() }
+                .filter {
+                    Modifier.isStatic(it.modifiers) &&
+                            it.parameterTypes.contentEquals(arrayOf(Context::class.java, String::class.java)) &&
+                            it.returnType == Boolean::class.javaPrimitiveType
+                }
+        }.getOrNull().orEmpty()
+        if (targets.isEmpty()) return
+        targets.createHooks {
+            before { param ->
+                if (param.args.getOrNull(1) != PACKAGE_NAME_XIAOMI_BROWSER) return@before
+                val context = param.args.getOrNull(0) as? Context ?: return@before
+                if (resolveTarget(context, null) != null) param.result = true
+            }
+        }
+    }
+
     // The install check of the browser type rejects the cue once the system browser is gone; let a
     // usable default browser stand in for it.
     private fun hookAgentBrowserInstallCheck() {
@@ -329,7 +365,9 @@ object ChangeBrowserForAIEngine : BaseHook() {
                 val uri = uriRegex.find(copyText)?.value?.trimEnd { it in TRAILING_CHARS } ?: return@after
                 val recognized = JSONObject().apply {
                     put("status", 0)
-                    put("tag", "SMART_PASS_WORD_XIAOMI_BROWSER")
+                    // The downstream handler reads the tag as an int; a string tag throws there and
+                    // the cue is dropped, so mirror the host's own tag for the browser type.
+                    put("tag", TAG_BROWSER)
                     put("copyText", copyText)
                     put("copySource", inputJson.optString("clipSource"))
                     put("recognitionText", uri)
