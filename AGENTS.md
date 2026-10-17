@@ -225,8 +225,16 @@ therefore published by the module's Java hook in system_server:
   and `clipboard` resolve), and clipboard traffic is far colder than a window
   transaction.  Do not move the endpoint back onto a service that only platform
   apps can see.
-- The feature bit of each gated hook and its preference key are declared in
-  `native_config.h` and `NativeConfigEndpoint.kt`; keep the two lists in step.
+- The feature bit of each gated hook and its preference key:
+
+  | bit | hook | preference key |
+  | --- | --- | --- |
+  | 0 | `perfect_icons` | `enable_perfect_icons` |
+  | 1 | `hide_landscape_nav_bar` | `hide_landscape_nav_bar` |
+  | 2 | `drag_to_pa` | `allow_move_non_miui_widgets_to_minus_screen` |
+  | 3 | `allow_search_on_4x7` | `allow_search_on_4x7` |
+  | 4 | `back_home_ratio` (Dart part and maml SDK part) | `restore_back_home_ratio` |
+  | 5 | `joystick_touch_guard` (all three backends) | `joystick_touch_guard` |
 - `hooks/native_config.cpp` resolves `libbinder_ndk` through the default
   namespace first and falls back to `dlopen("libbinder_ndk.so", RTLD_NOW)`:
   LSPosed loads the module library into a namespace whose default group does not

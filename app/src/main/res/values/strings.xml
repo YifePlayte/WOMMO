@@ -8,6 +8,7 @@
     <string name="allow_extra_ai_summary_apps">Allow extra apps for AI recording summary</string>
     <string name="allow_extra_ai_summary_apps_tips">Voice Call Recorder, System Framework\nAdd your own apps to the built-in allow list, one rule per line as package/activity, e.g. com.example.app/.ui.CallActivity</string>
     <string name="allow_move_non_miui_widgets_to_minus_screen">Allow to move non-MIUI-widgets to App vault</string>
+    <string name="allow_search_on_4x7">Keep capsule search on the 4x7 layout</string>
     <string name="allow_unofficial_system_applications_installation">Allow the installation of system applications from unofficial channels</string>
     <string name="aosp_app_info">AOSP app info</string>
     <string name="aosp_app_manager">AOSP app manager</string>
@@ -70,6 +71,8 @@
     <string name="icon_label_marquee">Icon label marquee</string>
     <string name="icon_label_size">Icon label font size</string>
     <string name="intent_resolver">IntentResolver</string>
+    <string name="joystick_touch_guard">Keep gamepad stick input out of the touch pipeline</string>
+    <string name="joystick_touch_guard_tips">Launcher, Weather, Gallery</string>
     <string name="lockscreen_charging_info">Display charging power on lock screen</string>
     <string name="lockscreen_charging_info_not_supported">Device currently unsupported</string>
     <string name="miui_home">Launcher</string>
@@ -99,6 +102,8 @@
     <string name="remove_xl_download">Remove .xldownload folder</string>
     <string name="restart_all_scope">Restart all scope</string>
     <string name="restart_all_scope_tips">Are you sure to restart all scope?</string>
+    <string name="restore_back_home_ratio">Restore the icon offset in the back-to-home animation</string>
+    <string name="restore_back_home_ratio_tips">Injects the maml ratio variable (the flying icon\'s horizontal offset) on the way back home, so the theme icon\'s return animation starts with the right direction and speed</string>
     <string name="restore_google_app_icon">Restore Google app icon</string>
     <string name="restore_hidden_custom_media_action">Restore hidden custom media action</string>
     <string name="restore_near_by_tile">Restore NearBy Share tile</string>

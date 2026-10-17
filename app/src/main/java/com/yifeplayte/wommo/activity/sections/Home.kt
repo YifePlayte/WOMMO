@@ -44,6 +44,11 @@ fun LazyListScope.home() {
                 titleId = R.string.widget_transition_animation,
             )
             SPSwitch(
+                key = "restore_back_home_ratio",
+                titleId = R.string.restore_back_home_ratio,
+                summaryId = R.string.restore_back_home_ratio_tips,
+            )
+            SPSwitch(
                 key = "fake_non_default_icon",
                 titleId = R.string.fake_non_default_icon,
             )
@@ -74,6 +79,10 @@ fun LazyListScope.home() {
             SPSwitch(
                 key = "unlock_grids",
                 titleId = R.string.unlock_grids,
+            )
+            SPSwitch(
+                key = "allow_search_on_4x7",
+                titleId = R.string.allow_search_on_4x7,
             )
             SPSwitch(
                 key = "force_applied_light_wallpaper",

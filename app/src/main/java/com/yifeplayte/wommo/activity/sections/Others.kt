@@ -71,6 +71,11 @@ fun LazyListScope.others() {
                     modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
                 )
             }
+            SPSwitch(
+                key = "joystick_touch_guard",
+                titleId = R.string.joystick_touch_guard,
+                summaryId = R.string.joystick_touch_guard_tips,
+            )
         }
     }
 }

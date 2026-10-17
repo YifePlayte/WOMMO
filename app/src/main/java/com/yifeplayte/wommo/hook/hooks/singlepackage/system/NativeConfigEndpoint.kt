@@ -47,6 +47,10 @@ object NativeConfigEndpoint : BaseHook() {
     private val featureKeys = arrayOf(
         "enable_perfect_icons",
         "hide_landscape_nav_bar",
+        "allow_move_non_miui_widgets_to_minus_screen",
+        "allow_search_on_4x7",
+        "restore_back_home_ratio",
+        "joystick_touch_guard",
     )
 
     /** Processes that map libwommo_native.so; extend together with the native targets. */

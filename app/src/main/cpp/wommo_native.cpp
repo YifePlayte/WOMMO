@@ -141,13 +141,16 @@ struct DartHook {
 };
 
 constexpr DartHook kDartHooks[] = {
-    {"drag_to_pa", 0u, &wommo::hooks::InstallDragToPaHook},
-    {"allow_search_on_4x7", 0u, &wommo::hooks::InstallAllowSearchOn4x7Hook},
+    {"drag_to_pa", wommo::config::kDragToPa,
+     &wommo::hooks::InstallDragToPaHook},
+    {"allow_search_on_4x7", wommo::config::kAllowSearchOn4x7,
+     &wommo::hooks::InstallAllowSearchOn4x7Hook},
     {"hide_landscape_nav_bar", wommo::config::kHideLandscapeNavBar,
      &wommo::hooks::InstallHideLandscapeNavBarHook},
     {"perfect_icons", wommo::config::kPerfectIcons,
      &wommo::hooks::InstallPerfectIconsHook},
-    {"back_home_ratio", 0u, &wommo::hooks::InstallBackHomeRatioHook},
+    {"back_home_ratio", wommo::config::kBackHomeRatio,
+     &wommo::hooks::InstallBackHomeRatioHook},
 };
 
 bool IsLauncherDartLibraryPath(const char* path) {
@@ -168,11 +171,17 @@ uint32_t g_image_verified_state = 0u;
 void* g_dart_handle = nullptr;
 bool g_dart_retry_pending = false;
 bool g_dart_retry_done = false;
+// The joystick guard installs from a library callback, so its handle is kept
+// for the same retry; loader callback and worker share it, hence the atomics.
+void* g_joystick_handle = nullptr;
+bool g_joystick_gallery = false;
+bool g_joystick_pending = false;
 // A gated hook invoked repeatedly (every libapp.so load callback) reports its
 // switch state once per process.
 uint32_t g_skip_logged = 0u;
 
-void RetryPendingDartHooks();
+void InstallJoystickGuard(void* handle, bool gallery);
+void RetryPendingGatedHooks();
 
 // Binds the LSPosed-reported library handle to the exact Dart AOT image:
 // the handle must export the snapshot symbol, the symbol's mapping path must
@@ -239,7 +248,7 @@ void* ConfigRetryWorker(void*) {
         if (!wommo::config::Refresh()) continue;
         WOMMO_LOGW("native config: endpoint answered on retry %u",
                    attempt + 1u);
-        RetryPendingDartHooks();
+        RetryPendingGatedHooks();
         return nullptr;
     }
     WOMMO_LOGW("native config: endpoint silent after %u retries",
@@ -310,6 +319,41 @@ void RetryPendingDartHooks() {
     RunDartHooks(__atomic_load_n(&g_dart_handle, __ATOMIC_ACQUIRE));
 }
 
+// Installs the joystick guard for one library when its switch is on.  The
+// switch gates all three backends, so it cannot sit in the Dart hook table.
+void InstallJoystickGuard(void* handle, bool gallery) {
+    if (handle != nullptr) {
+        __atomic_store_n(&g_joystick_handle, handle, __ATOMIC_RELEASE);
+        __atomic_store_n(&g_joystick_gallery, gallery, __ATOMIC_RELEASE);
+    }
+    if (!wommo::config::EnsureReady() ||
+            !wommo::config::Enabled(wommo::config::kJoystickTouchGuard)) {
+        LogSwitchOff("joystick_touch_guard", wommo::config::kJoystickTouchGuard);
+        // Only an unanswered endpoint is retried; an authoritative "off" is final.
+        const bool pending = !wommo::config::Ready();
+        __atomic_store_n(&g_joystick_pending, pending, __ATOMIC_RELEASE);
+        if (pending) StartConfigRetryWorker();
+        return;
+    }
+    __atomic_store_n(&g_joystick_pending, false, __ATOMIC_RELEASE);
+    const bool installed = gallery
+            ? wommo::hooks::InstallJoystickTouchGuardGalleryHooks(handle)
+            : wommo::hooks::InstallJoystickTouchGuardHooks(handle);
+    if (!installed) {
+        WOMMO_LOGE("hook 'joystick_touch_guard' failed to install");
+    }
+}
+
+// Re-runs every gated install that was held back by an unanswered endpoint.
+void RetryPendingGatedHooks() {
+    if (__atomic_load_n(&g_joystick_pending, __ATOMIC_ACQUIRE)) {
+        InstallJoystickGuard(
+                nullptr,
+                __atomic_load_n(&g_joystick_gallery, __ATOMIC_ACQUIRE));
+    }
+    RetryPendingDartHooks();
+}
+
 // Called by LSPosed whenever a new library is loaded into the process.
 void OnLibraryLoaded(const char* name, void* handle) {
     if (name == nullptr || handle == nullptr) return;
@@ -319,38 +363,40 @@ void OnLibraryLoaded(const char* name, void* handle) {
     if (!IsJoystickGuardProcess()) return;
 
     // The maml SDK is loaded lazily after libapp.so; the back-home ratio hook
-    // needs its exports. Launcher only.
+    // needs its exports. Launcher only, and only while its switch is on.
     if (EndsWith(name, kMamlSdkLibraryName)) {
         if (IsLauncherProcess()) {
-            wommo::hooks::InstallBackHomeRatioSdkHooks(handle);
+            if (wommo::config::EnsureReady() &&
+                    wommo::config::Enabled(wommo::config::kBackHomeRatio)) {
+                if (!wommo::hooks::InstallBackHomeRatioSdkHooks(handle)) {
+                    WOMMO_LOGE("hook 'back_home_ratio' sdk part failed to install");
+                }
+            } else {
+                LogSwitchOff("back_home_ratio", wommo::config::kBackHomeRatio);
+            }
         }
         return;
     }
-    // Joystick guard: backend 1.7 (launcher + weather share fingerprints).
+    // Joystick guard: backend 1.7 (launcher + weather share fingerprints) and
+    // backend 3.9 (gallery, refactored converter).
     if (EndsWith(name, kAppLauncherLibraryName) ||
             EndsWith(name, kWeatherAppLibraryName)) {
-        if (!wommo::hooks::InstallJoystickTouchGuardHooks(handle)) {
-            WOMMO_LOGE("joystick_touch_guard failed to install");
-        }
+        InstallJoystickGuard(handle, false);
         return;
     }
-    // Joystick guard: backend 3.9 (gallery, refactored converter).
     if (EndsWith(name, kGalleryLibraryName)) {
-        if (!wommo::hooks::InstallJoystickTouchGuardGalleryHooks(handle)) {
-            WOMMO_LOGE("joystick_touch_guard gallery failed to install");
-        }
+        InstallJoystickGuard(handle, true);
         return;
     }
     // Dart business hooks are launcher-only.
-    if (!IsLauncherProcess()) return;
-    if (EndsWith(name, kDartLibraryName)) {
+    if (IsLauncherProcess() && EndsWith(name, kDartLibraryName)) {
         WOMMO_LOGW("libapp.so loaded, installing native hooks");
         RunDartHooks(handle);
         return;
     }
-    // Any later library of the same launcher is a free retry point for hooks
+    // Any later library of the same process is a free retry point for hooks
     // held back by an endpoint that had not answered yet.
-    RetryPendingDartHooks();
+    RetryPendingGatedHooks();
 }
 
 }  // namespace
@@ -385,23 +431,15 @@ NativeOnModuleLoaded native_init(const NativeAPIEntries* entries) {
         }
         void* app_launcher_handle = dlopen(kAppLauncherLibraryName, RTLD_NOLOAD);
         if (app_launcher_handle != nullptr) {
-            if (!wommo::hooks::InstallJoystickTouchGuardHooks(
-                        app_launcher_handle)) {
-                WOMMO_LOGE("joystick_touch_guard failed to install");
-            }
+            InstallJoystickGuard(app_launcher_handle, false);
         }
         void* weather_handle = dlopen(kWeatherAppLibraryName, RTLD_NOLOAD);
         if (weather_handle != nullptr) {
-            if (!wommo::hooks::InstallJoystickTouchGuardHooks(weather_handle)) {
-                WOMMO_LOGE("joystick_touch_guard failed to install");
-            }
+            InstallJoystickGuard(weather_handle, false);
         }
         void* gallery_handle = dlopen(kGalleryLibraryName, RTLD_NOLOAD);
         if (gallery_handle != nullptr) {
-            if (!wommo::hooks::InstallJoystickTouchGuardGalleryHooks(
-                        gallery_handle)) {
-                WOMMO_LOGE("joystick_touch_guard gallery failed to install");
-            }
+            InstallJoystickGuard(gallery_handle, true);
         }
     }
 

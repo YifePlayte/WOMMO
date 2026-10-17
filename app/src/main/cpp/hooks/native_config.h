@@ -24,7 +24,12 @@ namespace wommo::config {
 // each bit is listed there; a hook without a bit installs unconditionally.
 constexpr uint32_t kPerfectIcons = 1u << 0u;
 constexpr uint32_t kHideLandscapeNavBar = 1u << 1u;
-constexpr uint32_t kKnownFeatures = kPerfectIcons | kHideLandscapeNavBar;
+constexpr uint32_t kDragToPa = 1u << 2u;
+constexpr uint32_t kAllowSearchOn4x7 = 1u << 3u;
+constexpr uint32_t kBackHomeRatio = 1u << 4u;
+constexpr uint32_t kJoystickTouchGuard = 1u << 5u;
+constexpr uint32_t kKnownFeatures = kPerfectIcons | kHideLandscapeNavBar |
+        kDragToPa | kAllowSearchOn4x7 | kBackHomeRatio | kJoystickTouchGuard;
 
 // Performs one synchronous query and publishes an authoritative answer.
 // Returns false when the endpoint refused, answered with an unusable frame or
