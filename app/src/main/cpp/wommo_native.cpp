@@ -17,13 +17,17 @@
 
 #include "dart_image.h"
 #include "hooks/hooks.h"
+#include "hooks/native_config.h"
 #include "log.h"
 #include "lsposed_hook_backend.h"
 
 #include <dlfcn.h>
 #include <errno.h>
 #include <fcntl.h>
+#include <inttypes.h>
+#include <pthread.h>
 #include <string.h>
+#include <time.h>
 #include <unistd.h>
 
 namespace {
@@ -125,20 +129,25 @@ bool IsJoystickGuardHookProcess() {
     return IsJoystickGuardProcess() || IsHyosSpawnerProcessFamily();
 }
 
-// The feature hooks installed once per launcher process.
+// The feature hooks installed once per launcher process.  A hook with a
+// non-zero feature bit is installed only while the module's switch for that
+// feature is on; the switch values come from system_server (native_config.h).
 using DartHookInstaller = bool (*)(const wommo::dart::Image& image);
 
 struct DartHook {
     const char* name;
+    uint32_t feature;
     DartHookInstaller install;
 };
 
 constexpr DartHook kDartHooks[] = {
-    {"drag_to_pa", &wommo::hooks::InstallDragToPaHook},
-    {"allow_search_on_4x7", &wommo::hooks::InstallAllowSearchOn4x7Hook},
-    {"hide_landscape_nav_bar", &wommo::hooks::InstallHideLandscapeNavBarHook},
-    {"perfect_icons", &wommo::hooks::InstallPerfectIconsHook},
-    {"back_home_ratio", &wommo::hooks::InstallBackHomeRatioHook},
+    {"drag_to_pa", 0u, &wommo::hooks::InstallDragToPaHook},
+    {"allow_search_on_4x7", 0u, &wommo::hooks::InstallAllowSearchOn4x7Hook},
+    {"hide_landscape_nav_bar", wommo::config::kHideLandscapeNavBar,
+     &wommo::hooks::InstallHideLandscapeNavBarHook},
+    {"perfect_icons", wommo::config::kPerfectIcons,
+     &wommo::hooks::InstallPerfectIconsHook},
+    {"back_home_ratio", 0u, &wommo::hooks::InstallBackHomeRatioHook},
 };
 
 bool IsLauncherDartLibraryPath(const char* path) {
@@ -152,6 +161,18 @@ bool IsLauncherDartLibraryPath(const char* path) {
 }
 
 uint32_t g_image_verified_state = 0u;
+
+// The verified launcher image handle and the pending-gate state used to retry
+// the gated hooks once the configuration endpoint answers.  The loader callback
+// writes them, the retry worker reads them, so every access is atomic.
+void* g_dart_handle = nullptr;
+bool g_dart_retry_pending = false;
+bool g_dart_retry_done = false;
+// A gated hook invoked repeatedly (every libapp.so load callback) reports its
+// switch state once per process.
+uint32_t g_skip_logged = 0u;
+
+void RetryPendingDartHooks();
 
 // Binds the LSPosed-reported library handle to the exact Dart AOT image:
 // the handle must export the snapshot symbol, the symbol's mapping path must
@@ -188,18 +209,105 @@ bool AcquireLauncherImage(void* handle, wommo::dart::Image* image) {
     return true;
 }
 
+// A gated hook reports its switch state once per process; the Dart hook table
+// and the library-scoped installers share the same log bit.
+void LogSwitchOff(const char* name, uint32_t feature) {
+    if (feature == 0u) return;
+    if ((__atomic_fetch_or(&g_skip_logged, feature, __ATOMIC_ACQ_REL) &
+                feature) != 0u) {
+        return;
+    }
+    WOMMO_LOGW("hook '%s' skipped: switch off (flags=0x%" PRIx32 " ready=%u)",
+               name, wommo::config::Flags(),
+               wommo::config::Ready() ? 1u : 0u);
+}
+
+// The service manager caches a failed lookup for a few seconds, so a retry from
+// the next library callback can still hit the cached miss (observed in the
+// untrusted_app weather process).  This bounded worker is the only thread the
+// module creates: it spaces the retries out, then exits.
+constexpr uint32_t kConfigRetryAttempts = 5u;
+constexpr long kConfigRetryDelaySeconds = 2;
+uint32_t g_config_retry_started = 0u;
+
+void* ConfigRetryWorker(void*) {
+    pthread_setname_np(pthread_self(), "wommo-config");
+    for (uint32_t attempt = 0u; attempt < kConfigRetryAttempts; ++attempt) {
+        timespec delay{kConfigRetryDelaySeconds, 0};
+        while (nanosleep(&delay, &delay) != 0 && errno == EINTR) {
+        }
+        if (!wommo::config::Refresh()) continue;
+        WOMMO_LOGW("native config: endpoint answered on retry %u",
+                   attempt + 1u);
+        RetryPendingDartHooks();
+        return nullptr;
+    }
+    WOMMO_LOGW("native config: endpoint silent after %u retries",
+               kConfigRetryAttempts);
+    return nullptr;
+}
+
+void StartConfigRetryWorker() {
+    if (__atomic_exchange_n(&g_config_retry_started, 1u, __ATOMIC_ACQ_REL) !=
+            0u) {
+        return;
+    }
+    pthread_t thread{};
+    if (pthread_create(&thread, nullptr, ConfigRetryWorker, nullptr) == 0) {
+        pthread_detach(thread);
+        return;
+    }
+    __atomic_store_n(&g_config_retry_started, 0u, __ATOMIC_RELEASE);
+    WOMMO_LOGE("native config: retry worker unavailable");
+}
+
 bool RunDartHooks(void* handle) {
+    if (handle != nullptr) {
+        __atomic_store_n(&g_dart_handle, handle, __ATOMIC_RELEASE);
+    }
     wommo::dart::Image image{};
     if (!AcquireLauncherImage(handle, &image)) return false;
 
+    // One bounded query per process: the launcher has no ART runtime, so the
+    // switch values can only come from the module's system_server endpoint.
+    const bool config_ready = wommo::config::EnsureReady();
+
     bool all_ok = true;
+    bool gated_skipped = false;
     for (const DartHook& hook : kDartHooks) {
+        if (hook.feature != 0u && !wommo::config::Enabled(hook.feature)) {
+            LogSwitchOff(hook.name, hook.feature);
+            gated_skipped = true;
+            continue;
+        }
         if (!hook.install(image)) {
             WOMMO_LOGE("hook '%s' failed to install", hook.name);
             all_ok = false;
         }
     }
+    // A skipped hook only means "off" when the endpoint answered.  Otherwise the
+    // next mapped library retries with the stored image.
+    if (gated_skipped && !config_ready) {
+        __atomic_store_n(&g_dart_retry_done, false, __ATOMIC_RELAXED);
+        __atomic_store_n(&g_dart_retry_pending, true, __ATOMIC_RELEASE);
+        StartConfigRetryWorker();
+    }
     return all_ok;
+}
+
+// The endpoint lives in system_server and is installed by the module's system
+// hook; a launcher that starts before it answers must not lose its gated
+// features for the whole process lifetime.  The bounded worker retries on a
+// timer, and every later library load is a free extra chance.
+void RetryPendingDartHooks() {
+    if (!__atomic_load_n(&g_dart_retry_pending, __ATOMIC_ACQUIRE) ||
+            __atomic_load_n(&g_dart_retry_done, __ATOMIC_ACQUIRE)) {
+        return;
+    }
+    if (!wommo::config::EnsureReady()) return;
+    __atomic_store_n(&g_dart_retry_done, true, __ATOMIC_RELEASE);
+    WOMMO_LOGW("native config: endpoint answered late, retrying gated hooks");
+    RunDartHooks(__atomic_load_n(&g_dart_handle, __ATOMIC_ACQUIRE));
 }
 
 // Called by LSPosed whenever a new library is loaded into the process.
@@ -235,10 +343,14 @@ void OnLibraryLoaded(const char* name, void* handle) {
     }
     // Dart business hooks are launcher-only.
     if (!IsLauncherProcess()) return;
-    if (!EndsWith(name, kDartLibraryName)) return;
-
-    WOMMO_LOGW("libapp.so loaded, installing native hooks");
-    RunDartHooks(handle);
+    if (EndsWith(name, kDartLibraryName)) {
+        WOMMO_LOGW("libapp.so loaded, installing native hooks");
+        RunDartHooks(handle);
+        return;
+    }
+    // Any later library of the same launcher is a free retry point for hooks
+    // held back by an endpoint that had not answered yet.
+    RetryPendingDartHooks();
 }
 
 }  // namespace

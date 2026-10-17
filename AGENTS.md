@@ -187,8 +187,9 @@ name (`utils/Object.kt`).
 1. Create `app/src/main/cpp/hooks/<feature>_hook.cpp` with an idempotent
    installer taking `const wommo::dart::Image&`.
 2. Declare it in `hooks/hooks.h`.
-3. Register `{ "<feature>", &wommo::hooks::Install<Feature>Hook }` in
-   `kDartHooks[]` in `wommo_native.cpp`.
+3. Register `{ "<feature>", <feature bit>, &wommo::hooks::Install<Feature>Hook }`
+   in `kDartHooks[]` in `wommo_native.cpp`.  Pass `0u` for a hook that has no
+   module switch yet, otherwise the feature bit from `hooks/native_config.h`.
 4. Add the source to `WOMMO_NATIVE_SOURCES` in `cpp/CMakeLists.txt`.
 5. Installers must stay idempotent across the repeated `libapp.so` load
    callbacks: skip the fingerprint scan once the original hook pointer is
@@ -200,6 +201,57 @@ name (`utils/Object.kt`).
    `InstallBackHomeRatioSdkHooks`) and call it from `OnLibraryLoaded` with
    the LSPosed handle; `dlopen(RTLD_NOLOAD)` fails inside that callback.
    Protect every hooked address with `ProtectHookRange` first.
+7. When the feature has a user switch, also add the bit in
+   `hooks/native_config.h`, the same bit plus the preference key in
+   `NativeConfigEndpoint.kt`, and the matching `SPSwitch` in the settings UI.
+
+### Switch values (system_server endpoint)
+
+HYOS processes own no ART runtime: the module's Java entry and the framework's
+remote preference store are unreachable from inside them (verified on myron:
+`/proc/<pid>/exe` is `/system_ext/bin/hyos_spawner`, no `libart.so`, and
+LSPosed only loads the APK's `native_init.list` entry).  The switch values are
+therefore published by the module's Java hook in system_server:
+
+- `hook/hooks/singlepackage/system/NativeConfigEndpoint.kt` is the authority.
+  It hooks `android.content.IClipboard$Stub.onTransact`, claims the private code
+  `0x00574F4D`, requires the genuine interface descriptor frame, verifies
+  uid + pid + `/proc/<pid>/cmdline` against the processes that map
+  `libwommo_native.so`, and answers `ack`, `available`, `flags`, `revision`.
+  It is infrastructure, not a user feature: `isEnabled` is `true`.
+  The carrier is the clipboard service, not WMS: HyperOS hides `window` from
+  third-party processes (`checkService("window")` returns null in the
+  untrusted_app weather/gallery processes while `activity`, `display`, `input`
+  and `clipboard` resolve), and clipboard traffic is far colder than a window
+  transaction.  Do not move the endpoint back onto a service that only platform
+  apps can see.
+- The feature bit of each gated hook and its preference key are declared in
+  `native_config.h` and `NativeConfigEndpoint.kt`; keep the two lists in step.
+- `hooks/native_config.cpp` resolves `libbinder_ndk` through the default
+  namespace first and falls back to `dlopen("libbinder_ndk.so", RTLD_NOW)`:
+  LSPosed loads the module library into a namespace whose default group does not
+  include the process' global group, so `dlsym(RTLD_DEFAULT, ...)` cannot see
+  the binder API at all (observed on myron).  The soname lookup makes the linker
+  attach the already loaded library to this namespace - no second copy is
+  mapped - and the handle must stay local: never add `RTLD_GLOBAL`, it would
+  change symbol resolution for every other library in the process.
+- `RunDartHooks` asks once per process (`EnsureReady`, bounded retry) and gates
+  each hook on its feature bit.  A hook skipped while the endpoint had not
+  answered yet is retried by a bounded worker thread (the service manager caches
+  a failed lookup for a few seconds, so retrying from the next library callback
+  is too early) and, as a free extra chance, from the next library-load
+  callback.  A slow boot therefore does not disable a feature for the whole
+  process lifetime.
+- Fail closed: an unreachable endpoint, an unusable frame or an unreadable
+  preference store leave every gated feature off, exactly like a switched-off
+  feature.  The launcher log then reports `hook '<name>' skipped: switch off
+  (flags=0x.. ready=0)`.
+- Feature bits are mirrored in `native_config.h` and `NativeConfigEndpoint.kt`;
+  unknown bits in an answer are masked out with one warning, so a hot-reloaded
+  Java side can be newer than the running native side.
+- Toggling a gated feature takes a restart of the affected process: the patches
+  are installed once, not consulted per call (`joystick_touch_guard` also covers
+  weather and gallery).
 
 ### Dart runtime hooks (runtime values)
 
@@ -239,9 +291,9 @@ reference):
   verification.
 - Version-specific offsets discovered during reverse engineering are evidence,
   not constants. Keep them in local notes; only fingerprints belong in code.
-- Known gap: the native hooks install unconditionally. Wiring them to the
-  shared module preference keys (the same keys the Java hooks and UI use) is
-  pending.
+- The switch values reach the native side through the system_server endpoint
+  described in "Switch values": a hook without a feature bit still installs
+  unconditionally, a gated hook installs only while its switch is on.
 
 ### Logging
 
