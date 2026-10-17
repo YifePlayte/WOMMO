@@ -3,19 +3,19 @@ package com.yifeplayte.wommo.activity.sections
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.yifeplayte.wommo.R
 import com.yifeplayte.wommo.activity.ui.SPSwitch
+import com.yifeplayte.wommo.activity.ui.SectionTitle
 import com.yifeplayte.wommo.utils.Build.HYPER_OS_VERSION
 import com.yifeplayte.wommo.utils.Build.IS_INTERNATIONAL_BUILD
 import top.yukonga.miuix.kmp.basic.Card
-import top.yukonga.miuix.kmp.basic.SmallTitle
 
 fun LazyListScope.system() {
     item {
-        SmallTitle(
-            text = stringResource(R.string.system),
+        SectionTitle(
+            titleId = R.string.system,
+            packages = listOf("system"),
         )
     }
     item {

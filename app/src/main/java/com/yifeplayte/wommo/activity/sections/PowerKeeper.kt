@@ -14,17 +14,18 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.yifeplayte.wommo.R
 import com.yifeplayte.wommo.activity.ui.SPSwitch
+import com.yifeplayte.wommo.activity.ui.SectionTitle
 import com.yifeplayte.wommo.utils.SharedPreferences.get
 import com.yifeplayte.wommo.utils.SharedPreferences.mSP
 import com.yifeplayte.wommo.utils.Terminal
 import top.yukonga.miuix.kmp.basic.BasicComponent
 import top.yukonga.miuix.kmp.basic.Card
-import top.yukonga.miuix.kmp.basic.SmallTitle
 
 fun LazyListScope.powerKeeper() {
     item {
-        SmallTitle(
-            text = stringResource(R.string.power_keeper),
+        SectionTitle(
+            titleId = R.string.power_keeper,
+            packages = listOf("com.miui.powerkeeper"),
         )
     }
     item {

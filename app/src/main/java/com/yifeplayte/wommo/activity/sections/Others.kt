@@ -10,18 +10,29 @@ import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.yifeplayte.wommo.R
 import com.yifeplayte.wommo.activity.ui.SPSwitch
 import com.yifeplayte.wommo.activity.ui.SPTextField
+import com.yifeplayte.wommo.activity.ui.SectionTitle
 import top.yukonga.miuix.kmp.basic.Card
-import top.yukonga.miuix.kmp.basic.SmallTitle
 
 fun LazyListScope.others() {
     item {
-        SmallTitle(
-            text = stringResource(R.string.others),
+        SectionTitle(
+            titleId = R.string.others,
+            // multipackage hook 的目标，加上摇杆守卫覆盖的桌面/天气/相册
+            packages = listOf(
+                "com.android.settings",
+                "com.android.systemui",
+                "com.miui.audiomonitor",
+                "com.miui.gallery",
+                "com.miui.home",
+                "com.miui.personalassistant",
+                "com.miui.weather2",
+                "com.milink.service",
+                "com.xiaomi.mirror",
+            ),
         )
     }
     item {

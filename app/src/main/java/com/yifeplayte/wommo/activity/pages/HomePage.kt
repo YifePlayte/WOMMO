@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -40,8 +41,10 @@ import com.yifeplayte.wommo.activity.sections.voiceAssist
 import com.yifeplayte.wommo.activity.sections.xmsf
 import com.yifeplayte.wommo.activity.ui.AdaptiveTopAppBar
 import com.yifeplayte.wommo.activity.ui.BlurredBar
+import com.yifeplayte.wommo.activity.ui.LocalRestartRequest
 import com.yifeplayte.wommo.activity.ui.StatusCard
 import com.yifeplayte.wommo.activity.ui.WithServiceReady
+import com.yifeplayte.wommo.activity.dialogs.RestartScopeDialog
 import com.yifeplayte.wommo.utils.SharedPreferences.isModuleActivated
 import top.yukonga.miuix.kmp.basic.MiuixScrollBehavior
 import top.yukonga.miuix.kmp.basic.Scaffold
@@ -92,46 +95,57 @@ fun HomePage() {
         },
     ) { innerPadding ->
         WithServiceReady(serviceReady) {
-            Box(modifier = if (blurActive) Modifier.layerBackdrop(backdrop) else Modifier) {
-                LazyColumn(
-                    state = lazyListState,
-                    modifier = Modifier
-                        .scrollEndHaptic()
-                        .overScrollVertical()
-                        .nestedScroll(scrollBehavior.nestedScrollConnection)
-                        .fillMaxHeight(),
-                    contentPadding = innerPadding,
-                ) {
-                    item { StatusCard(isActive = serviceReady && isModuleActivated) }
-                    system()
-                    systemUI()
-                    home()
-                    securityCenter()
-                    contacts()
-                    screenRecorder()
-                    packageInstaller()
-                    barrage()
-                    settings()
-                    downloadProvider()
-                    voiceAssist()
-                    contentExtension()
-                    powerKeeper()
-                    intentResolver()
-                    aiEngine()
-                    xmsf()
-                    getApps()
-                    googlePlayServices()
-                    others()
-                    reboot()
-                    bottomSpacer()
+            // 分区重启：回调只记录目标，对话框由页面持有一份（分区项会被列表回收）
+            var restartTargets by remember { mutableStateOf<List<String>>(emptyList()) }
+            val showRestartDialog = remember { mutableStateOf(false) }
+            CompositionLocalProvider(
+                LocalRestartRequest provides { targets ->
+                    restartTargets = targets
+                    showRestartDialog.value = true
                 }
-                VerticalScrollBar(
-                    adapter = rememberScrollBarAdapter(lazyListState),
-                    modifier = Modifier
-                        .align(Alignment.CenterEnd)
-                        .fillMaxHeight(),
-                    trackPadding = innerPadding,
-                )
+            ) {
+                Box(modifier = if (blurActive) Modifier.layerBackdrop(backdrop) else Modifier) {
+                    LazyColumn(
+                        state = lazyListState,
+                        modifier = Modifier
+                            .scrollEndHaptic()
+                            .overScrollVertical()
+                            .nestedScroll(scrollBehavior.nestedScrollConnection)
+                            .fillMaxHeight(),
+                        contentPadding = innerPadding,
+                    ) {
+                        item { StatusCard(isActive = serviceReady && isModuleActivated) }
+                        system()
+                        systemUI()
+                        home()
+                        securityCenter()
+                        contacts()
+                        screenRecorder()
+                        packageInstaller()
+                        barrage()
+                        settings()
+                        downloadProvider()
+                        voiceAssist()
+                        contentExtension()
+                        powerKeeper()
+                        intentResolver()
+                        aiEngine()
+                        xmsf()
+                        getApps()
+                        googlePlayServices()
+                        others()
+                        reboot()
+                        bottomSpacer()
+                    }
+                    VerticalScrollBar(
+                        adapter = rememberScrollBarAdapter(lazyListState),
+                        modifier = Modifier
+                            .align(Alignment.CenterEnd)
+                            .fillMaxHeight(),
+                        trackPadding = innerPadding,
+                    )
+                }
+                RestartScopeDialog(restartTargets, showRestartDialog)
             }
         }
     }

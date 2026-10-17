@@ -100,8 +100,10 @@
     <string name="remove_game_toast">Remove game mode toast</string>
     <string name="remove_report_in_application_info">Remove report button in application info page</string>
     <string name="remove_xl_download">Remove .xldownload folder</string>
+    <string name="restart">Restart</string>
     <string name="restart_all_scope">Restart all scope</string>
     <string name="restart_all_scope_tips">Are you sure to restart all scope?</string>
+    <string name="restart_scope_tips">Are you sure to restart the apps of this section?\n%1$s</string>
     <string name="restore_back_home_ratio">Restore the icon offset in the back-to-home animation</string>
     <string name="restore_back_home_ratio_tips">Injects the maml ratio variable (the flying icon\'s horizontal offset) on the way back home, so the theme icon\'s return animation starts with the right direction and speed</string>
     <string name="restore_google_app_icon">Restore Google app icon</string>

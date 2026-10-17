@@ -3,14 +3,13 @@ package com.yifeplayte.wommo.activity.sections
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.yifeplayte.wommo.R
 import com.yifeplayte.wommo.activity.ui.SPSlider
 import com.yifeplayte.wommo.activity.ui.SPSwitch
+import com.yifeplayte.wommo.activity.ui.SectionTitle
 import com.yifeplayte.wommo.utils.Build.HYPER_OS_VERSION
 import top.yukonga.miuix.kmp.basic.Card
-import top.yukonga.miuix.kmp.basic.SmallTitle
 
 fun LazyListScope.home() {
     // HyperOS 4 and newer ship the Flutter launcher, which owns no launcher dex
@@ -19,8 +18,9 @@ fun LazyListScope.home() {
     // launcher) would be dead rows, so each is shown for the launcher it serves.
     val nativeLauncher = HYPER_OS_VERSION >= 4
     item {
-        SmallTitle(
-            text = stringResource(R.string.miui_home),
+        SectionTitle(
+            titleId = R.string.miui_home,
+            packages = listOf("com.miui.home"),
         )
     }
     item {
