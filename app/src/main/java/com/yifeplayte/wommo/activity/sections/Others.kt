@@ -79,7 +79,7 @@ fun LazyListScope.others() {
                     key = "ai_summary_extra_rules",
                     labelId = R.string.ai_summary_extra_rules,
                     maxLines = 6,
-                    modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
+                    modifier = Modifier.padding(start = 16.dp, end = 16.dp),
                 )
             }
             SPSwitch(
