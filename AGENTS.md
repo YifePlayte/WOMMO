@@ -31,12 +31,12 @@ app/src/main/java/com/yifeplayte/wommo/
   utils/                                  Build, Clazz, Object, Terminal...
 app/src/main/cpp/
   classhelper/                            pre-existing JNI helper library
-  wommo_native.cpp                        native_init entry; hook dispatch
-  dart_image.{h,cpp}                      image lookup, pattern scan, patch
-  lsposed_hook_backend.*                  LSPosed native API wrapper
+  wommo_native.cpp                        module descriptor + hook callbacks
+  config/native_config.h                  feature bits + switch transport config
   log.h                                   WOMMO_LOGW / WOMMO_LOGE only
   hooks/hooks.h                           native feature hook declarations
   hooks/*_hook.cpp                        one file per native feature
+native-hook-kit/                           shared source-level native scaffold
 app/src/main/resources/META-INF/xposed/   module.prop, java_init.list,
                                           native_init.list, scope.list
 ```
@@ -150,9 +150,10 @@ name (`utils/Object.kt`).
   native entry. Do not add one `.so` per feature.
 - LSPosed's HYOS entry initializes in the root spawner (cmdline `usap64`, exe
   `/system_ext/bin/hyos_spawner`) before the launcher child is forked.
-  `native_init` accepts the spawner family and the launcher process, but
-  business hooks only install from the `libapp.so` load callback inside
-  `com.miui.home`.
+  The exported `native_init` is provided by the shared `NativeHookKit`; the
+  module implements `GetModuleDescriptor()` with `OnNativeInit` and
+  `OnLibraryLoaded`.  Business hooks only install from the `libapp.so` load
+  callback inside `com.miui.home`.
 - Image verification is handle-bound and fail closed (see
   `AcquireLauncherImage` in `wommo_native.cpp`):
   1. the process must be exactly `com.miui.home` (spawner family only passes
@@ -171,16 +172,38 @@ name (`utils/Object.kt`).
 - HyperOS memory cleanup can issue `madvise(MADV_DONTNEED)` over the mapped
   launcher image. That drops the modified copy-on-write code pages and the
   kernel re-reads the original bytes, silently reverting every patch.
-- `lsposed_hook_backend.cpp` hooks libc's `madvise` through LSPosed's
-  `hookFunc` and removes registered hook pages from `MADV_DONTNEED` ranges
-  (`GuardedMadvise`). Page registration happens before the patch is written to
-  close the concurrent-cleanup race.
-- `dart::PatchCode` calls `ProtectHookRange` before touching the code. A range
-  that cannot be protected is not patched: the guard is a hard prerequisite,
-  not a best effort.
-- Verify the hook is live by reading the `madvise` entry in `/proc/<pid>/mem`:
-  the original bionic prologue (`bti c; mov x8, #__NR_madvise; svc #0`) is
-  replaced by a `ldr x17 / br x17` trampoline.
+- The shared `NativeHookKit` (`native-hook-kit`) uses the pinned
+  `org.lsposed.lsplt:lsplt-standalone:2.1.1-7d609ac-compat` AAR through prefab
+  to hook every `madvise` PLT slot that can drop the patched image.  The guard
+  follows the image the launcher build actually uses: 7751+ runs its Dart
+  payload on `libhyper_os_flutter.so`, while 7748 maps it straight from the
+  APK and issues cleanup through the Rust mmap crates
+  (`libmemmap2.dylib.so`, `libnix.dylib.so`).  Each slot keeps its own LSPlt
+  backup, and the guard removes registered pages from `MADV_DONTNEED` ranges,
+  so several modules can form a GOT chain.
+- The artifact is committed in the `native-hook-kit` submodule under
+  `third_party/maven`; no Maven Central or LSPlt checkout is needed at build
+  time. It is built from upstream `7d609ac` with 16KB page alignment and keeps
+  a legacy `MapInfo::Scan()` overload for MiuiBackGestureHook's older LSPlt ABI.
+- The APK also contains `lib/arm64-v8a/liblsplt.so`. LSPosed loads
+  `libwommo_native.so` directly from the APK, so the native target must carry a
+  `DT_RUNPATH` of `$ORIGIN`; without it the loader cannot resolve
+  `liblsplt.so`. The build passes that value through
+  `cpp/linker-rpath.txt` because CMake/Ninja would otherwise strip `$ORIGIN`
+  down to `$`.
+- The pinned compat AAR is shared by soname. All guards operate on the same
+  LSPlt registry, and each module preserves its own protected pages. Keep every
+  consumer on the same AAR version; diverging `liblsplt.so` copies reintroduce
+  the soname/ABI collision.
+- Page registration happens before the patch is written to close the
+  concurrent-cleanup race. `dart::PatchCode` calls `ProtectHookRange` before
+  touching the code; the LSPlt guard is a hard prerequisite when the external
+  dependency is available.
+- The inline LSPosed `hookFunc` fallback remains for setups where LSPlt cannot
+  load or the runtime segment is already owned by another LSPlt module. It is a
+  fallback, not the preferred path.
+- Verify the guard from logs (`madvise guard installed: LSPlt GOT chain` or the
+  inline fallback message) before concluding a patch is durable.
 
 ### Adding a feature hook
 
@@ -204,6 +227,10 @@ name (`utils/Object.kt`).
 7. When the feature has a user switch, also add the bit in
    `hooks/native_config.h`, the same bit plus the preference key in
    `NativeConfigEndpoint.kt`, and the matching `SPSwitch` in the settings UI.
+8. Entry logging is automatic for `kDartHooks[]`: `RunDartHooks` emits one
+   `Inited hook: <name>` or `Failed init hook: <name>` per feature per process.
+   Library-scoped installers (joystick guard, maml SDK) must call their
+   one-shot result logger after installation, matching the Java BaseHook lines.
 
 ### Switch values (system_server endpoint)
 
@@ -235,14 +262,15 @@ therefore published by the module's Java hook in system_server:
   | 3 | `allow_search_on_4x7` | `allow_search_on_4x7` |
   | 4 | `back_home_ratio` (Dart part and maml SDK part) | `restore_back_home_ratio` |
   | 5 | `joystick_touch_guard` (all three backends) | `joystick_touch_guard` |
-- `hooks/native_config.cpp` resolves `libbinder_ndk` through the default
-  namespace first and falls back to `dlopen("libbinder_ndk.so", RTLD_NOW)`:
-  LSPosed loads the module library into a namespace whose default group does not
-  include the process' global group, so `dlsym(RTLD_DEFAULT, ...)` cannot see
-  the binder API at all (observed on myron).  The soname lookup makes the linker
-  attach the already loaded library to this namespace - no second copy is
-  mapped - and the handle must stay local: never add `RTLD_GLOBAL`, it would
-  change symbol resolution for every other library in the process.
+- The shared `NativeHookKit` (`native-hook-kit/src/config.cpp`) resolves
+  `libbinder_ndk` through the default namespace first and falls back to
+  `dlopen("libbinder_ndk.so", RTLD_NOW)`: LSPosed loads the module library into
+  a namespace whose default group does not include the process' global group,
+  so `dlsym(RTLD_DEFAULT, ...)` cannot see the binder API at all (observed on
+  myron).  The soname lookup makes the linker attach the already loaded library
+  to this namespace - no second copy is mapped - and the handle must stay local:
+  never add `RTLD_GLOBAL`, it would change symbol resolution for every other
+  library in the process.
 - `RunDartHooks` asks once per process (`EnsureReady`, bounded retry) and gates
   each hook on its feature bit.  A hook skipped while the endpoint had not
   answered yet is retried by a bounded worker thread (the service manager caches
@@ -314,9 +342,9 @@ Feature hooks mute their runtime logs by default so animation hot paths never
 pay for IO: each hook file defines a local `WOMMO_<FEATURE>_LOGW/LOGE` macro
 that expands to `((void)0)` under a commented
 `// #define WOMMO_<FEATURE>_DEBUG` line.  Uncomment that line to get the logs
-back when debugging on device.  The entry and backend (`wommo_native.cpp`,
-`lsposed_hook_backend.cpp`) keep their one-shot startup WARN logs because the
-deploy workflow checks them.
+back when debugging on device.  The entry (`wommo_native.cpp`) and the shared
+`NativeHookKit` keep their one-shot startup WARN logs because the deploy
+workflow checks them.
 
 ## Device and Testing Workflow
 

@@ -39,7 +39,8 @@
 #include "hooks.h"
 
 #include "../log.h"
-#include "../lsposed_hook_backend.h"
+#include <nhk/madvise_guard.h>
+#include <nhk/native_api.h>
 
 #include <dlfcn.h>
 #include <inttypes.h>
@@ -371,14 +372,14 @@ bool InstallDartHooks(const dart::Image& image) {
     }
 
     if (g_get_visible_screen_width_original == nullptr) {
-        if (!ProtectHookRange(width_getter, kHookPatchSize)) {
+        if (!nhk::ProtectHookRange(width_getter, kHookPatchSize)) {
             WOMMO_RATIO_LOGE("back_home_ratio: cannot protect width hook page");
             return false;
         }
         void* backup = nullptr;
-        if (InstallInlineHook(reinterpret_cast<void*>(width_getter),
+        if (nhk::InstallInlineHook(reinterpret_cast<void*>(width_getter),
                               reinterpret_cast<void*>(HookGetVisibleScreenWidth),
-                              &backup) != kHookSuccess ||
+                              &backup) != nhk::kHookSuccess ||
                 backup == nullptr) {
             WOMMO_RATIO_LOGE("back_home_ratio: failed to hook screen width getter");
             return false;
@@ -404,14 +405,14 @@ bool InstallDartHooks(const dart::Image& image) {
     }
 
     if (g_update_animation_properties_original == nullptr) {
-        if (!ProtectHookRange(update_props, kHookPatchSize)) {
+        if (!nhk::ProtectHookRange(update_props, kHookPatchSize)) {
             WOMMO_RATIO_LOGE("back_home_ratio: cannot protect props hook page");
             return false;
         }
         void* backup = nullptr;
-        if (InstallInlineHook(reinterpret_cast<void*>(update_props),
+        if (nhk::InstallInlineHook(reinterpret_cast<void*>(update_props),
                               reinterpret_cast<void*>(HookUpdateAnimationProps),
-                              &backup) != kHookSuccess ||
+                              &backup) != nhk::kHookSuccess ||
                 backup == nullptr) {
             WOMMO_RATIO_LOGE("back_home_ratio: failed to hook update properties");
             return false;
@@ -424,15 +425,15 @@ bool InstallDartHooks(const dart::Image& image) {
     }
 
     if (g_check_and_notify_back_home_original == nullptr) {
-        if (!ProtectHookRange(check_notify, kHookPatchSize)) {
+        if (!nhk::ProtectHookRange(check_notify, kHookPatchSize)) {
             WOMMO_RATIO_LOGE("back_home_ratio: cannot protect check-notify hook page");
             return false;
         }
         void* backup = nullptr;
-        if (InstallInlineHook(
+        if (nhk::InstallInlineHook(
                     reinterpret_cast<void*>(check_notify),
                     reinterpret_cast<void*>(HookCheckAndNotifyBackHome),
-                    &backup) != kHookSuccess ||
+                    &backup) != nhk::kHookSuccess ||
                 backup == nullptr) {
             WOMMO_RATIO_LOGE("back_home_ratio: failed to hook "
                        "_checkAndNotifyBackHome");
@@ -648,18 +649,18 @@ bool InstallMamlSdkHooks(void* library_handle) {
         return false;
     }
 
-    if (!ProtectHookRange(reinterpret_cast<uintptr_t>(send_command),
+    if (!nhk::ProtectHookRange(reinterpret_cast<uintptr_t>(send_command),
                           kHookPatchSize) ||
-            !ProtectHookRange(reinterpret_cast<uintptr_t>(put_variable_number),
+            !nhk::ProtectHookRange(reinterpret_cast<uintptr_t>(put_variable_number),
                               kHookPatchSize)) {
         WOMMO_RATIO_LOGE("back_home_ratio: cannot protect maml sdk hook pages");
         return false;
     }
 
     void* backup = nullptr;
-    if (InstallInlineHook(send_command,
+    if (nhk::InstallInlineHook(send_command,
                           reinterpret_cast<void*>(HookedSendCommand),
-                          &backup) != kHookSuccess ||
+                          &backup) != nhk::kHookSuccess ||
             backup == nullptr) {
         WOMMO_RATIO_LOGE("back_home_ratio: failed to hook send_command");
         return false;
@@ -669,9 +670,9 @@ bool InstallMamlSdkHooks(void* library_handle) {
                      __ATOMIC_RELEASE);
 
     backup = nullptr;
-    if (InstallInlineHook(put_variable_number,
+    if (nhk::InstallInlineHook(put_variable_number,
                           reinterpret_cast<void*>(HookedPutVariableNumber),
-                          &backup) != kHookSuccess ||
+                          &backup) != nhk::kHookSuccess ||
             backup == nullptr) {
         WOMMO_RATIO_LOGE("back_home_ratio: failed to hook put_variable_number");
         return false;

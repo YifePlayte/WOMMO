@@ -1,0 +1,3 @@
+[submodule "native-hook-kit"]
+	path = native-hook-kit
+	url = git@github.com:YifePlayte/NativeHookKit.git

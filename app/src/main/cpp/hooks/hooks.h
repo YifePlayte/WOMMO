@@ -10,7 +10,11 @@
 
 #pragma once
 
-#include "../dart_image.h"
+#include <nhk/dart_image.h>
+
+namespace wommo {
+namespace dart = nhk::dart;
+}
 
 namespace wommo::hooks {
 

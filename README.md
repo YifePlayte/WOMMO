@@ -4,6 +4,18 @@
 
 ---
 
+### Build
+
+```bash
+git clone --recurse-submodules git@github.com:YifePlayte/WOMMO.git
+# 或已有克隆：
+git submodule update --init --recursive
+```
+
+`native-hook-kit` submodule 内包含固定版本的 LSPlt AAR，构建不需要额外下载 LSPlt 或部署 sibling 目录。
+
+---
+
 [![翻译状态](https://hosted.weblate.org/widget/wommo/svg-badge.svg)](https://hosted.weblate.org/engage/wommo/)
 
 ---
@@ -138,6 +150,8 @@
 ~~[577fkj/blockmiui](https://github.com/Block-Network/blockmiui)~~
 
 ##### GNU Lesser General Public License v3.0
+
+[LSPosed/LSPlt](https://github.com/LSPosed/LSPlt)
 
 [LuckyPray/DexKit](https://github.com/LuckyPray/DexKit)
 

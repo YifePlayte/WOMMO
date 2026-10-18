@@ -27,7 +27,7 @@
 #include "hooks.h"
 
 #include "../log.h"
-#include "../lsposed_hook_backend.h"
+#include <nhk/native_api.h>
 
 #include <dlfcn.h>
 #include <errno.h>
@@ -675,9 +675,9 @@ bool InstallFileHooks() {
         ok = false;
     } else {
         void* backup = nullptr;
-        if (InstallInlineHook(open_target,
+        if (nhk::InstallInlineHook(open_target,
                               reinterpret_cast<void*>(HookedOpen),
-                              &backup) != kHookSuccess ||
+                              &backup) != nhk::kHookSuccess ||
                 backup == nullptr) {
             WOMMO_PERFECT_ICONS_LOGE("perfect_icons: failed to hook open");
             ok = false;
@@ -691,9 +691,9 @@ bool InstallFileHooks() {
     void* openat_target = dlsym(RTLD_DEFAULT, "openat");
     if (openat_target != nullptr) {
         void* backup = nullptr;
-        if (InstallInlineHook(openat_target,
+        if (nhk::InstallInlineHook(openat_target,
                               reinterpret_cast<void*>(HookedOpenAt),
-                              &backup) != kHookSuccess ||
+                              &backup) != nhk::kHookSuccess ||
                 backup == nullptr) {
             WOMMO_PERFECT_ICONS_LOGE("perfect_icons: failed to hook openat");
             ok = false;

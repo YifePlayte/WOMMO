@@ -13,14 +13,13 @@ endif()
 # Classhelper library (existing JNI helper)
 add_subdirectory(classhelper)
 
+find_package(lsplt REQUIRED CONFIG)
+
 # LSPosed native entry: one shared library carries the hook infrastructure and
 # every feature hook.  Features live under hooks/ and are dispatched by
 # wommo_native.cpp.
 set(WOMMO_NATIVE_SOURCES
     wommo_native.cpp
-    dart_image.cpp
-    lsposed_hook_backend.cpp
-    hooks/native_config.cpp
     hooks/back_home_ratio_hook.cpp
     hooks/drag_to_pa_hook.cpp
     hooks/allow_search_on_4x7_hook.cpp
@@ -33,6 +32,9 @@ set(WOMMO_NATIVE_TARGET wommo_native)
 set(WOMMO_NATIVE_EXPORTS exports-lsposed.map)
 
 add_library(${WOMMO_NATIVE_TARGET} SHARED ${WOMMO_NATIVE_SOURCES})
+
+set(NATIVE_HOOK_KIT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../../../../native-hook-kit" CACHE PATH "NativeHookKit source directory")
+add_subdirectory("${NATIVE_HOOK_KIT_DIR}" native_hook_kit)
 
 target_include_directories(${WOMMO_NATIVE_TARGET} PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}
@@ -59,9 +61,11 @@ target_link_options(${WOMMO_NATIVE_TARGET} PRIVATE
     -Wl,--no-undefined
     -Wl,-z,relro
     -Wl,-z,now
+    "-Wl,@${CMAKE_CURRENT_SOURCE_DIR}/linker-rpath.txt"
 )
 
 target_link_libraries(${WOMMO_NATIVE_TARGET} PRIVATE log dl z)
+nhk_link_module(${WOMMO_NATIVE_TARGET})
 
 set_target_properties(${WOMMO_NATIVE_TARGET} PROPERTIES
     CXX_EXTENSIONS OFF
