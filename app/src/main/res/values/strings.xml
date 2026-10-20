@@ -34,6 +34,8 @@
     <string name="disable_display_content_mode_management">Disable switching the content mode of connected displays between mirroring and extended</string>
     <string name="disable_display_content_mode_management_tips">System Framework, System UI</string>
     <string name="disable_gesture_recorder">Disable gesture recorder</string>
+    <string name="disable_icon_highlight">Disable the icon highlight</string>
+    <string name="disable_icon_highlight_tips">Never draws the highlight ring on app icons, regardless of theme and the advanced material switch; other highlights stay stock</string>
     <string name="disable_market_customize_icon">Disable marketing icons</string>
     <string name="disable_network_assistant_offline_info_manager">Disable network assistant offline info manager</string>
     <string name="disable_network_assistant_offline_info_manager_tips">Block \"Data plan and balance inquiry service adjustment\"</string>

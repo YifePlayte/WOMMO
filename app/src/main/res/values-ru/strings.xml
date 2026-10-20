@@ -28,6 +28,8 @@
     <string name="disable_business_hall_offline_info_manager">Отключить оффлайн-менеджер бизнес-зала</string>
     <string name="disable_business_hall_offline_info_manager_tips">Блокировать «Настройку услуги проверки тарифа и баланса»</string>
     <string name="disable_gesture_recorder">Отключить рекордер жестов</string>
+    <string name="disable_icon_highlight">Отключить подсветку иконок</string>
+    <string name="disable_icon_highlight_tips">Никогда не рисует контурную подсветку на иконках, независимо от темы и переключателя продвинутых материалов; остальные подсветки не затрагиваются</string>
     <string name="disable_network_assistant_offline_info_manager">Отключить оффлайн-менеджер сетевого ассистента</string>
     <string name="disable_network_assistant_offline_info_manager_tips">Блокировать «Настройку услуги проверки тарифа и баланса»</string>
     <string name="disable_safe_media_volume">Отключить предупреждения о безопасной громкости медиа</string>

@@ -70,6 +70,11 @@ fun LazyListScope.home() {
                 key = "enable_perfect_icons",
                 titleId = R.string.enable_perfect_icons,
             )
+            if (nativeLauncher) SPSwitch(
+                key = "disable_icon_highlight",
+                titleId = R.string.disable_icon_highlight,
+                summaryId = R.string.disable_icon_highlight_tips,
+            )
             SPSwitch(
                 key = "hide_landscape_nav_bar",
                 titleId = R.string.hide_landscape_nav_bar,

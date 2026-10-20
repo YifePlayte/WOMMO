@@ -23,6 +23,7 @@ set(WOMMO_NATIVE_SOURCES
     hooks/back_home_ratio_hook.cpp
     hooks/drag_to_pa_hook.cpp
     hooks/allow_search_on_4x7_hook.cpp
+    hooks/disable_icon_highlight_hook.cpp
     hooks/hide_landscape_nav_bar_hook.cpp
     hooks/joystick_touch_guard_hook.cpp
     hooks/perfect_icons_hook.cpp

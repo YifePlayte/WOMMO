@@ -51,6 +51,7 @@ object NativeConfigEndpoint : BaseHook() {
         "allow_search_on_4x7",
         "restore_back_home_ratio",
         "joystick_touch_guard",
+        "disable_icon_highlight",
     )
 
     /** Processes that map libwommo_native.so; extend together with the native targets. */

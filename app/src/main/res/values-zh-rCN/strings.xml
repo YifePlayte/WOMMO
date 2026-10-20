@@ -33,6 +33,8 @@
     <string name="disable_display_content_mode_management">禁用外置显示器显示模式切换</string>
     <string name="disable_display_content_mode_management_tips">系统框架，系统界面</string>
     <string name="disable_gesture_recorder">禁用手势记录</string>
+    <string name="disable_icon_highlight">关闭图标高光</string>
+    <string name="disable_icon_highlight_tips">始终不绘制应用图标的一圈高光，不受主题与高级材质开关影响，其它高光不受影响</string>
     <string name="disable_market_customize_icon">禁用营销图标</string>
     <string name="disable_network_assistant_offline_info_manager">禁用网络助手套餐查询下线信息</string>
     <string name="disable_network_assistant_offline_info_manager_tips">屏蔽“套餐查询服务调整”</string>

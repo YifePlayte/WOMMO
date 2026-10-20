@@ -262,6 +262,7 @@ therefore published by the module's Java hook in system_server:
   | 3 | `allow_search_on_4x7` | `allow_search_on_4x7` |
   | 4 | `back_home_ratio` (Dart part and maml SDK part) | `restore_back_home_ratio` |
   | 5 | `joystick_touch_guard` (all three backends) | `joystick_touch_guard` |
+  | 6 | `disable_icon_highlight` | `disable_icon_highlight` |
 - The shared `NativeHookKit` (`native-hook-kit/src/config.cpp`) resolves
   `libbinder_ndk` through the default namespace first and falls back to
   `dlopen("libbinder_ndk.so", RTLD_NOW)`: LSPosed loads the module library into

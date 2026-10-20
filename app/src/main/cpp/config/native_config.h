@@ -11,8 +11,10 @@ constexpr uint32_t kDragToPa = 1u << 2u;
 constexpr uint32_t kAllowSearchOn4x7 = 1u << 3u;
 constexpr uint32_t kBackHomeRatio = 1u << 4u;
 constexpr uint32_t kJoystickTouchGuard = 1u << 5u;
+constexpr uint32_t kDisableIconHighlight = 1u << 6u;
 constexpr uint32_t kKnownFeatures = kPerfectIcons | kHideLandscapeNavBar |
-        kDragToPa | kAllowSearchOn4x7 | kBackHomeRatio | kJoystickTouchGuard;
+        kDragToPa | kAllowSearchOn4x7 | kBackHomeRatio | kJoystickTouchGuard |
+        kDisableIconHighlight;
 
 inline constexpr nhk::config::Descriptor kDescriptor{
     0x00574F4Du, 0x574F4D31, kKnownFeatures};

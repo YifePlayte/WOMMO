@@ -100,6 +100,8 @@ constexpr DartHook kDartHooks[] = {
      &wommo::hooks::InstallPerfectIconsHook},
     {"back_home_ratio", wommo::config::kBackHomeRatio,
      &wommo::hooks::InstallBackHomeRatioHook},
+    {"disable_icon_highlight", wommo::config::kDisableIconHighlight,
+     &wommo::hooks::InstallDisableIconHighlightHook},
 };
 
 bool AcceptLauncherDartPath(const char* path) {
