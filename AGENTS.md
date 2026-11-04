@@ -137,10 +137,26 @@ name (`utils/Object.kt`).
   use `Log.i/w/e` from hooks. `utils/Build.kt` exposes `IS_HYPER_OS`,
   `HYPER_OS_VERSION`, `IS_TABLET`, `IS_INTERNATIONAL_BUILD` for version-gated
   paths (see `SystemUIPlugin.initClassLoader()` for the branching pattern).
-- Settings live in the remote preferences file `config`
+- Settings live in the remote preferences group `config`
   (`XSharedPreferences` on the hook side, `SharedPreferences.mSP` on the UI
   side). Hook code must read them at `init()` time (or after hot reload), not
   cache them forever.
+- These are LSPosed's remote preferences, not a file: values are stored in
+  `/data/adb/lspd/config/modules_config.db`, table `module_configs`, one row per
+  key with a Java-serialized blob in `data` (a one-byte `01`/`00` at the end
+  encodes the boolean). `/data/user/0/<pkg>/shared_prefs/` and any
+  `/data/misc/apexdata/.../prefs/<pkg>/config.xml` are stale leftovers and do
+  not reflect current settings, so never read them to check a switch.
+  Inspecting the database requires pulling the `.db`, `-wal` and `-shm` files
+  (no `sqlite3` on device).
+- UI writes go through `App.mService?.getRemotePreferences("config")`. The
+  nullable receiver makes `SharedPreferences.put` a silent no-op while the
+  XposedService is not bound, so a switch can look toggled without anything
+  being stored; verify through the database, not the UI.
+- Hot reload covers new and changed Java hooks: LSPosed re-runs
+  `onHotReloaded`, `installHooks()` runs again, and each newly enabled hook
+  logs `Inited hook: <name>`. A hook added while the module was already active
+  installs without a system_server restart.
 
 ## Native Hook System (Flutter MiuiHome)
 

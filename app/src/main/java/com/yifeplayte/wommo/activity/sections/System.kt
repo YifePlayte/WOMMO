@@ -41,6 +41,11 @@ fun LazyListScope.system() {
                 key = "disable_safe_media_volume",
                 titleId = R.string.disable_safe_media_volume,
             )
+            SPSwitch(
+                key = "force_smart_dns_disabled",
+                titleId = R.string.force_smart_dns_disabled,
+                summaryId = R.string.force_smart_dns_disabled_tips,
+            )
         }
     }
 }

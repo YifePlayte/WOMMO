@@ -58,6 +58,8 @@
     <string name="force_dark_mode_for_all_apps">允许所有应用使用强制深色模式</string>
     <string name="force_dark_mode_for_all_apps_tips">可以在系统设置里管理应用的强制深色设置</string>
     <string name="force_enable_native_playback_capture">强制启用原生录音支持</string>
+    <string name="force_smart_dns_disabled">禁用 SmartDns</string>
+    <string name="force_smart_dns_disabled_tips">尝试修复网络不稳定时 IPv6 DNS 被静默丢弃</string>
     <string name="force_support_barrage">允许所有应用使用弹幕通知</string>
     <string name="force_support_car_sickness">强制支持晕车缓解</string>
     <string name="force_support_send_app">强制所有应用支持流转</string>

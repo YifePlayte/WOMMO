@@ -49,6 +49,8 @@
     <string name="force_dark_mode_for_all_apps">Принудительно включить темную тему для всех приложений</string>
     <string name="force_dark_mode_for_all_apps_tips">Настроить это можно в системных настройках</string>
     <string name="force_enable_native_playback_capture">Принудительно включить захват воспроизведения в родном режиме</string>
+    <string name="force_smart_dns_disabled">Отключить SmartDns</string>
+    <string name="force_smart_dns_disabled_tips">Пытается исправить молчаливое отбрасывание DNS-запросов IPv6 при нестабильной сети</string>
     <string name="force_support_barrage">Разрешить всем приложениям использовать уведомления «пулевого экрана»</string>
     <string name="force_support_car_sickness">Принудительно включить поддержку снижения укачивания</string>
     <string name="force_support_send_app">Принудительно включить поддержку Handoff во всех приложениях</string>
