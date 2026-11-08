@@ -41,6 +41,12 @@ object LockscreenChargingInfo : BaseHook() {
 
     private const val INDICATION_TYPE_BATTERY = 3
 
+    /** IMiCharge 的 transaction code，取自 vendor.xiaomi.hardware.micharge-V2-ndk.so 的 BpMiCharge */
+    private const val MICHARGE_SERVICE = "vendor.xiaomi.hardware.micharge.IMiCharge/default"
+    private const val MICHARGE_DESCRIPTOR = "vendor.xiaomi.hardware.micharge.IMiCharge"
+    private const val MICHARGE_CODE_USB_CURRENT = 0x1c
+    private const val MICHARGE_CODE_USB_VOLTAGE = 0x1d
+
     private val mainHandler by lazy { Handler(Looper.getMainLooper()) }
     private var rotateTextViewController: WeakReference<Any>? = null
     private var batteryMessage: CharSequence? = null
@@ -123,16 +129,49 @@ object LockscreenChargingInfo : BaseHook() {
     }
 
     /**
-     * 电池侧的 current_now / voltage_now 能在 platform_app 域读到，
-     * 与旧路径共用同一份取值逻辑
+     * 电池侧的 current_now / voltage_now 在 platform_app 域可读，与旧路径一致；
+     * usb / wireless 节点属于 vendor_sysfs_usb_supply，实测被 SELinux 拒绝（EACCES）。
+     * 输入侧的功率改从小米充电 HAL 取：IMiCharge 的 getUsbVoltage / getUsbCurrent
+     * 返回微伏、微安的字符串，platform_app 域对该 binder 有 call 权限。
+     * 无线充电时 usb 节点 ONLINE=0 但 VOLTAGE_NOW / CURRENT_NOW 仍是接收端整流后的
+     * 直流输入（10.9V 量级），这两个 HAL 方法在新旧两种供电下都返回该值
      */
     private fun getChargingInfoForHyperOS4(context: Context): String? {
         val batteryStatus = context.registerReceiver(
             null, IntentFilter(Intent.ACTION_BATTERY_CHANGED)
         ) ?: return null
         if (batteryStatus.getIntExtra(BatteryManager.EXTRA_PLUGGED, 0) == 0) return null
+        val usbVoltage = queryMiCharge(MICHARGE_CODE_USB_VOLTAGE)
+        val usbCurrent = queryMiCharge(MICHARGE_CODE_USB_CURRENT)
+        if (usbVoltage > 0 && usbCurrent > 0) {
+            val current = usbCurrent / 1000000.0
+            val voltage = usbVoltage / 1000000.0
+            return String.format("%.2f A · %.2f V\n%.2f W", current, voltage, current * voltage)
+        }
         return getChargingInfo()
     }
+
+    /**
+     * 直接发 transaction：接口有几十个方法且多数带字符串参数，
+     * 只为两个无参查询引入整套 AIDL 代理解析不值得
+     */
+    private fun queryMiCharge(code: Int): Int = runCatching {
+        val binder = Class.forName("android.os.ServiceManager")
+            .getMethod("getService", String::class.java)
+            .invoke(null, MICHARGE_SERVICE) as? android.os.IBinder
+            ?: return@runCatching -1
+        val data = android.os.Parcel.obtain()
+        val reply = android.os.Parcel.obtain()
+        try {
+            data.writeInterfaceToken(MICHARGE_DESCRIPTOR)
+            if (!binder.transact(code, data, reply, 0)) return@runCatching -1
+            reply.readException()
+            reply.readString()?.toIntOrNull() ?: -1
+        } finally {
+            reply.recycle()
+            data.recycle()
+        }
+    }.getOrElse { -1 }
 
     private fun hookLegacy() {
         val clazzDependency = loadClass("com.android.systemui.Dependency")
