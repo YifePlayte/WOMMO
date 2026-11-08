@@ -95,8 +95,9 @@ dependencies {
     implementation("org.lsposed.hiddenapibypass:hiddenapibypass:6.1")
     implementation("org.luckypray:dexkit:2.2.0")
     implementation("org.lsposed.lsplt:lsplt-standalone:2.1.1-7d609ac-compat")
-    implementation("top.yukonga.miuix.kmp:miuix-blur-android:0.9.3")
-    implementation("top.yukonga.miuix.kmp:miuix-preference-android:0.9.3")
-    implementation("top.yukonga.miuix.kmp:miuix-ui-android:0.9.3")
+    implementation("top.yukonga.miuix.kmp:miuix-blur-android:0.9.4")
+    implementation("top.yukonga.miuix.kmp:miuix-icons-android:0.9.4")
+    implementation("top.yukonga.miuix.kmp:miuix-preference-android:0.9.4")
+    implementation("top.yukonga.miuix.kmp:miuix-ui-android:0.9.4")
     implementation("androidx.compose.material:material-icons-extended:1.7.6")
 }
