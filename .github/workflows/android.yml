@@ -78,20 +78,30 @@ jobs:
           if-no-files-found: error
 
       - name: Post to Telegram channel
-        if: ${{ success() && github.event_name != 'pull_request' && github.ref == 'refs/heads/main' && github.ref_type != 'tag' }}
+        if: ${{ success() && github.event_name == 'push' && github.ref == 'refs/heads/main' }}
         env:
           CHANNEL_ID: ${{ secrets.TELEGRAM_TO }}
           BOT_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
-          COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
-          COMMIT_URL: ${{ github.event.head_commit.url }}
         run: |
-          if [ ! -z "${{ secrets.TELEGRAM_TOKEN }}" ]; then
-            OUTPUT="app/build/outputs/apk/release/"
-            export arm64_v8a=$(find $OUTPUT -name "WOMMO-*.apk")
-            event_path=$GITHUB_EVENT_PATH
-            commit_count=$(jq -r '.commits | length' $event_path)
-            { echo -e 'Github CI\n'; git log -$commit_count --pretty=format:"%h %s"; } > ${{ github.workspace }}/git_log
-            ESCAPED="$(cat ${{ github.workspace }}/git_log | gawk '{gsub(/[_*[\]()~`>#+=\|{}.!-]/,"\\\\\\\\&")}1' | sed -e 's|"|\\"|g' -e 's|^[0-9a-z]\+|__&__|' | hexdump -v -e '/1 "%02X"' | sed 's/\(..\)/%\1/g')"
-            cd ${{ github.workspace }}
-            curl -v "https://api.telegram.org/bot${BOT_TOKEN}/sendMediaGroup?chat_id=${CHANNEL_ID}&media=%5B%7B%22type%22:%22document%22,%22media%22:%22attach://arm64_v8a%22,%22caption%22:%22${ESCAPED}%22,%22parse_mode%22:%22MarkdownV2%22%7D%5D" -F arm64_v8a="@$arm64_v8a"
+          if [ -z "$BOT_TOKEN" ] || [ -z "$CHANNEL_ID" ]; then
+            echo "Telegram secrets are not set; skipping."
+            exit 0
           fi
+          apk=$(find app/build/outputs/apk/release -name 'WOMMO-*.apk' | head -n 1)
+          if [ -z "$apk" ]; then
+            echo "No release APK found."
+            exit 1
+          fi
+          commit_count=$(jq -r '.commits | length' "$GITHUB_EVENT_PATH")
+          { echo -e 'Github CI\n'; git log "-$commit_count" --pretty=format:"%h %s"; } > "$RUNNER_TEMP/git_log"
+          # The caption lands inside the JSON `media` parameter, so it is
+          # unescaped twice on the way: gawk folds a backslash pair in the
+          # string literal and again in the replacement string, and JSON
+          # parsing folds one more. Eight source backslashes therefore reach
+          # MarkdownV2 as the single backslash it expects.
+          escaped=$(gawk '{gsub(/[_*[\]()~`>#+=\|{}.!-]/,"\\\\\\\\&")}1' "$RUNNER_TEMP/git_log" \
+            | sed -e 's|"|\\"|g' -e 's|^[0-9a-z]\+|__&__|' \
+            | hexdump -v -e '/1 "%02X"' | sed 's/\(..\)/%\1/g')
+          curl -sS --fail-with-body \
+            "https://api.telegram.org/bot${BOT_TOKEN}/sendMediaGroup?chat_id=${CHANNEL_ID}&media=%5B%7B%22type%22:%22document%22,%22media%22:%22attach://arm64_v8a%22,%22caption%22:%22${escaped}%22,%22parse_mode%22:%22MarkdownV2%22%7D%5D" \
+            -F "arm64_v8a=@${apk}"
