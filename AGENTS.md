@@ -127,6 +127,21 @@ name (`utils/Object.kt`).
   / `findMethod { ... }`, then `.getInstance()` / `.getMethodInstance()` which
   apply `EzXposed.safeClassLoader`. `.single()` throws on ambiguity, so prefer
   stable markers (unique strings) and log clearly on failure.
+- Only members whose names are actually obfuscated need DexKit. A bundled
+  third-party SDK keeps its own public names (`com.xiaomi.onetrack.OneTrack.track`
+  for example), so hook it by name like a framework API instead of wrapping it in
+  a structural search. Judge by whether the name is readable, not by whether the
+  class belongs to the host APK.
+- Name anything resolved through DexKit (and any class, method, field or string
+  held in a variable or constant) after its kind and origin, using a
+  `<kind><Purpose>` camelCase name. `clazzXxx`, `methodXxx`, `fieldXxx` and
+  `stringXxx` are examples, not a closed list: `constructorXxx`, `enumXxx` or
+  another kind prefix reads naturally when the member is of a different kind.
+  `Xxx` describes what the member is rather than how it was found
+  (`methodReportDeviceState`, `fieldEngineList`, `stringVirusScanUrl`). The
+  prefix makes the deliberately-not-a-real-name members obvious at the call
+  site, so a later version bump can find every fragile lookup by searching for
+  them.
 - `hook/utils/AdditionalFields.kt` replaces XposedHelpers additional instance
   fields with a weak identity map. Use it instead of holding strong references.
 - `utils/Object.kt` loads `libclasshelper` and exposes `invokeSuper*Method` for
