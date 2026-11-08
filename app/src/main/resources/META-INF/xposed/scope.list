@@ -9,6 +9,7 @@ com.milink.service
 com.miui.audiomonitor
 com.miui.contentextension
 com.miui.gallery
+com.miui.guardprovider
 com.miui.home
 com.miui.packageinstaller
 com.miui.personalassistant
