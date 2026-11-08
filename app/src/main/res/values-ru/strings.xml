@@ -11,9 +11,34 @@
     <string name="aosp_app_manager">Менеджер приложений AOSP</string>
     <string name="app_link_open_always">Разрешить приложению открывать поддерживаемые ссылки</string>
     <string name="app_link_open_never">Запретить приложению открывать ссылки</string>
+    <string name="back">Назад</string>
     <string name="barrage">Уведомления в стиле «пулевого экрана»</string>
     <string name="barrage_length">Максимальная длина уведомления «пулевого экрана»</string>
     <string name="barrage_not_touchable">Уведомления «пулевого экрана» не кликабельны</string>
+    <string name="block_app_list_upload">Блокировать загрузку списка приложений</string>
+    <string name="block_app_list_upload_tips">Имя пакета, версия, хеш подписи и название каждого несистемного приложения отправляются на сервер антивируса после каждой проверки, по запросу центра безопасности и при запуске процесса.</string>
+    <string name="block_device_state_report">Блокировать отчёт о состоянии устройства</string>
+    <string name="block_device_state_report_tips">Раз в сутки через OneTrack отправляются состояние блокировки загрузчика, состояние SELinux, включённые службы доступности и списки фильтрации приложений.</string>
+    <string name="block_push_command_clear_a11y" translatable="false">clear_a11y</string>
+    <string name="block_push_command_clear_a11y_tips">Отзыв разрешения доступности</string>
+    <string name="block_push_command_collect_package" translatable="false">collect_package</string>
+    <string name="block_push_command_collect_package_tips">Загрузка полного APK установленного приложения</string>
+    <string name="block_push_command_disable_component" translatable="false">disable_component</string>
+    <string name="block_push_command_disable_component_tips">Отключение компонента приложения</string>
+    <string name="block_push_command_disable_package" translatable="false">disable_package</string>
+    <string name="block_push_command_disable_package_tips">Тихое отключение приложения</string>
+    <string name="block_push_command_enable_component" translatable="false">enable_component</string>
+    <string name="block_push_command_enable_component_tips">Включение компонента приложения</string>
+    <string name="block_push_command_enable_package" translatable="false">enable_package</string>
+    <string name="block_push_command_enable_package_tips">Повторное включение приложения</string>
+    <string name="block_push_command_scan_and_process" translatable="false">scan_and_process</string>
+    <string name="block_push_command_scan_and_process_tips">Проверка всех приложений с обработкой находок</string>
+    <string name="block_push_command_set_prop" translatable="false">set_prop</string>
+    <string name="block_push_command_set_prop_tips">Запись системного свойства</string>
+    <string name="block_push_command_set_settings" translatable="false">set_settings</string>
+    <string name="block_push_command_set_settings_tips">Запись любого параметра настроек</string>
+    <string name="block_push_command_update_virus_db" translatable="false">update_virus_db</string>
+    <string name="block_push_command_update_virus_db_tips">Обновление базы вирусов</string>
     <string name="cancel">Отмена</string>
     <string name="change_bitrate_and_frame_rate_range">Изменить битрейт и диапазон частоты кадров</string>
     <string name="change_browser_for_ai_engine">Изменить браузер для Clipboard Shortcut</string>

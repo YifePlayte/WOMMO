@@ -14,9 +14,34 @@
     <string name="aosp_app_manager">原生应用管理</string>
     <string name="app_link_open_always">允许应用打开支持的链接</string>
     <string name="app_link_open_never">不允许应用打开链接</string>
+    <string name="back">返回</string>
     <string name="barrage">弹幕通知</string>
     <string name="barrage_length">最大弹幕长度</string>
     <string name="barrage_not_touchable">弹幕不可点击</string>
+    <string name="block_app_list_upload">拦截应用清单上传</string>
+    <string name="block_app_list_upload_tips">每次扫描结束、手机管家主动请求以及进程启动时，会把所有非系统应用的包名、版本、签名哈希和应用名上传到病毒扫描服务端。</string>
+    <string name="block_device_state_report">拦截设备状态上报</string>
+    <string name="block_device_state_report_tips">每天通过 OneTrack 上报一次 bootloader 锁状态、SELinux 状态、已启用的无障碍服务和应用过滤列表。</string>
+    <string name="block_push_command_clear_a11y" translatable="false">clear_a11y</string>
+    <string name="block_push_command_clear_a11y_tips">清除应用的无障碍授权</string>
+    <string name="block_push_command_collect_package" translatable="false">collect_package</string>
+    <string name="block_push_command_collect_package_tips">上传已安装应用的完整安装包</string>
+    <string name="block_push_command_disable_component" translatable="false">disable_component</string>
+    <string name="block_push_command_disable_component_tips">禁用应用的指定组件</string>
+    <string name="block_push_command_disable_package" translatable="false">disable_package</string>
+    <string name="block_push_command_disable_package_tips">静默禁用应用</string>
+    <string name="block_push_command_enable_component" translatable="false">enable_component</string>
+    <string name="block_push_command_enable_component_tips">启用应用的指定组件</string>
+    <string name="block_push_command_enable_package" translatable="false">enable_package</string>
+    <string name="block_push_command_enable_package_tips">重新启用应用</string>
+    <string name="block_push_command_scan_and_process" translatable="false">scan_and_process</string>
+    <string name="block_push_command_scan_and_process_tips">扫描全部应用并处置命中项</string>
+    <string name="block_push_command_set_prop" translatable="false">set_prop</string>
+    <string name="block_push_command_set_prop_tips">写入系统属性</string>
+    <string name="block_push_command_set_settings" translatable="false">set_settings</string>
+    <string name="block_push_command_set_settings_tips">写入任意系统设置项</string>
+    <string name="block_push_command_update_virus_db" translatable="false">update_virus_db</string>
+    <string name="block_push_command_update_virus_db_tips">更新病毒库</string>
     <string name="cancel">取消</string>
     <string name="change_bitrate_and_frame_rate_range">修改码率与帧率范围</string>
     <string name="change_browser_for_ai_engine">修改复制直达使用的浏览器</string>
@@ -67,6 +92,9 @@
     <string name="get_apps">应用商店</string>
     <string name="global_barrage">全局弹幕通知</string>
     <string name="google_play_services">Google Play 服务</string>
+    <string name="guard_provider">系统安全组件</string>
+    <string name="guard_provider_push_page">拦截云端指令</string>
+    <string name="guard_provider_push_page_tips">推送下发的指令可以上传任意已安装应用的安装包、静默禁用应用、写入系统属性、修改任意系统设置。重启进程后生效。</string>
     <string name="hide_bluetooth_icon">隐藏蓝牙图标</string>
     <string name="hide_landscape_nav_bar">隐藏横屏时的手势提示线</string>
     <string name="hide_mobile_signal_icon">隐藏手机信号图标</string>

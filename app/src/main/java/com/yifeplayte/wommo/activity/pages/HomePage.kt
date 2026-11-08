@@ -27,6 +27,7 @@ import com.yifeplayte.wommo.activity.sections.contentExtension
 import com.yifeplayte.wommo.activity.sections.downloadProvider
 import com.yifeplayte.wommo.activity.sections.getApps
 import com.yifeplayte.wommo.activity.sections.googlePlayServices
+import com.yifeplayte.wommo.activity.sections.guardProvider
 import com.yifeplayte.wommo.activity.sections.home
 import com.yifeplayte.wommo.activity.sections.intentResolver
 import com.yifeplayte.wommo.activity.sections.others
@@ -119,6 +120,7 @@ fun HomePage() {
                         systemUI()
                         home()
                         securityCenter()
+                        guardProvider()
                         contacts()
                         screenRecorder()
                         packageInstaller()

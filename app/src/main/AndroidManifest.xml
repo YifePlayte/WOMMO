@@ -21,6 +21,11 @@
                 <category android:name="de.robv.android.xposed.category.MODULE_SETTINGS" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".activity.GuardProviderPushActivity"
+            android:exported="false"
+            android:theme="@style/Theme.WOMMO" />
     </application>
 
 </manifest>

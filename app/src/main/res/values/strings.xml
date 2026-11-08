@@ -15,9 +15,34 @@
     <string name="app_link_open_always">Allow app to open supported links</string>
     <string name="app_link_open_never">Don\'t allow app to open links</string>
     <string name="app_name" translatable="false">WOMMO</string>
+    <string name="back">Back</string>
     <string name="barrage">Bullet Screen Notification</string>
     <string name="barrage_length">Max bullet screen notification length</string>
     <string name="barrage_not_touchable">Bullet screen notification not clickable</string>
+    <string name="block_app_list_upload">Block upload of installed app list</string>
+    <string name="block_app_list_upload_tips">Package name, version, signature hash and label of every non-system app are posted to the virus scan backend after each scan, on demand from the security center, and at process start.</string>
+    <string name="block_device_state_report">Block device state report</string>
+    <string name="block_device_state_report_tips">Reports bootloader lock state, SELinux state, enabled accessibility services and app filter lists through OneTrack once a day.</string>
+    <string name="block_push_command_clear_a11y" translatable="false">clear_a11y</string>
+    <string name="block_push_command_clear_a11y_tips">Revoke the accessibility permission</string>
+    <string name="block_push_command_collect_package" translatable="false">collect_package</string>
+    <string name="block_push_command_collect_package_tips">Upload the full APK of an installed app</string>
+    <string name="block_push_command_disable_component" translatable="false">disable_component</string>
+    <string name="block_push_command_disable_component_tips">Disable a component of an app</string>
+    <string name="block_push_command_disable_package" translatable="false">disable_package</string>
+    <string name="block_push_command_disable_package_tips">Disable an app silently</string>
+    <string name="block_push_command_enable_component" translatable="false">enable_component</string>
+    <string name="block_push_command_enable_component_tips">Enable a component of an app</string>
+    <string name="block_push_command_enable_package" translatable="false">enable_package</string>
+    <string name="block_push_command_enable_package_tips">Re-enable an app</string>
+    <string name="block_push_command_scan_and_process" translatable="false">scan_and_process</string>
+    <string name="block_push_command_scan_and_process_tips">Scan all apps and act on the hits</string>
+    <string name="block_push_command_set_prop" translatable="false">set_prop</string>
+    <string name="block_push_command_set_prop_tips">Write a system property</string>
+    <string name="block_push_command_set_settings" translatable="false">set_settings</string>
+    <string name="block_push_command_set_settings_tips">Write any system setting</string>
+    <string name="block_push_command_update_virus_db" translatable="false">update_virus_db</string>
+    <string name="block_push_command_update_virus_db_tips">Update the virus database</string>
     <string name="cancel">Cancel</string>
     <string name="change_bitrate_and_frame_rate_range">Change bitrate and frame rate range</string>
     <string name="change_browser_for_ai_engine">Change browser for Clipboard Shortcut</string>
@@ -68,6 +93,9 @@
     <string name="get_apps">GetApps</string>
     <string name="global_barrage">Global bullet screen notification</string>
     <string name="google_play_services">Google Play services</string>
+    <string name="guard_provider">System security components</string>
+    <string name="guard_provider_push_page">Block cloud commands</string>
+    <string name="guard_provider_push_page_tips">Commands pushed by MiPush can upload any installed APK, silently disable apps, write system properties and change any system setting. Take effect after restarting the process.</string>
     <string name="hide_bluetooth_icon">Hide Bluetooth icon</string>
     <string name="hide_landscape_nav_bar">Hide the navigation bar when in landscape mode</string>
     <string name="hide_mobile_signal_icon">Hide mobile signal icon</string>
