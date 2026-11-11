@@ -162,8 +162,13 @@ name (`utils/Object.kt`).
   encodes the boolean). `/data/user/0/<pkg>/shared_prefs/` and any
   `/data/misc/apexdata/.../prefs/<pkg>/config.xml` are stale leftovers and do
   not reflect current settings, so never read them to check a switch.
-  Inspecting the database requires pulling the `.db`, `-wal` and `-shm` files
-  (no `sqlite3` on device).
+- That database belongs to LSPosed: treat it as **read only**. Reading a switch
+  means pulling a copy of the `.db`, `-wal` and `-shm` files (no `sqlite3` on
+  device). Never write to it, never push a modified copy back, and never use it
+  to flip a preference. Doing so bypasses the module UI, races the LSPosed
+  daemon holding the file open, and a hand-built row is easy to corrupt with
+  another key's blob. Enable a switch from the module UI (`App.mService`
+  writes it), then restart the affected process.
 - UI writes go through `App.mService?.getRemotePreferences("config")`. The
   nullable receiver makes `SharedPreferences.put` a silent no-op while the
   XposedService is not bound, so a switch can look toggled without anything
@@ -473,6 +478,10 @@ Keep the previous known-good MiuiHome APK on hand before every native test.
 ## Operating Boundaries
 
 - Never write Android system properties, even with already-present values.
+- Never write LSPosed's `modules_config.db`. It is read-only input: read switches
+  from a pulled copy, and change them through the module UI. Hand-editing it
+  bypasses the UI, races the daemon that holds the file open, and has already
+  produced a corrupted row (one key's blob stored under another key's name).
 - Never modify files under `/data/adb/modules` or install helpers under
   `/system/bin`.
 - Keep the static scope minimal; do not add new packages to `scope.list` for a
