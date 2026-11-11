@@ -109,6 +109,7 @@ git submodule update --init --recursive
 
 - 修改小爱同学使用的浏览器
 - 启用唤醒高级动画
+- 将蓝牙语音缓存移入应用数据目录
 
 #### 传送门
 

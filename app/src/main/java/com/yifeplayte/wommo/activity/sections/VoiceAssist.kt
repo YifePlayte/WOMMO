@@ -30,6 +30,10 @@ fun LazyListScope.voiceAssist() {
                 key = "enable_wake_up_advanced_animation",
                 titleId = R.string.enable_wake_up_advanced_animation,
             )
+            SPSwitch(
+                key = "redirect_bluetooth_voice_file_dir",
+                titleId = R.string.redirect_bluetooth_voice_file_dir,
+            )
         }
     }
 }

@@ -126,6 +126,7 @@
     <string name="reboot">重启</string>
     <string name="reboot_system">重启系统</string>
     <string name="reboot_tips">确定重启系统？</string>
+    <string name="redirect_bluetooth_voice_file_dir">将蓝牙语音缓存移入应用数据目录</string>
     <string name="redirect_to_notification_channel_setting">重定向通知设置到频道设置</string>
     <string name="remove_adb_install_intercept">移除adb安装拦截弹窗</string>
     <string name="remove_game_toast">移除游戏模式 Toast</string>

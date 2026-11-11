@@ -105,6 +105,7 @@
     <string name="reboot">Перезагрузка</string>
     <string name="reboot_system">Перезагрузить систему</string>
     <string name="reboot_tips">Вы уверены, что хотите перезагрузить?</string>
+    <string name="redirect_bluetooth_voice_file_dir">Перенести кэш голоса Bluetooth в данные приложения</string>
     <string name="redirect_to_notification_channel_setting">Перенаправить настройки уведомлений на настройки канала</string>
     <string name="remove_adb_install_intercept">Удалить перехват установки adb</string>
     <string name="remove_game_toast">Удалить уведомление режима игр</string>
