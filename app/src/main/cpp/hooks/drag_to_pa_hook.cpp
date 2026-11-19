@@ -7,14 +7,15 @@
 //     ldur w0, [x2, #0xfb]       ; itemInfo.isMIUIWidget
 //     add  x0, x0, x28, lsl #32  ; decompress the 32-bit pointer
 //     tbnz w0, #4, error_path    ; if false -> "unsupported itemInfo"
+//     mov  x1, x4
 //     ...                        ; span check, paging/timing guards follow
 //
-// Only this three-instruction sequence is patched: the conditional branch is
-// replaced with a NOP, so the drag check ignores the flag while every other
-// consumer of isMIUIWidget (refresh scheduling, rendering, widget manager)
-// keeps seeing the real metadata value.  The exact triple is unique in the
-// shipped libapp.so builds and the relative branch distance is identical
-// between them.
+// Only this sequence is patched: the conditional branch is replaced with a
+// NOP, so the drag check ignores the flag while every other consumer of
+// isMIUIWidget (refresh scheduling, rendering, widget manager) keeps seeing
+// the real metadata value.  The branch displacement is an operand, not
+// structure: it moved from +0xa0 to +0xa8 between launcher builds, so its imm14
+// is wildcarded and the trailing `mov x1, x4` keeps the site unique.
 
 #include "hooks.h"
 
@@ -40,13 +41,17 @@ namespace {
 constexpr uint32_t kNop = 0xD503201Fu;
 
 // The isMIUIWidget gate inside AssistantDragToPAHandler.canDragToPA.  The
-// third word is the conditional branch that is replaced with a NOP.
-constexpr size_t kGatePatternLength = 3u;
-constexpr uint32_t kGatePattern[kGatePatternLength] = {
-    0xB84FB040u,  // ldur w0, [x2, #0xfb]
-    0x8B1C8000u,  // add  x0, x0, x28, lsl #32
-    0x37200500u,  // tbnz w0, #4, +0xa0
+// third word is the conditional branch that is replaced with a NOP; its imm14
+// is dropped so a changed error-path distance still matches.
+constexpr uint32_t kAll = 0xFFFFFFFFu;
+constexpr dart::PatternWord kGatePattern[] = {
+    {0xB84FB040u, kAll},          // ldur w0, [x2, #0xfb]
+    {0x8B1C8000u, kAll},          // add  x0, x0, x28, lsl #32
+    {0x37200500u, 0xFFFFE01Fu},   // tbnz w0, #4, <error path>
+    {0xAA0403E1u, kAll},          // mov  x1, x4
 };
+constexpr size_t kGatePatternLength =
+        sizeof(kGatePattern) / sizeof(kGatePattern[0]);
 
 // 0 = not installed, 1 = installing, 2 = installed.
 uint32_t g_state = 0u;
@@ -63,8 +68,8 @@ bool InstallDragToPaHook(const dart::Image& image) {
 
     uintptr_t gate = 0u;
     uint32_t matches = 0u;
-    if (!dart::FindUniqueWordPattern(image, kGatePattern, kGatePatternLength,
-                                     &gate, &matches) ||
+    if (!dart::FindUniqueMaskedPattern(image, kGatePattern, kGatePatternLength,
+                                       &gate, &matches) ||
             !dart::RangeInExecutableSegment(
                     image, gate, kGatePatternLength * sizeof(uint32_t))) {
         WOMMO_DRAG_TO_PA_LOGW("drag_to_pa: isMIUIWidget gate pattern rejected "
