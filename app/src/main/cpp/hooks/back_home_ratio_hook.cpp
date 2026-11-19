@@ -1,37 +1,44 @@
 //
 // WOMMO native hook: back-home ratio for the Flutter launcher.
 //
-// The legacy launcher seeded MIUI maml app icons with a "ratio" variable on
-// the way back home (FancyDrawableCompat.updateRatio -> MamlUtils.updateVariable
-// -> "ratio").  The value was the horizontal offset of the flying icon from the
-// home icon, normalised by the device width:
+// The legacy launcher seeded maml app icons with a "ratio" variable right
+// before it fired the back-home maml commands:
 //
-//     ratio = (floatingCenterX - homeIconCenterX) / deviceWidth
+//     ratio = (flyingIconCenterX - homeIconCenterX) / deviceWidth
 //
-// and maml themes consumed it as the landing animation's direction/speed seed.
-// The Flutter launcher kept the back-home commands ("back_home_start" /
-// "back_home_finish") but dropped the variable seeding, so the value stays at
-// its default and theme icons lose their initial state.
+// computed once when the return gesture passed half of its progress, then
+// clamped to [-1, 1].  FancyDrawableCompat.updateRatio forwarded it through
+// MamlUtils.updateVariable(root, "ratio", value), immediately before
+// MamlUtils.notifyBackHome("back_home_start"), so the theme icon started its
+// landing animation from the direction and speed the floating icon had.
 //
-// This hook restores the seed natively:
+// The Flutter launcher kept the same notification point: onFrame() drives
+// FolmeAnimationDriver, _checkAndNotifyBackHome turns the driver's progress pair
+// into a 0..1 value and calls MamlIconCache.notifyBackHome once that value
+// passes 0.5.  notifyBackHome sends "back_home_start" / "back_home_finish"
+// through MamlController.sendCommand, but nothing writes the "ratio" variable
+// any more, so the maml landing animation starts from its default state.
 //
-//   * FolmeAnimationDriver._updateAnimationProperties receives the closing
-//     window's live geometry every frame; the center X carries the gesture's
-//     direction and speed (a diagonal swipe drags the window left or right),
-//     exactly like the legacy floating icon rect did.
-//   * FolmeAnimationDriver._checkAndNotifyBackHome supplies the hero origin
-//     (+0xd8, the home icon's left edge) and the icon width (+0xe8), so the
-//     offset is measured against the icon centre.
+// This hook restores the seed:
+//
+//   * FolmeAnimationDriver._checkAndNotifyBackHome runs on every frame of the
+//     return gesture and owns the receiver, so the driver can be read there.
+//   * The flying-icon rect of the current frame is the rect of the driver's
+//     flight item: driver[0x4] -> [0x1c].  The rect the flight lands on is the
+//     field popOriginTargetRect returns, and its offset is taken from that
+//     getter's fingerprint because it moved between launcher builds (8.01.02:
+//     0xa4, 8.01.03: 0xbc).  These are the same rects
+//     _getSfCurrentRectOrHeroRect resolves and _updateAnimationProperties paints
+//     every frame.
 //   * GestureAnimCalculator.getVisibleScreenWidth supplies the normalisation
-//     width, so the ratio stays in the legacy [-1, 1] device-width units.
+//     width.  All three values are logical pixels, so the ratio is the legacy
+//     device-width fraction without any pixel-ratio conversion.
 //   * librust_maml_sdk.so's send_command is intercepted; on "back_home_start"
 //     it writes "ratio" through put_variable_number before the command is
-//     forwarded, mirroring the legacy order (variable, then command).  The
-//     seed is latched per gesture: every controller of one return sees the
-//     same value.
+//     forwarded, mirroring the legacy order (variable, then command).
 //
-// Both Dart functions are located by instruction fingerprint and hooked with a
-// register-preserving trampoline (Dart AOT uses x15 as its frame pointer, so a
+// _checkAndNotifyBackHome is located by instruction fingerprint and hooked with
+// a register-preserving trampoline (Dart AOT uses x15 as its frame pointer, so a
 // plain C replacement would corrupt the caller's frame).  Everything fails
 // closed: a missing fingerprint, an unreadable driver or an unknown
 // put_variable_number argument layout leaves the stock behavior untouched.
@@ -72,24 +79,41 @@ namespace {
 constexpr uint32_t kStateIdle = 0u;
 constexpr uint32_t kStateReady = 1u;
 
+// FolmeAnimationDriver instance fields.  The flight item holds the live
+// flying-icon rect; the target rect field is derived at install time from
+// popOriginTargetRect.  Both are logical pixels, like the visible screen width.
+constexpr uint32_t kDriverFlightItemOffset = 0x04u;
+constexpr uint32_t kFlightItemRectOffset = 0x1cu;
+// Filled from the popOriginTargetRect fingerprint at install time; the field
+// moved between launcher builds (8.01.02 reads 0xa4, 8.01.03 reads 0xbc).
+uint32_t g_target_rect_offset = 0u;
+// GestureAnimCalculator.visibleScreenWidth (logical pixels).
+constexpr uint32_t kCalculatorWidthOffset = 0x80u;
+
+// The rects must come from the frame that notified the maml icons.
+constexpr uint64_t kFrameFreshnessMs = 120u;
+
 double g_screen_width = 0.0;
-double g_hero_x = 0.0;
-double g_hero_width = 0.0;
-double g_window_center_x = 0.0;
-double g_window_width = 0.0;
 uint32_t g_width_state = kStateIdle;
-uint32_t g_hero_state = kStateIdle;
-uint32_t g_window_state = kStateIdle;
-uint64_t g_window_update_ms = 0u;
 
-// The seed is latched once per back-home gesture so every maml controller of
-// the same return sees the same value.
-double g_gesture_ratio = 0.0;
-uint32_t g_gesture_valid = 0u;
-uint64_t g_gesture_start_ms = 0u;
+double g_flight_left = 0.0;
+double g_flight_top = 0.0;
+double g_flight_right = 0.0;
+double g_flight_bottom = 0.0;
+uint32_t g_flight_state = kStateIdle;
+uint64_t g_flight_update_ms = 0u;
 
+double g_target_left = 0.0;
+double g_target_top = 0.0;
+double g_target_right = 0.0;
+double g_target_bottom = 0.0;
+uint32_t g_target_state = kStateIdle;
+uint64_t g_target_update_ms = 0u;
+
+#ifdef WOMMO_RATIO_DEBUG
 uint32_t g_ratio_log_count = 0u;
-uint32_t g_width_log_count = 0u;
+uint32_t g_frame_log_count = 0u;
+#endif
 
 // ---------------------------------------------------------------------------
 // Dart heap readers
@@ -126,6 +150,20 @@ bool ReadCompressedPointer(uintptr_t object, uint32_t field_offset,
     return true;
 }
 
+bool ReadRect(uintptr_t object, uint32_t field_offset, uint64_t heap_base,
+              double* left, double* top, double* right, double* bottom) {
+    uintptr_t rect = 0u;
+    return ReadCompressedPointer(object, field_offset, heap_base, &rect) &&
+            ReadDouble(rect + 7u, left) && ReadDouble(rect + 15u, top) &&
+            ReadDouble(rect + 23u, right) && ReadDouble(rect + 31u, bottom);
+}
+
+bool RectLooksSane(double left, double top, double right, double bottom) {
+    return left > -20000.0 && left < 20000.0 && top > -20000.0 &&
+            top < 20000.0 && right > left && right < 20000.0 &&
+            bottom > top && bottom < 20000.0;
+}
+
 // ---------------------------------------------------------------------------
 // Dart trampolines
 // ---------------------------------------------------------------------------
@@ -134,17 +172,12 @@ extern "C" void WommoRecordVisibleScreenWidth(uint64_t self,
                                               uint64_t heap_base);
 extern "C" void WommoRecordBackHomeDriver(uint64_t driver,
                                           uint64_t heap_base,
-                                          double current);
-extern "C" void WommoRecordAnimProps(uint64_t stack_args, double d0, double d1,
-                                     double d2, double d3, double d4, double d5,
-                                     double d6, double d7);
+                                          double progress);
 extern "C" void* g_get_visible_screen_width_original;
 extern "C" void* g_check_and_notify_back_home_original;
-extern "C" void* g_update_animation_properties_original;
 
 void* g_get_visible_screen_width_original = nullptr;
 void* g_check_and_notify_back_home_original = nullptr;
-void* g_update_animation_properties_original = nullptr;
 
 uint64_t MonotonicMillis() {
     struct timespec now {};
@@ -203,18 +236,6 @@ extern "C" __attribute__((naked)) void HookGetVisibleScreenWidth() {
             "br x16\n");
 }
 
-extern "C" __attribute__((naked)) void HookUpdateAnimationProps() {
-    __asm__ volatile(
-            ".inst 0xd503245f\n"  // bti c
-            WOMMO_SAVE_ARGUMENTS()
-            "mov x0, x15\n"
-            "bl WommoRecordAnimProps\n"
-            WOMMO_RESTORE_ARGUMENTS()
-            "adrp x16, g_update_animation_properties_original\n"
-            "ldr x16, [x16, :lo12:g_update_animation_properties_original]\n"
-            "br x16\n");
-}
-
 extern "C" __attribute__((naked)) void HookCheckAndNotifyBackHome() {
     __asm__ volatile(
             ".inst 0xd503245f\n"  // bti c
@@ -228,76 +249,80 @@ extern "C" __attribute__((naked)) void HookCheckAndNotifyBackHome() {
             "br x16\n");
 }
 
+// _checkAndNotifyBackHome(driver, driver, state, progress) runs on every frame
+// of the return gesture.  The flying-icon rect lives on the driver's flight
+// item and the landing rect on the driver; both are refreshed before the
+// launcher's own notify pass in the same call.
 void WommoRecordBackHomeDriver(uint64_t driver, uint64_t heap_base,
-                               double current) {
-    (void)heap_base;
-    (void)current;
+                               double progress) {
+    (void)progress;
     if (driver < 0x100000000ull) return;
-    // The driver stores the hero origin at +0xd8 (x) and +0xe0 (y); the values
-    // track the home icon's column/row in logical pixels.
-    double hero_x = 0.0;
-    double hero_y = 0.0;
-    double hero_width = 0.0;
-    if (!ReadDouble(static_cast<uintptr_t>(driver) + 0xd8u + 7u, &hero_x) ||
-            !ReadDouble(static_cast<uintptr_t>(driver) + 0xe0u + 7u, &hero_y) ||
-            !ReadDouble(static_cast<uintptr_t>(driver) + 0xe8u + 7u,
-                        &hero_width) ||
-            !(hero_x > -20000.0 && hero_x < 20000.0) ||
-            !(hero_y > -20000.0 && hero_y < 20000.0) ||
-            !(hero_width > 0.0 && hero_width < 2000.0)) {
-        return;
-    }
-    __atomic_store(&g_hero_x, &hero_x, __ATOMIC_RELEASE);
-    __atomic_store(&g_hero_width, &hero_width, __ATOMIC_RELEASE);
-    __atomic_store_n(&g_hero_state, kStateReady, __ATOMIC_RELEASE);
-    (void)current;
-}
+    const uint64_t now_ms = MonotonicMillis();
 
-// _updateAnimationProperties receives the animated window values; d2 is the
-// window center X and d1 the window Width.  The values carry the gesture's
-// direction and velocity.
-void WommoRecordAnimProps(uint64_t stack_args, double window_width,
-                          double window_height, double window_x, double window_y,
-                          double d4, double d5, double d6, double d7) {
-    (void)stack_args;
-    (void)window_height;
-    (void)window_y;
-    (void)d4;
-    (void)d5;
-    (void)d6;
-    (void)d7;
-    if (!(window_width > 0.0 && window_width < 20000.0) ||
-            !(window_x > -20000.0 && window_x < 20000.0)) {
-        return;
+    double flight_left = 0.0;
+    double flight_top = 0.0;
+    double flight_right = 0.0;
+    double flight_bottom = 0.0;
+    uintptr_t flight_item = 0u;
+    const bool flight_valid =
+            ReadCompressedPointer(static_cast<uintptr_t>(driver),
+                                  kDriverFlightItemOffset, heap_base,
+                                  &flight_item) &&
+            ReadRect(flight_item, kFlightItemRectOffset, heap_base, &flight_left,
+                     &flight_top, &flight_right, &flight_bottom) &&
+            RectLooksSane(flight_left, flight_top, flight_right, flight_bottom);
+
+    double target_left = 0.0;
+    double target_top = 0.0;
+    double target_right = 0.0;
+    double target_bottom = 0.0;
+    const bool target_valid =
+            g_target_rect_offset != 0u &&
+            ReadRect(static_cast<uintptr_t>(driver), g_target_rect_offset,
+                     heap_base, &target_left, &target_top, &target_right,
+                     &target_bottom) &&
+            RectLooksSane(target_left, target_top, target_right, target_bottom);
+
+    if (flight_valid) {
+        __atomic_store(&g_flight_left, &flight_left, __ATOMIC_RELEASE);
+        __atomic_store(&g_flight_top, &flight_top, __ATOMIC_RELEASE);
+        __atomic_store(&g_flight_right, &flight_right, __ATOMIC_RELEASE);
+        __atomic_store(&g_flight_bottom, &flight_bottom, __ATOMIC_RELEASE);
+        __atomic_store_n(&g_flight_update_ms, now_ms, __ATOMIC_RELEASE);
+        __atomic_store_n(&g_flight_state, kStateReady, __ATOMIC_RELEASE);
     }
-    __atomic_store(&g_window_center_x, &window_x, __ATOMIC_RELEASE);
-    __atomic_store(&g_window_width, &window_width, __ATOMIC_RELEASE);
-    __atomic_store_n(&g_window_update_ms, MonotonicMillis(), __ATOMIC_RELEASE);
-    __atomic_store_n(&g_window_state, kStateReady, __ATOMIC_RELEASE);
-    static uint32_t log_count = 0u;
-    const uint32_t count = __atomic_add_fetch(&log_count, 1u, __ATOMIC_RELAXED);
-    if (count <= 2u) {
-        WOMMO_RATIO_LOGW("back_home_ratio: window w=%.1f x=%.1f y=%.1f", window_width,
-                   window_x, window_y);
+    if (target_valid) {
+        __atomic_store(&g_target_left, &target_left, __ATOMIC_RELEASE);
+        __atomic_store(&g_target_top, &target_top, __ATOMIC_RELEASE);
+        __atomic_store(&g_target_right, &target_right, __ATOMIC_RELEASE);
+        __atomic_store(&g_target_bottom, &target_bottom, __ATOMIC_RELEASE);
+        __atomic_store_n(&g_target_update_ms, now_ms, __ATOMIC_RELEASE);
+        __atomic_store_n(&g_target_state, kStateReady, __ATOMIC_RELEASE);
     }
+#ifdef WOMMO_RATIO_DEBUG
+    const uint32_t count = __atomic_add_fetch(&g_frame_log_count, 1u,
+                                              __ATOMIC_RELAXED);
+    if (count <= 200u) {
+        WOMMO_RATIO_LOGW("back_home_ratio: frame p=%.3f flight=%.1f..%.1f "
+                         "target=%.1f..%.1f valid=%u/%u",
+                         progress, flight_left, flight_right, target_left,
+                         target_right, flight_valid ? 1u : 0u,
+                         target_valid ? 1u : 0u);
+    }
+#endif
 }
 
 void WommoRecordVisibleScreenWidth(uint64_t self, uint64_t heap_base) {
     uintptr_t config = 0u;
     double width = 0.0;
-    if (!ReadCompressedPointer(static_cast<uintptr_t>(self), 0x80u, heap_base,
-                               &config) ||
+    if (!ReadCompressedPointer(static_cast<uintptr_t>(self),
+                               kCalculatorWidthOffset, heap_base, &config) ||
             !ReadDouble(config + 7u, &width) ||
             !(width > 100.0 && width < 20000.0)) {
         return;
     }
     __atomic_store(&g_screen_width, &width, __ATOMIC_RELEASE);
     __atomic_store_n(&g_width_state, kStateReady, __ATOMIC_RELEASE);
-    const uint32_t count = __atomic_add_fetch(&g_width_log_count, 1u,
-                                              __ATOMIC_RELAXED);
-    if (count <= 1u) {
-        WOMMO_RATIO_LOGW("back_home_ratio: visible screen width %.1f", width);
-    }
 }
 
 // ---------------------------------------------------------------------------
@@ -314,34 +339,62 @@ constexpr size_t kVisibleScreenWidthPatternLength =
 
 // FolmeAnimationDriver._checkAndNotifyBackHome:
 //   stp x29, x30, [x15, #-0x10]! ; mov x29, x15 ; sub x15, x15, #0x28
-//   stur x1, [x29, #-8]          ; stur d0, [x29, #-0x10]
+//   stur x1, [x29, #-8]          ; stur d0, [x29, #-16]
 //   ldur w0, [x1, #0x87]         ; add x0, x0, x28, lsl #32
 //   ldr x16, [x27, #0x40]
-constexpr uint32_t kCheckNotifyPattern[] = {
-    0xa9bf79fdu, 0xaa0f03fdu, 0xd100a1efu, 0xf81f83a1u,
-    0xfc1f03a0u, 0xb8487020u, 0x8b1c8000u, 0xf9402370u,
+//
+// The tagged load of the state field is the only word that moves between
+// launcher builds (8.01.03.308 reads #0x8f), so its imm9 is wildcarded; the
+// frame layout around it stays exact so an unrelated function cannot match.
+constexpr uint32_t kCheckNotifyImmMask = 0xffe00fffu;
+constexpr nhk::dart::PatternWord kCheckNotifyPattern[] = {
+    {0xa9bf79fdu, 0xffffffffu},
+    {0xaa0f03fdu, 0xffffffffu},
+    {0xd100a1efu, 0xffffffffu},
+    {0xf81f83a1u, 0xffffffffu},
+    {0xfc1f03a0u, 0xffffffffu},
+    {0xb8487020u, kCheckNotifyImmMask},
+    {0x8b1c8000u, 0xffffffffu},
+    {0xf9402370u, 0xffffffffu},
 };
 constexpr size_t kCheckNotifyPatternLength =
-        sizeof(kCheckNotifyPattern) / sizeof(uint32_t);
+        sizeof(kCheckNotifyPattern) / sizeof(kCheckNotifyPattern[0]);
 
-// FolmeAnimationDriver._updateAnimationProperties:
-//   stp x29, x30, [x15, #-0x10]! ; mov x29, x15 ; sub x15, x15, #0x10
-//   mov x4, x1                   ; stur x1, [x29, #-0x10]
-//   ldur w6, [x4, #0x63]         ; add x6, x6, x28, lsl #32
-//   stur x6, [x29, #-8]
-constexpr uint32_t kUpdatePropsPattern[] = {
-    0xa9bf79fdu, 0xaa0f03fdu, 0xd10041efu, 0xaa0103e4u,
-    0xf81f03a1u, 0xb8463086u, 0x8b1c80c6u,
+// FolmeAnimationDriver.popOriginTargetRect: the getter that returns the rect
+// the current flight lands on.  Its body loads the target field from the
+// receiver, so the immediate in word 4 is the field this build stores it in.
+// Only the immediates are wildcarded; the tail (`ldur x1, [x29, #-8]` after the
+// null check) separates it from the two sibling getters that share the prologue.
+constexpr uint32_t kTargetRectFieldMask = 0xffe00fffu;
+constexpr uint32_t kPoolLoadMask = 0xffc0001fu;
+constexpr uint32_t kBranchMask = 0xff00001fu;
+constexpr uint32_t kBranchLinkMask = 0xfc000000u;
+constexpr nhk::dart::PatternWord kTargetRectPattern[] = {
+    {0xa9bf79fdu, 0xffffffffu},
+    {0xaa0f03fdu, 0xffffffffu},
+    {0xd10081efu, 0xffffffffu},
+    {0xf81f03a1u, 0xffffffffu},
+    {0xb84c3020u, kTargetRectFieldMask},
+    {0x8b1c8000u, 0xffffffffu},
+    {0xf81f83a0u, 0xffffffffu},
+    {0xf95d1370u, kPoolLoadMask},
+    {0x6b10001fu, 0xffffffffu},
+    {0x54000300u, kBranchMask},
+    {0xf95cfb70u, kPoolLoadMask},
+    {0xf95cfb7eu, kPoolLoadMask},
+    {0xa90041feu, 0xffffffffu},
+    {0x94000000u, kBranchLinkMask},
+    {0x00000000u, 0x00000000u},
+    {0xf85f83a1u, 0xffffffffu},
 };
-constexpr size_t kUpdatePropsPatternLength =
-        sizeof(kUpdatePropsPattern) / sizeof(uint32_t);
+constexpr size_t kTargetRectPatternLength =
+        sizeof(kTargetRectPattern) / sizeof(kTargetRectPattern[0]);
 
 constexpr size_t kHookPatchSize = 16u;
 
 bool InstallDartHooks(const dart::Image& image) {
     if (g_get_visible_screen_width_original != nullptr &&
-            g_check_and_notify_back_home_original != nullptr &&
-            g_update_animation_properties_original != nullptr) {
+            g_check_and_notify_back_home_original != nullptr) {
         return true;
     }
 
@@ -360,9 +413,9 @@ bool InstallDartHooks(const dart::Image& image) {
 
     uintptr_t check_notify = 0u;
     uint32_t check_matches = 0u;
-    if (!dart::FindUniqueWordPattern(image, kCheckNotifyPattern,
-                                     kCheckNotifyPatternLength, &check_notify,
-                                     &check_matches) ||
+    if (!dart::FindUniqueMaskedPattern(image, kCheckNotifyPattern,
+                                       kCheckNotifyPatternLength, &check_notify,
+                                       &check_matches) ||
             !dart::RangeInExecutableSegment(image, check_notify,
                                             kHookPatchSize)) {
         WOMMO_RATIO_LOGW("back_home_ratio: check-notify pattern rejected "
@@ -370,6 +423,31 @@ bool InstallDartHooks(const dart::Image& image) {
                    check_matches);
         return false;
     }
+
+    uintptr_t target_getter = 0u;
+    uint32_t target_matches = 0u;
+    if (!dart::FindUniqueMaskedPattern(image, kTargetRectPattern,
+                                       kTargetRectPatternLength, &target_getter,
+                                       &target_matches) ||
+            !dart::RangeInExecutableSegment(image, target_getter,
+                                            kHookPatchSize)) {
+        WOMMO_RATIO_LOGW("back_home_ratio: target rect pattern rejected "
+                   "(matches=%u), keeping stock behavior",
+                   target_matches);
+        return false;
+    }
+    const uint32_t target_field =
+            ((*reinterpret_cast<const uint32_t*>(target_getter + 16u) >> 12) &
+                    0x1ffu) -
+            7u;
+    if (target_field < 0x40u || target_field > 0x400u) {
+        WOMMO_RATIO_LOGW("back_home_ratio: target rect field %#x rejected",
+                         target_field);
+        return false;
+    }
+    __atomic_store_n(&g_target_rect_offset, target_field, __ATOMIC_RELEASE);
+    WOMMO_RATIO_LOGW("back_home_ratio: target rect field at +%#x",
+                     target_field);
 
     if (g_get_visible_screen_width_original == nullptr) {
         if (!nhk::ProtectHookRange(width_getter, kHookPatchSize)) {
@@ -389,39 +467,6 @@ bool InstallDartHooks(const dart::Image& image) {
         WOMMO_RATIO_LOGW("back_home_ratio: width hook at 0x%" PRIxPTR
                    " (file offset 0x%" PRIxPTR ")",
                    width_getter, width_getter - image.bias);
-    }
-
-    uintptr_t update_props = 0u;
-    uint32_t props_matches = 0u;
-    if (!dart::FindUniqueWordPattern(image, kUpdatePropsPattern,
-                                     kUpdatePropsPatternLength, &update_props,
-                                     &props_matches) ||
-            !dart::RangeInExecutableSegment(image, update_props,
-                                            kHookPatchSize)) {
-        WOMMO_RATIO_LOGW("back_home_ratio: update props pattern rejected "
-                   "(matches=%u), keeping stock behavior",
-                   props_matches);
-        return false;
-    }
-
-    if (g_update_animation_properties_original == nullptr) {
-        if (!nhk::ProtectHookRange(update_props, kHookPatchSize)) {
-            WOMMO_RATIO_LOGE("back_home_ratio: cannot protect props hook page");
-            return false;
-        }
-        void* backup = nullptr;
-        if (nhk::InstallInlineHook(reinterpret_cast<void*>(update_props),
-                              reinterpret_cast<void*>(HookUpdateAnimationProps),
-                              &backup) != nhk::kHookSuccess ||
-                backup == nullptr) {
-            WOMMO_RATIO_LOGE("back_home_ratio: failed to hook update properties");
-            return false;
-        }
-        __atomic_store_n(&g_update_animation_properties_original, backup,
-                         __ATOMIC_RELEASE);
-        WOMMO_RATIO_LOGW("back_home_ratio: props hook at 0x%" PRIxPTR
-                   " (file offset 0x%" PRIxPTR ")",
-                   update_props, update_props - image.bias);
     }
 
     if (g_check_and_notify_back_home_original == nullptr) {
@@ -463,39 +508,43 @@ SendCommandFn g_original_send_command = nullptr;
 PutVariableNumberFn g_original_put_variable_number = nullptr;
 
 constexpr char kBackHomeStartCommand[] = "back_home_start";
+constexpr size_t kBackHomeStartCommandLength =
+        sizeof(kBackHomeStartCommand) - 1u;
 constexpr char kRatioName[] = "ratio";
 constexpr size_t kRatioNameLength = sizeof(kRatioName) - 1u;
 
-// 0 = unknown, 1 = (length, pointer), 2 = (pointer, length).
-uint32_t g_put_variable_layout = 0u;
+// 1 = (length, pointer), 2 = (pointer, length).  The shipped
+// librust_maml_sdk.so takes the length in x1 and the name pointer in x2, so the
+// default is already usable before the launcher pushes any widget variable;
+// an observation from the launcher's own calls corrects it if a build differs.
+uint32_t g_put_variable_layout = 1u;
 uint32_t g_put_variable_type = 0u;
 
 constexpr uint64_t kPointerThreshold = 0x10000ull;
 
-bool SplitPointerAndLength(uint64_t first, uint64_t second, uint64_t* pointer) {
+bool SplitPointerAndLength(uint64_t first, uint64_t second, uint64_t* pointer,
+                           uint64_t* length) {
     const bool first_is_pointer = first > kPointerThreshold;
     const bool second_is_pointer = second > kPointerThreshold;
     if (first_is_pointer == second_is_pointer) return false;
     *pointer = first_is_pointer ? first : second;
+    *length = first_is_pointer ? second : first;
     return true;
 }
 
 void NotePutVariableNumber(uint64_t name_arg, uint64_t length_arg,
                            uint64_t type) {
     (void)type;
-    static uint32_t log_count = 0u;
-    const uint32_t count = __atomic_add_fetch(&log_count, 1u, __ATOMIC_RELAXED);
-    if (count <= 4u) {
-        WOMMO_RATIO_LOGW("back_home_ratio: put_variable_number first=%#" PRIx64
-                   " second=%#" PRIx64 " type=%" PRIu64,
-                   name_arg, length_arg, type & 3u);
-    }
-    if (__atomic_load_n(&g_put_variable_layout, __ATOMIC_ACQUIRE) != 0u) return;
     const bool name_arg_is_pointer = name_arg > kPointerThreshold;
     const bool length_arg_is_pointer = length_arg > kPointerThreshold;
     if (name_arg_is_pointer == length_arg_is_pointer) return;
     const uint32_t layout = name_arg_is_pointer ? 2u : 1u;
-    __atomic_store_n(&g_put_variable_layout, layout, __ATOMIC_RELEASE);
+    const uint32_t previous =
+            __atomic_exchange_n(&g_put_variable_layout, layout, __ATOMIC_ACQ_REL);
+    if (previous != layout) {
+        WOMMO_RATIO_LOGW("back_home_ratio: put_variable_number layout %u -> %u "
+                         "type=%" PRIu64, previous, layout, type);
+    }
 }
 
 void NotePutVariableType(uint64_t type) {
@@ -518,31 +567,38 @@ extern "C" uint64_t HookedPutVariableNumber(uint64_t id, uint64_t first,
 }
 
 // The legacy seed is the flying icon's horizontal offset from the home icon,
-// normalised by the device width.  The flying icon is the closing app window,
-// so its live center (captured from the SF animation status) carries the
-// gesture's direction and speed; the hero origin is the home icon.
+// normalised by the device width.  The launcher notifies the maml icons at half
+// of the return, so the live rect read here is the flying icon.
 bool ComputeRatio(double* ratio) {
-    double width = 0.0;
-    double hero_x = 0.0;
-    double hero_width = 0.0;
-    double window_x = 0.0;
-    __atomic_load(&g_screen_width, &width, __ATOMIC_ACQUIRE);
-    __atomic_load(&g_hero_x, &hero_x, __ATOMIC_ACQUIRE);
-    __atomic_load(&g_hero_width, &hero_width, __ATOMIC_ACQUIRE);
-    __atomic_load(&g_window_center_x, &window_x, __ATOMIC_ACQUIRE);
-    const uint64_t update_ms =
-            __atomic_load_n(&g_window_update_ms, __ATOMIC_ACQUIRE);
-    if (!(width > 100.0) || !(hero_width > 1.0) || !(hero_width < 2000.0) ||
-            __atomic_load_n(&g_hero_state, __ATOMIC_ACQUIRE) != kStateReady ||
-            __atomic_load_n(&g_window_state, __ATOMIC_ACQUIRE) != kStateReady) {
+    double screen_width = 0.0;
+    double flight_left = 0.0;
+    double flight_right = 0.0;
+    double target_left = 0.0;
+    double target_right = 0.0;
+    __atomic_load(&g_screen_width, &screen_width, __ATOMIC_ACQUIRE);
+    __atomic_load(&g_flight_left, &flight_left, __ATOMIC_ACQUIRE);
+    __atomic_load(&g_flight_right, &flight_right, __ATOMIC_ACQUIRE);
+    __atomic_load(&g_target_left, &target_left, __ATOMIC_ACQUIRE);
+    __atomic_load(&g_target_right, &target_right, __ATOMIC_ACQUIRE);
+    const uint64_t now_ms = MonotonicMillis();
+    if (__atomic_load_n(&g_width_state, __ATOMIC_ACQUIRE) != kStateReady ||
+            __atomic_load_n(&g_flight_state, __ATOMIC_ACQUIRE) != kStateReady ||
+            __atomic_load_n(&g_target_state, __ATOMIC_ACQUIRE) != kStateReady) {
         return false;
     }
-    if (update_ms == 0u || MonotonicMillis() - update_ms > 100u) {
+    if (now_ms - __atomic_load_n(&g_flight_update_ms, __ATOMIC_ACQUIRE) >
+                    kFrameFreshnessMs ||
+            now_ms - __atomic_load_n(&g_target_update_ms, __ATOMIC_ACQUIRE) >
+                    kFrameFreshnessMs) {
         return false;
     }
-    // The hero origin is the icon's left edge; the legacy target is its centre.
-    const double icon_center_x = hero_x + hero_width * 0.5;
-    double value = (window_x - icon_center_x) / width;
+    if (!(screen_width > 100.0) || !(flight_right > flight_left) ||
+            !(target_right > target_left)) {
+        return false;
+    }
+    const double flight_center = (flight_left + flight_right) * 0.5;
+    const double target_center = (target_left + target_right) * 0.5;
+    double value = (flight_center - target_center) / screen_width;
     if (value > 1.0) value = 1.0;
     if (value < -1.0) value = -1.0;
     *ratio = value;
@@ -554,29 +610,23 @@ void ApplyBackHomeRatio(uint64_t maml_id) {
             __atomic_load_n(&g_put_variable_layout, __ATOMIC_ACQUIRE);
     PutVariableNumberFn put = __atomic_load_n(
             &g_original_put_variable_number, __ATOMIC_ACQUIRE);
-    if (layout == 0u || put == nullptr) return;
-    if (__atomic_load_n(&g_width_state, __ATOMIC_ACQUIRE) != kStateReady ||
-            __atomic_load_n(&g_hero_state, __ATOMIC_ACQUIRE) != kStateReady) {
-        return;
-    }
-    // Latch the seed once per gesture: all maml controllers of one return must
-    // see the same initial value.
-    const uint64_t now_ms = MonotonicMillis();
-    const bool new_gesture =
-            __atomic_load_n(&g_gesture_valid, __ATOMIC_ACQUIRE) == 0u ||
-            now_ms - __atomic_load_n(&g_gesture_start_ms, __ATOMIC_ACQUIRE) >
-                    400u;
-    if (new_gesture) {
-        double captured = 0.0;
-        if (!ComputeRatio(&captured)) return;
-        __atomic_store(&g_gesture_ratio, &captured, __ATOMIC_RELEASE);
-        __atomic_store_n(&g_gesture_start_ms, now_ms, __ATOMIC_RELEASE);
-        __atomic_store_n(&g_gesture_valid, 1u, __ATOMIC_RELEASE);
-    }
+    if (put == nullptr) return;
     double ratio = 0.0;
-    if (__atomic_load_n(&g_gesture_valid, __ATOMIC_ACQUIRE) == 1u) {
-        __atomic_load(&g_gesture_ratio, &ratio, __ATOMIC_ACQUIRE);
-    } else {
+    if (!ComputeRatio(&ratio)) {
+        double screen_width = 0.0;
+        double flight_left = 0.0;
+        double flight_right = 0.0;
+        double target_left = 0.0;
+        double target_right = 0.0;
+        __atomic_load(&g_screen_width, &screen_width, __ATOMIC_ACQUIRE);
+        __atomic_load(&g_flight_left, &flight_left, __ATOMIC_ACQUIRE);
+        __atomic_load(&g_flight_right, &flight_right, __ATOMIC_ACQUIRE);
+        __atomic_load(&g_target_left, &target_left, __ATOMIC_ACQUIRE);
+        __atomic_load(&g_target_right, &target_right, __ATOMIC_ACQUIRE);
+        WOMMO_RATIO_LOGW("back_home_ratio: no seed flight=%.1f..%.1f "
+                         "target=%.1f..%.1f screen=%.1f",
+                         flight_left, flight_right, target_left, target_right,
+                         screen_width);
         return;
     }
     const uint64_t name = reinterpret_cast<uint64_t>(kRatioName);
@@ -590,34 +640,40 @@ void ApplyBackHomeRatio(uint64_t maml_id) {
         result = put(maml_id, name, length, type, 0u, 0u, 0u, 0u, ratio, 0.0);
     }
     (void)result;
+#ifdef WOMMO_RATIO_DEBUG
     const uint32_t count = __atomic_add_fetch(&g_ratio_log_count, 1u,
                                               __ATOMIC_RELAXED);
     if (count <= 8u) {
-        double width = 0.0;
-        double hero_x = 0.0;
-        double hero_width = 0.0;
-        double window_x = 0.0;
-        __atomic_load(&g_screen_width, &width, __ATOMIC_ACQUIRE);
-        __atomic_load(&g_hero_x, &hero_x, __ATOMIC_ACQUIRE);
-        __atomic_load(&g_hero_width, &hero_width, __ATOMIC_ACQUIRE);
-        __atomic_load(&g_window_center_x, &window_x, __ATOMIC_ACQUIRE);
+        double screen_width = 0.0;
+        double flight_left = 0.0;
+        double flight_right = 0.0;
+        double target_left = 0.0;
+        double target_right = 0.0;
+        __atomic_load(&g_screen_width, &screen_width, __ATOMIC_ACQUIRE);
+        __atomic_load(&g_flight_left, &flight_left, __ATOMIC_ACQUIRE);
+        __atomic_load(&g_flight_right, &flight_right, __ATOMIC_ACQUIRE);
+        __atomic_load(&g_target_left, &target_left, __ATOMIC_ACQUIRE);
+        __atomic_load(&g_target_right, &target_right, __ATOMIC_ACQUIRE);
         WOMMO_RATIO_LOGW("back_home_ratio: id=%" PRIu64
-                   " ratio=%.3f window_x=%.1f hero=%.1f+%.1f width=%.1f "
-                   "result=%#" PRIx64,
-                   maml_id, ratio, window_x, hero_x, hero_width, width, result);
+                         " ratio=%.4f flight=%.1f..%.1f target=%.1f..%.1f "
+                         "screen=%.1f layout=%u result=%#" PRIx64,
+                         maml_id, ratio, flight_left, flight_right, target_left,
+                         target_right, screen_width, layout, result);
     }
+#endif
 }
 
 extern "C" uint64_t HookedSendCommand(uint64_t id, uint64_t first,
                                       uint64_t second, uint64_t a3, uint64_t a4,
                                       uint64_t a5, uint64_t a6, uint64_t a7) {
     uint64_t command_pointer = 0u;
-    if (SplitPointerAndLength(first, second, &command_pointer)) {
-        const char* command =
-                reinterpret_cast<const char*>(command_pointer);
-        if (strcmp(command, kBackHomeStartCommand) == 0) {
-            ApplyBackHomeRatio(id);
-        }
+    uint64_t command_length = 0u;
+    if (SplitPointerAndLength(first, second, &command_pointer,
+                              &command_length) &&
+            command_length == kBackHomeStartCommandLength &&
+            memcmp(reinterpret_cast<const void*>(command_pointer),
+                   kBackHomeStartCommand, kBackHomeStartCommandLength) == 0) {
+        ApplyBackHomeRatio(id);
     }
     SendCommandFn original =
             __atomic_load_n(&g_original_send_command, __ATOMIC_ACQUIRE);
