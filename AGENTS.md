@@ -388,6 +388,16 @@ workflow checks them.
 Target device: Redmi 25102RKBEC (`myron`), HyperOS 4 / Android 17, 4K pages,
 LSPosed 2.2.0 (API 102).
 
+**Restarting a process: always kill by package name, never by PID.**
+`killall com.miui.home` is the supported way to restart the launcher; it
+survives spawner churn and cannot hit an unrelated process. `pidof` is only a
+snapshot: the Dart `usap64` spawners fork and exit continuously, so a PID read a
+few seconds earlier may already be a different process by the time `kill`
+runs. Killing a stale PID has already taken down `com.miui.weather2` and the
+launcher together, which left Android believing the launcher was still alive
+(`am start` replied "already delivered to top-most instance" with no process
+present, `WaitTime` reached 168 s) and needed a device restart to clear.
+
 Build (debug is the iteration target, release for delivery):
 
 ```text
@@ -402,12 +412,13 @@ WOMMO` and the module log.
 Deploy native hooks:
 
 1. `adb install -r app/build/outputs/apk/debug/WOMMO-*.apk`
-2. Kill the desktop's HYOS spawner so a fresh one loads the new APK. Find it by
-   checking that `readlink /proc/<pid>/exe` is `/system_ext/bin/hyos_spawner`;
-   `kill -TERM <pid>` and the launcher restarts automatically.
+2. Restart the launcher **by package name only**: `su -c 'killall com.miui.home'`
+   (or `am force-stop com.miui.home`). The launcher is forked from a HYOS
+   spawner, and a package-scoped kill lets Android re-fork it from the current
+   spawner, which is the case that matters for loading the new APK.
 3. If the hook logs are missing, the launcher was forked from a spawner that
-   did not load the module. Kill the launcher process (`pidof com.miui.home`)
-   so it refork from a module-loaded spawner.
+   did not load the module. Only then restart the spawner itself, and use the
+   process-name form: `su -c 'killall usap64'`. Android recreates one.
 4. Verify: `adb logcat -d | grep WommoNative` and check the reported file
    offset. Then verify the patched words in `/proc/<pid>/mem` as root.
 5. Confirm the launcher is stable (no new tombstone) before visible tests.
