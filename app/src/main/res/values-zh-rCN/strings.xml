@@ -112,11 +112,13 @@
     <string name="module_status_inactive">未激活</string>
     <string name="module_status_inactive_desc">请在 LSPosed 中激活模块</string>
     <string name="not_support">您似乎正在使用过时的 LSPosed 版本或 LSPosed 未激活，请更新 LSPosed 或者激活后再试。</string>
+    <string name="no_stack_swipe_background">翻页时不绘制堆叠小部件背景</string>
     <string name="notification_settings_no_white_list">移除通知设置白名单</string>
     <string name="open_battery_status_activity">启动电池续航活动</string>
     <string name="open_by_default">默认打开</string>
     <string name="others">其他</string>
     <string name="package_installer">应用包管理组件</string>
+    <string name="personal_assistant">智能助理（负一屏）</string>
     <string name="power_keeper">电量和性能</string>
     <string name="prevent_disabling_dev_mode">防止禁用开发者模式</string>
     <string name="qs_tile_long_press_fallback_override">快捷磁贴长按回退替换</string>

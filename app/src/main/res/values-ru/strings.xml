@@ -93,11 +93,13 @@
     <string name="lockscreen_charging_info_not_supported">Устройство не поддерживается</string>
     <string name="miui_home">Лаунчер</string>
     <string name="not_support">У вас устаревшая версия LSPosed или LSPosed не активен, обновите LSPosed или активируйте его и попробуйте снова.</string>
+    <string name="no_stack_swipe_background">Не рисовать фон при перелистывании стопки виджетов</string>
     <string name="notification_settings_no_white_list">Удалить белый список для настроек уведомлений</string>
     <string name="open_battery_status_activity">Открыть активность статуса батареи</string>
     <string name="open_by_default">Открывать по умолчанию</string>
     <string name="others">Другое</string>
     <string name="package_installer">Установщик пакетов</string>
+    <string name="personal_assistant">App vault</string>
     <string name="power_keeper">Батарея и производительность</string>
     <string name="prevent_disabling_dev_mode">Запретить отключение режима разработчика</string>
     <string name="quick_manage_overlay_permission">Быстрое управление наложением разрешений</string>

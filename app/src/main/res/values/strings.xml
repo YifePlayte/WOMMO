@@ -113,11 +113,13 @@
     <string name="module_status_inactive">Not Activated</string>
     <string name="module_status_inactive_desc">Please activate the module in LSPosed</string>
     <string name="not_support">You seem to be using an outdated version of LSPosed or LSPosed is not active, please update LSPosed or activate it and try again.</string>
+    <string name="no_stack_swipe_background">No background while paging a widget stack</string>
     <string name="notification_settings_no_white_list">Remove white list for notification settings</string>
     <string name="open_battery_status_activity">Open battery status activity</string>
     <string name="open_by_default">Open by default</string>
     <string name="others">Others</string>
     <string name="package_installer">Package Installer</string>
+    <string name="personal_assistant">App Vault</string>
     <string name="power_keeper">Battery and performance</string>
     <string name="prevent_disabling_dev_mode">Prevent disabling developer mode</string>
     <string name="qs_tile_long_press_fallback_override">Quick settings tile long-press fallback override</string>

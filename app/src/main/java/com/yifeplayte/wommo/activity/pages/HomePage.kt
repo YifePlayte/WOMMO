@@ -32,6 +32,7 @@ import com.yifeplayte.wommo.activity.sections.home
 import com.yifeplayte.wommo.activity.sections.intentResolver
 import com.yifeplayte.wommo.activity.sections.others
 import com.yifeplayte.wommo.activity.sections.packageInstaller
+import com.yifeplayte.wommo.activity.sections.personalAssistant
 import com.yifeplayte.wommo.activity.sections.powerKeeper
 import com.yifeplayte.wommo.activity.sections.reboot
 import com.yifeplayte.wommo.activity.sections.screenRecorder
@@ -128,6 +129,7 @@ fun HomePage() {
                         settings()
                         downloadProvider()
                         voiceAssist()
+                        personalAssistant()
                         contentExtension()
                         powerKeeper()
                         intentResolver()
