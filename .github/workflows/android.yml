@@ -6,6 +6,12 @@ on:
   pull_request:
     branches: ["main"]
   workflow_dispatch:
+  schedule:
+    # GitHub drops a cache entry that goes 7 days without an access. The last two
+    # gaps between pushes here were 7 and 8 days and both builds started from an
+    # empty cache, so a run this often keeps the Gradle entries alive. A
+    # scheduled run is a trusted trigger, so it may also write them back.
+    - cron: "17 3 */3 * *"
 
 permissions:
   contents: read
@@ -39,24 +45,27 @@ jobs:
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v6
 
-      - name: Assemble debug
-        run: ./gradlew :app:assembleDebug --console=plain
-
-      # R8 and resource shrinking only run in release, so building it here keeps
-      # the keep rules honest.
-      - name: Assemble release
-        run: ./gradlew :app:assembleRelease --console=plain
-
-      # `build` used to run the full lint on every push; keep the check without
-      # pulling in the redundant debug/release assembles it would redo.
-      - name: Lint
-        run: ./gradlew :app:lintDebug --console=plain
+      # One invocation for all three graphs. Two reasons to keep them together:
+      # `build` would redo the assembles it depends on, and `versionName` is
+      # `LocalDateTime.now()`, so each separate `./gradlew` call re-runs
+      # generateBuildConfig with a new value and recompiles the variant it shares
+      # with the next call.
+      #
+      # R8 and resource shrinking only run in release, so linting and building
+      # it here keeps the keep rules honest.
+      - name: Assemble and lint
+        run: ./gradlew :app:assembleDebug :app:assembleRelease :app:lintDebug --console=plain
 
       # The old single archive held `debug/` and `release/` as subdirectories.
       # Split it into one artifact per variant so a download is a plain APK
       # directory, and give release the R8 mapping that retraces its own
       # obfuscated stack traces.
+      #
+      # The scheduled run exists only to keep the Gradle cache alive, so it
+      # publishes nothing: nobody would download its APKs and every artifact it
+      # stored would count against the repository's storage.
       - name: Stage artifacts
+        if: ${{ github.event_name != 'schedule' }}
         run: |
           mkdir -p "$RUNNER_TEMP/dist/debug" "$RUNNER_TEMP/dist/release"
           cp -r app/build/outputs/apk/debug/. "$RUNNER_TEMP/dist/debug/"
@@ -64,6 +73,7 @@ jobs:
           cp app/build/outputs/mapping/release/mapping.txt "$RUNNER_TEMP/dist/release/"
 
       - name: Upload debug artifacts
+        if: ${{ github.event_name != 'schedule' }}
         uses: actions/upload-artifact@v7
         with:
           name: app-debug
@@ -71,6 +81,7 @@ jobs:
           if-no-files-found: error
 
       - name: Upload release artifacts
+        if: ${{ github.event_name != 'schedule' }}
         uses: actions/upload-artifact@v7
         with:
           name: app-release
